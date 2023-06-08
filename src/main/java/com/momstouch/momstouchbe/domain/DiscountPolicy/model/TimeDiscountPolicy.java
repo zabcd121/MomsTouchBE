@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.time.LocalTime;
 
 @Entity
@@ -19,6 +20,7 @@ public class TimeDiscountPolicy extends DiscountPolicy {
     private Long id;
 
     private LocalTime baseTime;
+    @Positive
     private Integer discountAmount;
 
     @Override

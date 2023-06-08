@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Builder
@@ -17,6 +18,7 @@ public class OptionSpecification {
     private Long id;
 
     private String name;
+    @Positive
     private Integer price;
 
 }

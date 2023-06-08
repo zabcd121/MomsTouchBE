@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,5 +34,6 @@ public class OrderMenu {
     @JoinColumn(name="order_menu_id")
     private List<OrderOptionGroup> orderOptionGroupList = new ArrayList<>();
 
+    @Positive
     private Integer count;
 }

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @DiscriminatorValue("RATE_DISCOUNT_POLICY")
@@ -16,9 +17,10 @@ public class RateDiscountPolicy extends DiscountPolicy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Positive
     private Integer baseAmount;
-
+    @DecimalMin("0.0")
+    @DecimalMax("100.0")
     private Double discountRate;
 
 

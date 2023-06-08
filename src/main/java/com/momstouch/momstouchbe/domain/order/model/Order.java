@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +38,25 @@ public class Order {
 
     private String address;
     private String phoneNumber;
+
+    @Positive
     private Integer totalPrice;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.ORDER;
+
+    public void cancel() {
+        orderStatus = OrderStatus.CANCEL;
+    }
+
+    public void deliver() {
+        orderStatus = OrderStatus.DELIVERY;
+    }
+
+    public void complete() {
+        orderStatus = OrderStatus.COMPLETE;
+    }
 
 
 }
