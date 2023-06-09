@@ -1,11 +1,10 @@
 package com.momstouch.momstouchbe.domain.menu.model;
 
 import lombok.*;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.global.domain.Money;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +23,10 @@ public class Menu {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name="menu_id")
     private List<OptionGroupSpecification> optionGroupList = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "discount_policy_id")
+    private DiscountPolicy discountPolicy;
 
     private String name;
     private String description;

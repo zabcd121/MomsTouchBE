@@ -1,6 +1,6 @@
 package com.momstouch.momstouchbe.global.domain;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
@@ -8,9 +8,9 @@ import javax.persistence.Embeddable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@Data
 @Embeddable
 @NoArgsConstructor
-@Getter
 public class Money {
 
     public static final Money ZERO = Money.of(0);
