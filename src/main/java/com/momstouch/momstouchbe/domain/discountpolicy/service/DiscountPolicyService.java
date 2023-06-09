@@ -59,6 +59,7 @@ public class DiscountPolicyService {
         return discountPolicyRepository.findAll();
     }
 
+    @Transactional
     public Long delete(Long id) {
         Optional<DiscountPolicy> byId = discountPolicyRepository.findById(id);
         DiscountPolicy discountPolicy = byId.orElseThrow(NoSuchElementException::new);

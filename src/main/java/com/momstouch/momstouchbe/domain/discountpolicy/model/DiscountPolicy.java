@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,6 +15,8 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class DiscountPolicy {
+
+    public static final List<String> DISCOUNT_POLICY_TYPES = List.of("AMOUNT","RATE","TIME");
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="discount_policy_id")
