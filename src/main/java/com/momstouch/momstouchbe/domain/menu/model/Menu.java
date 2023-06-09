@@ -1,11 +1,13 @@
 package com.momstouch.momstouchbe.domain.menu.model;
 
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ public class Menu {
 
     private String name;
     private String description;
-    private int price;
+    private Money price;
     private String imageURL;
 
 

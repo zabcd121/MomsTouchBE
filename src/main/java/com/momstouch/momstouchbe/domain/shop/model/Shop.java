@@ -2,13 +2,16 @@ package com.momstouch.momstouchbe.domain.shop.model;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.menu.model.Menu;
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,9 +38,9 @@ public class Shop {
     private String name;
     private String phoneNumber;
     private String address;
-    private LocalDateTime openTime;
-    private LocalDateTime closedTime;
-    private Integer minOrderPrice;
+    private LocalTime openTime;
+    private LocalTime closedTime;
 
+    private Money minOrderPrice;
 
 }
