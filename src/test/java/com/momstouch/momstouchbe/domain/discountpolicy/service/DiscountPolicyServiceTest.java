@@ -4,7 +4,10 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.AmountDiscountPolic
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
+import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.setup.ShopSetup;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,12 +25,17 @@ class DiscountPolicyServiceTest {
 
     @Autowired
     private DiscountPolicyService discountPolicyService;
+
+    @Autowired private ShopSetup shopSetup;
     @Test
     public void 할인정책_생성_테스트() {
         LocalTime baseTime = LocalTime.of(12, 12);
-        Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(1000, 200);
-        Long rateDiscountPolicyId = discountPolicyService.createRateDiscountPolicy(1000, 10.0);
-        Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(baseTime, 200);
+        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
+
+        Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,1000, 200);
+        Long rateDiscountPolicyId = discountPolicyService.createRateDiscountPolicy(shop,1000, 10.0);
+        Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop,baseTime, 200);
 
         Optional<DiscountPolicy> amountOptional = discountPolicyService.findById(amountDiscountPolicyId);
         Optional<DiscountPolicy> rateDiscountOptional = discountPolicyService.findById(rateDiscountPolicyId);
@@ -48,9 +57,12 @@ class DiscountPolicyServiceTest {
     @Test
     public void 할인정책_삭제_테스트() {
         LocalTime baseTime = LocalTime.of(12, 12);
-        Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(1000, 200);
-        Long rateDiscountPolicyId = discountPolicyService.createRateDiscountPolicy(1000, 10.0);
-        Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(baseTime, 200);
+        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
+
+        Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,1000, 200);
+        Long rateDiscountPolicyId = discountPolicyService.createRateDiscountPolicy(shop,1000, 10.0);
+        Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop,baseTime, 200);
 
         assertThat(discountPolicyService.delete(amountDiscountPolicyId)).isEqualTo(amountDiscountPolicyId);
         assertThat(discountPolicyService.delete(rateDiscountPolicyId)).isEqualTo(rateDiscountPolicyId);

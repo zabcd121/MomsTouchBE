@@ -10,6 +10,9 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand;
+import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.setup.ShopSetup;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -29,6 +32,7 @@ import java.net.URI;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountRequest.*;
 import static com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand.*;
@@ -47,6 +51,8 @@ class DiscountPolicyApiControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    ShopSetup shopSetup;
 
     @Autowired
     private DiscountPolicyService discountPolicyService;
@@ -54,9 +60,12 @@ class DiscountPolicyApiControllerTest {
     @Test
     public void 할인정책_목록조회_테스트() throws Exception {
         LocalTime now = LocalTime.of(1,1,1);
-        discountPolicyService.createAmountDiscountPolicy(10000,1000);
-        discountPolicyService.createRateDiscountPolicy(10000,9.00);
-        discountPolicyService.createTimeDiscountPolicy(now,10000);
+        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
+
+        discountPolicyService.createAmountDiscountPolicy(shop,10000,1000);
+        discountPolicyService.createRateDiscountPolicy(shop,10000,9.00);
+        discountPolicyService.createTimeDiscountPolicy(shop,now,10000);
 
         ResultActions actions = mvc.perform(
                 get("/api/discountPolicy")
@@ -173,7 +182,9 @@ class DiscountPolicyApiControllerTest {
 
     @Test
     public void 할인정책_삭제_테스트() throws Exception {
-        Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(10000, 1000);
+        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
+        Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,10000, 1000);
         Optional<DiscountPolicy> beforeDelete = discountPolicyService.findById(amountDiscountPolicyId);
         Assertions.assertThat(beforeDelete.isPresent()).isTrue();
 

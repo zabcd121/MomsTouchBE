@@ -83,7 +83,7 @@ class MenuApiControllerTest {
 
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
-        Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(10000, 1000);
+        Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop,10000, 1000);
         MenuCreateRequest menuCreateRequest = MenuCreateRequest.builder()
                 .category(Category.MAIN)
                 .name("싸이버거")

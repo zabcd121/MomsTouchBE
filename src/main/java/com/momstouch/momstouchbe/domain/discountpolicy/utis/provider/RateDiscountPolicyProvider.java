@@ -2,14 +2,18 @@ package com.momstouch.momstouchbe.domain.discountpolicy.utis.provider;
 
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand;
+import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.NoSuchElementException;
 
 import static com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand.*;
 
 public class RateDiscountPolicyProvider extends DiscountPolicyProvider {
 
-    public RateDiscountPolicyProvider(DiscountPolicyService discountPolicyService) {
-        super(discountPolicyService);
+    public RateDiscountPolicyProvider(DiscountPolicyService discountPolicyService, ShopRepository shopRepository) {
+        super(discountPolicyService,shopRepository);
     }
 
     @Override
@@ -18,7 +22,8 @@ public class RateDiscountPolicyProvider extends DiscountPolicyProvider {
             RateDiscountPolicyCreateCommand createCommand = (RateDiscountPolicyCreateCommand) command;
             double discountRate = createCommand.getDiscountRate();
             Integer baseAmount = createCommand.getBaseAmount();
-            return discountPolicyService.createRateDiscountPolicy(baseAmount, discountRate);
+            Shop shop = shopRepository.findById(command.getShopId()).orElseThrow(NoSuchElementException::new);
+            return discountPolicyService.createRateDiscountPolicy(shop, baseAmount, discountRate);
         }
         return null;
     }

@@ -12,6 +12,8 @@ public class DiscountRequest {
     @Getter
     @Setter
     public static class CreateDiscountPolicyRequest {
+
+        private Long shopId;
         private Integer baseAmount;
         private Integer discountAmount;
         private Double discountRate;

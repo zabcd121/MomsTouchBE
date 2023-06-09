@@ -50,11 +50,11 @@ public class DiscountAppService {
         DiscountPolicyCreateCommand createCommand;
 
         if(type.equals("AMOUNT")) {
-            createCommand = new AmountDiscountPolicyCreateCommand(createRequest.getBaseAmount(), createRequest.getDiscountAmount());
+            createCommand = new AmountDiscountPolicyCreateCommand(createRequest.getShopId(),createRequest.getBaseAmount(), createRequest.getDiscountAmount());
         } else if(type.equals("RATE")) {
-            createCommand = new RateDiscountPolicyCreateCommand(createRequest.getBaseAmount(),createRequest.getDiscountRate());
+            createCommand = new RateDiscountPolicyCreateCommand(createRequest.getShopId(),createRequest.getBaseAmount(),createRequest.getDiscountRate());
         } else if(type.equals("TIME")) {
-            createCommand = new TimeDiscountPolicyCreateCommand(createRequest.getBaseTime(),createRequest.getDiscountAmount());
+            createCommand = new TimeDiscountPolicyCreateCommand(createRequest.getShopId(),createRequest.getBaseTime(),createRequest.getDiscountAmount());
         } else {
             throw new UnsupportedOperationException();
         }
