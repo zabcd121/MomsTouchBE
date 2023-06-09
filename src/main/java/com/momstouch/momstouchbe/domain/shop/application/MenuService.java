@@ -34,6 +34,7 @@ public class MenuService {
         Shop shop = null;
         try {
             shop = shopSearchableRepository.findMenuListByShopId(shopId);
+            shop.getDiscountPolicyList();
             String imageURL = fileUploadUtil.uploadMenuImage(image);
             shop.addMenu(
                     menuRequest.toEntity(

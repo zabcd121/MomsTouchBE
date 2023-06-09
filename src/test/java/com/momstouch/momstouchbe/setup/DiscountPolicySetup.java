@@ -15,6 +15,7 @@ public class DiscountPolicySetup {
     private DiscountPolicyService discountPolicyService;
 
     public Long saveAmountDiscountPolicy(Shop shop, Integer baseAmount, Integer discountAmount) {
-        return discountPolicyService.createAmountDiscountPolicy(shop,baseAmount, discountAmount);
+        return discountPolicyService.createAmountDiscountPolicy(shop, baseAmount, discountAmount);
     }
+
 }

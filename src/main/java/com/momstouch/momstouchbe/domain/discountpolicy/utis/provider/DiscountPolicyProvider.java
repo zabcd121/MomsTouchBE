@@ -3,8 +3,6 @@ package com.momstouch.momstouchbe.domain.discountpolicy.utis.provider;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
-import com.momstouch.momstouchbe.domain.shop.repository.ShopSearchRepository;
-
 
 public abstract class DiscountPolicyProvider {
 
