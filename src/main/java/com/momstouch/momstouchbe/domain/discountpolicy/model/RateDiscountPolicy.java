@@ -1,4 +1,4 @@
-package com.momstouch.momstouchbe.domain.DiscountPolicy.model;
+package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,25 +6,26 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalTime;
 
 @Entity
-@DiscriminatorValue("TIME_DISCOUNT_POLICY")
+@DiscriminatorValue("RATE_DISCOUNT_POLICY")
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TimeDiscountPolicy extends DiscountPolicy {
+public class RateDiscountPolicy extends DiscountPolicy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalTime baseTime;
-    private Integer discountAmount;
+    private Integer baseAmount;
+
+    private Double discountRate;
+
 
     @Override
     public int discount(int price) {
-        if (LocalTime.now().isAfter(baseTime)) {
-            return price - discountAmount;
+        if (price >= baseAmount) {
+            return (int) (price - (price * discountRate));
         }
         return price;
     }

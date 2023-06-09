@@ -1,9 +1,6 @@
 package com.momstouch.momstouchbe.domain.menu.model;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Menu {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +27,9 @@ public class Menu {
     private String description;
     private int price;
     private String imageURL;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
 
 }
