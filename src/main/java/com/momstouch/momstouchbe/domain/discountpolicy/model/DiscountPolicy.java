@@ -1,14 +1,13 @@
 package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
 import com.momstouch.momstouchbe.global.domain.Money;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
 @Entity
+@Getter
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
