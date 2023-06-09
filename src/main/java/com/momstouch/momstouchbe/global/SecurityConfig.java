@@ -37,7 +37,8 @@ public class SecurityConfig {
      */
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web -> web.ignoring().mvcMatchers("/h2-console/**"));
+        return (web -> web.ignoring().mvcMatchers("/h2-console/**",
+                "/api/shop/*/menus"));
     }
 
     @Bean

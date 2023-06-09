@@ -1,5 +1,6 @@
-package com.momstouch.momstouchbe.domain.menu.model;
+package com.momstouch.momstouchbe.domain.shop.model;
 
+import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import lombok.*;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.global.domain.Money;
@@ -20,12 +21,13 @@ public class Menu {
     private Long id;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="menu_id")
     private List<OptionGroupSpecification> optionGroupList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "discount_policy_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="discount_policy_id")
     private DiscountPolicy discountPolicy;
 
     private String name;

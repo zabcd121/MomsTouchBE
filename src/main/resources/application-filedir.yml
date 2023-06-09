@@ -1,0 +1,5 @@
+fileDir:
+  inbound: /api/images
+  outbound: /Users/khs/testimage
+  menus: /menus
+

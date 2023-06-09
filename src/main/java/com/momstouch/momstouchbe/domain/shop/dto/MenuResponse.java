@@ -1,7 +1,7 @@
 package com.momstouch.momstouchbe.domain.shop.dto;
 
-import com.momstouch.momstouchbe.domain.menu.model.Category;
-import com.momstouch.momstouchbe.domain.menu.model.Menu;
+import com.momstouch.momstouchbe.domain.shop.model.Category;
+import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
