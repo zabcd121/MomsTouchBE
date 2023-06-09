@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,5 @@ public abstract class DiscountPolicy {
     @Column(name="discount_policy_id")
     private Long id;
 
-    public abstract int discount(int price);
+    public abstract Money discount(Money price);
 }

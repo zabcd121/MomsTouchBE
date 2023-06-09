@@ -2,12 +2,14 @@ package com.momstouch.momstouchbe.domain.order.model;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +39,24 @@ public class Order {
 
     private String address;
     private String phoneNumber;
-    private Integer totalPrice;
 
+    private Money totalPrice;
+
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.ORDER;
+
+    public void cancel() {
+        orderStatus = OrderStatus.CANCEL;
+    }
+
+    public void deliver() {
+        orderStatus = OrderStatus.DELIVERY;
+    }
+
+    public void complete() {
+        orderStatus = OrderStatus.COMPLETE;
+    }
 
 
 }
