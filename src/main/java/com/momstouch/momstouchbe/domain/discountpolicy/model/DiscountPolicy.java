@@ -1,9 +1,8 @@
-package com.momstouch.momstouchbe.domain.DiscountPolicy.model;
+package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 

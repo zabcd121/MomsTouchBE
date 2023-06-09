@@ -1,4 +1,4 @@
-package com.momstouch.momstouchbe.domain.DiscountPolicy.model;
+package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;

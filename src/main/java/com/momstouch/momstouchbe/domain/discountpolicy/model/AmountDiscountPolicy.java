@@ -1,40 +1,44 @@
-package com.momstouch.momstouchbe.domain.DiscountPolicy.model;
+package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Entity
-@DiscriminatorValue("RATE_DISCOUNT_POLICY")
+@DiscriminatorValue("AMOUNT_DISCOUNT_POLICY")
 //@Builder
 //@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RateDiscountPolicy extends DiscountPolicy {
+public class AmountDiscountPolicy extends DiscountPolicy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Money baseAmount;
-    @DecimalMin(value = "0.0", message = "할인율을 0% 이상")
-    @DecimalMax(value = "100.0", message = "할인율을 100% 이하")
     @NotNull
-    private Double discountRate;
+    private Money baseAmount;
+
+    @NotNull
+    private Money discountAmount;
 
     @Builder
-    private RateDiscountPolicy(int baseAmount, double discountRate) {
+    public AmountDiscountPolicy(int baseAmount, int discountAmount) {
+        if(discountAmount > baseAmount) {
+            throw new IllegalArgumentException();
+        }
         this.baseAmount = Money.of(baseAmount);
-        this.discountRate = discountRate;
+        this.discountAmount = Money.of(discountAmount);
     }
 
     @Override
     public Money discount(Money price) {
         if (price.equalsOrMore(baseAmount)) {
-            return (price.times((100 - discountRate)/100));
+            return price.minus(discountAmount);
         }
         return price;
     }

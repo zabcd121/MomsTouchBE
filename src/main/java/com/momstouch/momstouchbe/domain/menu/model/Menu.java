@@ -1,10 +1,7 @@
 package com.momstouch.momstouchbe.domain.menu.model;
 
+import lombok.*;
 import com.momstouch.momstouchbe.global.domain.Money;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -16,6 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Menu {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +29,9 @@ public class Menu {
     private String description;
     private Money price;
     private String imageURL;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
 
 }
