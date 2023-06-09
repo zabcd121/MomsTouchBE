@@ -1,6 +1,5 @@
 package com.momstouch.momstouchbe.domain.shop.dto;
 
-import com.momstouch.momstouchbe.domain.menu.dto.MenuResponse;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import lombok.*;
 
