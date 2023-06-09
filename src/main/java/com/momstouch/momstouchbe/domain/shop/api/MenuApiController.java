@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.shop.api;
 
 import com.momstouch.momstouchbe.domain.shop.application.MenuService;
+import com.momstouch.momstouchbe.domain.shop.dto.ShopResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.momstouch.momstouchbe.domain.shop.dto.MenuRequest.*;
+import static com.momstouch.momstouchbe.domain.shop.dto.ShopResponse.*;
 
 @RestController
 @RequestMapping("/api")
@@ -18,7 +20,7 @@ public class MenuApiController {
     private final MenuService menuService;
 
     @GetMapping("/shop/{shopId}/menus")
-    public ResponseEntity searchAllMenu(@PathVariable Long shopId) {
+    public ResponseEntity<ShopMenuListResponse> searchAllMenu(@PathVariable Long shopId) {
         return new ResponseEntity<>(menuService.searchAllMenuBy(shopId), HttpStatus.OK);
     }
 

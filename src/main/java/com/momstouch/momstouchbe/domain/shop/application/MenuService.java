@@ -26,9 +26,7 @@ public class MenuService {
     private final FileUploadUtil fileUploadUtil;
 
     public ShopMenuListResponse searchAllMenuBy(Long shopId) {
-        return ShopMenuListResponse.of(
-                shopSearchableRepository.findMenuListByShopId(shopId).getMenuList().stream(),
-                );
+        return ShopMenuListResponse.of(shopSearchableRepository.findMenuListByShopId(shopId));
     }
 
     @Transactional
@@ -36,6 +34,7 @@ public class MenuService {
         Shop shop = null;
         try {
             shop = shopSearchableRepository.findMenuListByShopId(shopId);
+            shop.getDiscountPolicyList();
             String imageURL = fileUploadUtil.uploadMenuImage(image);
             shop.addMenu(
                     menuRequest.toEntity(
