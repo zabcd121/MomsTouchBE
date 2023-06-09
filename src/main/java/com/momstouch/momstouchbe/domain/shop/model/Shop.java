@@ -1,13 +1,10 @@
 package com.momstouch.momstouchbe.domain.shop.model;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.menu.model.Menu;
 import lombok.*;
 import com.momstouch.momstouchbe.global.domain.Money;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +26,7 @@ public class Shop {
     private Member owner;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="shop_id")
     private List<Menu> menuList = new ArrayList<>();
 
@@ -40,5 +37,10 @@ public class Shop {
     private LocalTime closedTime;
 
     private Money minOrderPrice;
+
+    public void addMenu(Menu menu) {
+        menuList.add(menu);
+    }
+
 
 }

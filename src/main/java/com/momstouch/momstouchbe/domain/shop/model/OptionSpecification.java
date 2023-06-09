@@ -1,4 +1,4 @@
-package com.momstouch.momstouchbe.domain.menu.model;
+package com.momstouch.momstouchbe.domain.shop.model;
 
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;

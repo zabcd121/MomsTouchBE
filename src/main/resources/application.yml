@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: application-filedir.yml
   datasource:
     url: jdbc:h2:mem:food
     username: sa

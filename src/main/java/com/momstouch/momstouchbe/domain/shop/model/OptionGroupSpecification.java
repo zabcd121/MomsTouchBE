@@ -1,4 +1,4 @@
-package com.momstouch.momstouchbe.domain.menu.model;
+package com.momstouch.momstouchbe.domain.shop.model;
 
 
 import lombok.AccessLevel;
@@ -21,7 +21,7 @@ public class OptionGroupSpecification {
     private Long id;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="option_group_id")
     private List<OptionSpecification> optionList = new ArrayList<>();
 
