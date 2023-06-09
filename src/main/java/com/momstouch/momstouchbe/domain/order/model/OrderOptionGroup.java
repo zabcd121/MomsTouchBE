@@ -28,6 +28,10 @@ public class OrderOptionGroup {
 
     private String name;
 
+    public void addOrderOption(OrderOption orderOption) {
+        orderOptionList.add(orderOption);
+    }
+
     public Money totalPrice() {
         Money zero = Money.ZERO;
         for (OrderOption orderOption : orderOptionList) {
