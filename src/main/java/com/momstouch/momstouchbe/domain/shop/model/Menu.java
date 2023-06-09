@@ -38,5 +38,13 @@ public class Menu {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    public Money getTotalPrice() {
+        Money zero = Money.ZERO;
+        Money total = zero.plus(price);
+        for (OptionGroupSpecification optionGroupSpecification : optionGroupList) {
+            total = total.plus(optionGroupSpecification.getTotalPrice());
+        }
 
+        return total;
+    }
 }

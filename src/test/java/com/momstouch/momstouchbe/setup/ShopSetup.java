@@ -16,7 +16,7 @@ public class ShopSetup {
     @Autowired
     private ShopRepository shopRepository;
 
-    public Shop saveMenu(Member member, String name, String description, String address, String phoneNumber, LocalTime openTime, LocalTime closedTime, Integer minOrderPrice) {
+    public Shop saveShop(Member member, String name, String description, String address, String phoneNumber, LocalTime openTime, LocalTime closedTime, Integer minOrderPrice) {
         return shopRepository.save(
                 Shop.builder()
                         .owner(member)

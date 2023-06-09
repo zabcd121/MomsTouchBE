@@ -22,6 +22,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
@@ -80,8 +82,8 @@ class MenuApiControllerTest {
     void 메뉴추가_성공() throws Exception {
 
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
-        Shop shop = shopSetup.saveMenu(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
-        Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(10000, 1000);
+        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
+        Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop,10000, 1000);
         MenuCreateRequest menuCreateRequest = MenuCreateRequest.builder()
                 .category(Category.MAIN)
                 .name("싸이버거")

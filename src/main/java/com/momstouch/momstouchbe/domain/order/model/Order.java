@@ -3,18 +3,17 @@ package com.momstouch.momstouchbe.domain.order.model;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.global.domain.Money;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
@@ -26,10 +25,12 @@ public class Order {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
+    @NotNull
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id")
+    @NotNull
     private Shop shop;
 
     @Builder.Default
@@ -37,9 +38,13 @@ public class Order {
     @JoinColumn(name="order_id")
     private List<OrderMenu> orderMenuList = new ArrayList<>();
 
+    @NotNull
     private String address;
+
+    @NotNull
     private String phoneNumber;
 
+    @NotNull
     private Money totalPrice;
 
     @Builder.Default

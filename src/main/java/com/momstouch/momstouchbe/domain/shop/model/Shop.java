@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.shop.model;
 
+import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import lombok.*;
 import com.momstouch.momstouchbe.global.domain.Money;
@@ -30,6 +31,11 @@ public class Shop {
     @JoinColumn(name="shop_id")
     private List<Menu> menuList = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "shop_id")
+    private List<DiscountPolicy> discountPolicyList = new ArrayList<>();
+
     private String name;
     private String phoneNumber;
     private String address;
@@ -40,6 +46,10 @@ public class Shop {
 
     public void addMenu(Menu menu) {
         menuList.add(menu);
+    }
+
+    public void addDiscountPolicy(DiscountPolicy discountPolicy) {
+        discountPolicyList.add(discountPolicy);
     }
 
 

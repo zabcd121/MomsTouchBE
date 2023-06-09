@@ -7,6 +7,8 @@ import com.momstouch.momstouchbe.domain.discountpolicy.utis.provider.AmountDisco
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.provider.DiscountPolicyProvider;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.provider.RateDiscountPolicyProvider;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.provider.TimeDiscountPolicyProvider;
+import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,11 +18,11 @@ public class DelegationDiscountPolicyProvider {
 
     private final List<DiscountPolicyProvider> providerList;
 
-    public DelegationDiscountPolicyProvider(DiscountPolicyService discountPolicyService) {
+    public DelegationDiscountPolicyProvider(DiscountPolicyService discountPolicyService, ShopRepository shopRepository) {
         providerList = List.of(
-                new AmountDiscountPolicyProvider(discountPolicyService),
-                new RateDiscountPolicyProvider(discountPolicyService),
-                new TimeDiscountPolicyProvider(discountPolicyService)
+                new AmountDiscountPolicyProvider(discountPolicyService,shopRepository),
+                new RateDiscountPolicyProvider(discountPolicyService,shopRepository),
+                new TimeDiscountPolicyProvider(discountPolicyService,shopRepository)
         );
     }
 
