@@ -26,7 +26,9 @@ public class MenuService {
     private final FileUploadUtil fileUploadUtil;
 
     public ShopMenuListResponse searchAllMenuBy(Long shopId) {
-        return ShopMenuListResponse.of(shopSearchableRepository.findMenuListByShopId(shopId));
+        return ShopMenuListResponse.of(
+                shopSearchableRepository.findMenuListByShopId(shopId).getMenuList().stream(),
+                );
     }
 
     @Transactional

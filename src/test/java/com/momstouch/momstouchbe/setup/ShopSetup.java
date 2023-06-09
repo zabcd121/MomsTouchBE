@@ -3,7 +3,6 @@ package com.momstouch.momstouchbe.setup;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
-import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
 import com.momstouch.momstouchbe.global.domain.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
