@@ -34,6 +34,5 @@ public class OrderMenu {
     @JoinColumn(name="order_menu_id")
     private List<OrderOptionGroup> orderOptionGroupList = new ArrayList<>();
 
-    @Positive
     private Integer count;
 }

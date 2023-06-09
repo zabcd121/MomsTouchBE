@@ -1,33 +1,50 @@
 package com.momstouch.momstouchbe.domain.DiscountPolicy.model;
 
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.LocalTime;
 
 @Entity
 @DiscriminatorValue("TIME_DISCOUNT_POLICY")
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+//@Builder
+//@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TimeDiscountPolicy extends DiscountPolicy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private LocalTime baseTime;
-    @Positive
-    private Integer discountAmount;
+
+    private Money discountAmount;
+
+    @Builder
+    public TimeDiscountPolicy(LocalTime baseTime, int discountAmount) {
+        this.baseTime = baseTime;
+        this.discountAmount = Money.of(discountAmount);
+    }
+
+
+
 
     @Override
-    public int discount(int price) {
-        if (LocalTime.now().isAfter(baseTime)) {
-            return price - discountAmount;
+    public Money discount(Money price) {
+        if (applicable()) {
+//            return price.minus(discountAmount);
+            return discountAmount.equalsOrMore(price) ? Money.ZERO : price.minus(discountAmount);
         }
         return price;
+    }
+
+    public boolean applicable() {
+        return LocalTime.now().isBefore(baseTime);
     }
 }

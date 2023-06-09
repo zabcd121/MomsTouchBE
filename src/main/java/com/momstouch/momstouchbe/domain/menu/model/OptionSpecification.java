@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.menu.model;
 
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +19,6 @@ public class OptionSpecification {
     private Long id;
 
     private String name;
-    @Positive
-    private Integer price;
+    private Money price;
 
 }

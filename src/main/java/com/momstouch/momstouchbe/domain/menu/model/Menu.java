@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.menu.model;
 
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,8 +29,7 @@ public class Menu {
 
     private String name;
     private String description;
-    @Positive
-    private int price;
+    private Money price;
     private String imageURL;
 
 

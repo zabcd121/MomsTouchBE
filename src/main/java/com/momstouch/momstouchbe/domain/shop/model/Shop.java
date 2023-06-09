@@ -2,6 +2,7 @@ package com.momstouch.momstouchbe.domain.shop.model;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.menu.model.Menu;
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +41,6 @@ public class Shop {
     private LocalTime openTime;
     private LocalTime closedTime;
 
-    @Positive
-    private Integer minOrderPrice;
+    private Money minOrderPrice;
 
 }

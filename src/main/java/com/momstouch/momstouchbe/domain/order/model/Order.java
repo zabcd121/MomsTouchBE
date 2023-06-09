@@ -2,6 +2,7 @@ package com.momstouch.momstouchbe.domain.order.model;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,8 +40,7 @@ public class Order {
     private String address;
     private String phoneNumber;
 
-    @Positive
-    private Integer totalPrice;
+    private Money totalPrice;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.DiscountPolicy.model;
 
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 
 @Entity
 @DiscriminatorValue("AMOUNT_DISCOUNT_POLICY")
@@ -21,24 +20,25 @@ public class AmountDiscountPolicy extends DiscountPolicy {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Positive
-    private Integer baseAmount;
-    @Positive
-    private Integer discountAmount;
+    @NotNull
+    private Money baseAmount;
+
+    @NotNull
+    private Money discountAmount;
 
     @Builder
-    public AmountDiscountPolicy(Integer baseAmount, Integer discountAmount) {
+    public AmountDiscountPolicy(int baseAmount, int discountAmount) {
         if(discountAmount > baseAmount) {
             throw new IllegalArgumentException();
         }
-        this.baseAmount = baseAmount;
-        this.discountAmount = discountAmount;
+        this.baseAmount = Money.of(baseAmount);
+        this.discountAmount = Money.of(discountAmount);
     }
 
     @Override
-    public int discount(int price) {
-        if (price >= baseAmount) {
-            return price - discountAmount;
+    public Money discount(Money price) {
+        if (price.equalsOrMore(baseAmount)) {
+            return price.minus(discountAmount);
         }
         return price;
     }

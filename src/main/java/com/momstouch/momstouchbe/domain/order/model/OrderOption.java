@@ -1,5 +1,7 @@
 package com.momstouch.momstouchbe.domain.order.model;
 
+import com.momstouch.momstouchbe.global.domain.Money;
+
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Positive;
 
@@ -8,6 +10,5 @@ public class OrderOption {
 
     private String name;
 
-    @Positive
-    private Integer price;
+    private Money price;
 }
