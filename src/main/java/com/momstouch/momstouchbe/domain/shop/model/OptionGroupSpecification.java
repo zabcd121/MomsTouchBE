@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.shop.model;
 
 
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +28,14 @@ public class OptionGroupSpecification {
 
     private String name;
 
+    public Money getTotalPrice() {
+        Money total = Money.ZERO;
+
+        for (OptionSpecification optionSpecification : optionList) {
+            total = total.plus(optionSpecification.getPrice());
+        }
+
+        return total;
+    }
 
 }

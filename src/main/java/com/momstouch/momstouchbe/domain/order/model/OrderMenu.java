@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.order.model;
 
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,4 +35,13 @@ public class OrderMenu {
     private List<OrderOptionGroup> orderOptionGroupList = new ArrayList<>();
 
     private Integer count;
+
+    public Money getTotalPrice() {
+        Money menuPrice = menu.getPrice();
+        for (OrderOptionGroup orderOptionGroup : orderOptionGroupList) {
+            menuPrice = menuPrice.plus(orderOptionGroup.totalPrice());
+        }
+
+        return menuPrice.times(count);
+    }
 }
