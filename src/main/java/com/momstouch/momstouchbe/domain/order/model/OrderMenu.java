@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.order.model;
 
-import com.momstouch.momstouchbe.domain.menu.model.Menu;
+import com.momstouch.momstouchbe.domain.shop.model.Menu;
+import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -37,7 +37,7 @@ public class OrderService {
         Order order = Order.builder()
                 .member(member)
                 .shop(shop)
-                .orderMenuList()
+//                .orderMenuList()
                 .address(address)
                 .phoneNumber(phoneNumber)
                 .totalPrice(totalPrice)
