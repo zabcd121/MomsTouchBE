@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.momstouch.momstouchbe.domain.menu.dto.MenuResponse.*;
+import static com.momstouch.momstouchbe.domain.shop.dto.MenuResponse.*;
 
 public class ShopResponse {
 

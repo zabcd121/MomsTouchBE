@@ -1,22 +1,19 @@
-package com.momstouch.momstouchbe.domain.DiscountPolicy.service;
+package com.momstouch.momstouchbe.domain.discountpolicy.service;
 
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.AmountDiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.DiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.RateDiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.TimeDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.AmountDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
 import com.momstouch.momstouchbe.global.domain.Money;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

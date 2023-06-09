@@ -1,10 +1,10 @@
-package com.momstouch.momstouchbe.domain.DiscountPolicy.service;
+package com.momstouch.momstouchbe.domain.discountpolicy.service;
 
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.AmountDiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.DiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.RateDiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.TimeDiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.repository.DiscountPolicyRepository;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.AmountDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

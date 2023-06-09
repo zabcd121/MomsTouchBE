@@ -1,12 +1,10 @@
 package com.momstouch.momstouchbe.domain.menu.model;
 
 import lombok.*;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.DiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.global.domain.Money;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

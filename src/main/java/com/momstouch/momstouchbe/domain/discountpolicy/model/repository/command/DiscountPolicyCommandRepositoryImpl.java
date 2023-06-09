@@ -1,9 +1,9 @@
-package com.momstouch.momstouchbe.domain.DiscountPolicy.model.repository.command;
+package com.momstouch.momstouchbe.domain.discountpolicy.model.repository.command;
 
 
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.AmountDiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.RateDiscountPolicy;
-import com.momstouch.momstouchbe.domain.DiscountPolicy.model.TimeDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.AmountDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
