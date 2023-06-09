@@ -1,7 +1,9 @@
 package com.momstouch.momstouchbe.domain.order.service;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.setup.OrderInfoSetup;
 import com.momstouch.momstouchbe.setup.ShopSetup;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ class OrderServiceTest {
 
     @Autowired private OrderService orderService;
     @Autowired private ShopSetup shopSetup;
+    @Autowired private OrderInfoSetup orderInfoSetup;
 
     @Test
     public void 주문_생성_테스트() {
@@ -26,9 +29,6 @@ class OrderServiceTest {
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
                 LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
-
-//        orderService.createOrder(member,shop,,"금오공대","010-0101-0000");
-
-
+//TODO: 남은 로직 구현
     }
 }

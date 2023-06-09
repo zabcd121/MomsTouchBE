@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Builder
@@ -34,7 +35,7 @@ public class Order {
     private Shop shop;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name="order_id")
     private List<OrderMenu> orderMenuList = new ArrayList<>();
 
@@ -51,6 +52,13 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.ORDER;
 
+    public void addOrderMenu(OrderMenu orderMenu) {
+        if(!orderMenuList.contains(orderMenu)) {
+            orderMenuList.add(orderMenu);
+        }
+        orderMenu.order(this);
+    }
+
     public void cancel() {
         orderStatus = OrderStatus.CANCEL;
     }
@@ -63,5 +71,16 @@ public class Order {
         orderStatus = OrderStatus.COMPLETE;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(getId(), order.getId());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }
