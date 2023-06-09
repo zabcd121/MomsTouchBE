@@ -6,6 +6,7 @@ import com.momstouch.momstouchbe.domain.shop.dto.MenuRequest;
 import com.momstouch.momstouchbe.domain.shop.model.Category;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
+import com.momstouch.momstouchbe.setup.DiscountPolicySetup;
 import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.MockMultipartFileSetup;
 import com.momstouch.momstouchbe.setup.ShopSetup;
@@ -53,6 +54,9 @@ class MenuApiControllerTest {
     MemberSetup memberSetup;
 
     @Autowired
+    DiscountPolicySetup discountPolicySetup;
+
+    @Autowired
     ShopSearchableRepository shopSearchableRepository;
 
 
@@ -77,13 +81,13 @@ class MenuApiControllerTest {
 
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
         Shop shop = shopSetup.saveMenu(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
-
+        Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(10000, 1000);
         MenuCreateRequest menuCreateRequest = MenuCreateRequest.builder()
                 .category(Category.MAIN)
                 .name("싸이버거")
                 .description("풍미좋은 햄버거")
                 .price(6500)
-                .discountPolicyId(1L)
+                .discountPolicyId(discountPolicyId)
                 .optionGroupList(
                         List.of(
                                 OptionGroupRequest.builder().name("단품, 세트 선택")
