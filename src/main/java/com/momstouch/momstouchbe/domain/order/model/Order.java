@@ -55,8 +55,9 @@ public class Order {
     public void addOrderMenu(OrderMenu orderMenu) {
         if(!orderMenuList.contains(orderMenu)) {
             orderMenuList.add(orderMenu);
+            orderMenu.order(this);
         }
-        orderMenu.order(this);
+
     }
 
     public void cancel() {
