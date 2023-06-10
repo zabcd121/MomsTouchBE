@@ -1,20 +1,19 @@
 package com.momstouch.momstouchbe.global;
 
+import com.momstouch.momstouchbe.domain.member.Service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
@@ -22,7 +21,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
-
+    private final CustomOAuth2UserService customOAuth2UserService;
     @Bean // 인증 실패 처리 관련 객체
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -58,7 +57,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
+             http
                 .addFilter(corsFilter())//@CrossOrigin(인증x), 시큐리티 필터에 등록 인증(o)
                 .csrf().ignoringAntMatchers("/h2-console/**").disable()
                 .headers().frameOptions().disable().and()
@@ -68,7 +67,28 @@ public class SecurityConfig {
                 .anyRequest()
                 .permitAll()
                 .and()
-                .build();
+                     .oauth2Login()
+                     .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
+                     .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
+                     return http.build();
 
     }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+
+
+
+
+
+
 }

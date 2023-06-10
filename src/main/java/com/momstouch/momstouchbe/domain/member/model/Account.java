@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.security.core.Authentication;
 
 import javax.persistence.Embeddable;
-
+@Data
 @Embeddable
 @Getter
 //@Builder
@@ -12,10 +12,10 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
 
-    private String loginId;
-    private String password;
+    private String loginId;  //구글 제공 id
+    private String password;  //구글 제공 pw
     private String name;
-    private String role;
+    private String role;  //ROLE_TYPE
 
     @Builder
     private Account(String loginId, String password, String name, String role) {
