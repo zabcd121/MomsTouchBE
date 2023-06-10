@@ -1,0 +1,29 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: test
+            client-secret: test
+            scope: email, profile
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+server:
+  port: 8071
