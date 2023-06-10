@@ -1,21 +1,23 @@
 package com.momstouch.momstouchbe.domain.order.application;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.order.dto.OrderRequest;
+import com.momstouch.momstouchbe.domain.order.dto.OrderResponse;
+import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
-import com.momstouch.momstouchbe.domain.order.service.OptionGroupSelectInfo;
 import com.momstouch.momstouchbe.domain.order.service.OrderService;
-import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.vote.RoleVoter;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.momstouch.momstouchbe.domain.order.dto.OrderRequest.*;
 
@@ -28,11 +30,17 @@ public class OrderAppService {
     private final MenuRepository menuRepository;
     private final ShopRepository shopRepository;
 
+    public OrderResponse findOrderById(Long orderId) {
+        Order order = orderService.findByIdWithAll(orderId).orElseThrow();
+        return OrderResponse.of(order);
+    }
+
     public Long order(CreateOrderRequest createOrderRequest, Authentication authentication) {
 
         Long shopId = createOrderRequest.getShopId();
 
-        Shop shop = shopRepository.findById(shopId).orElseThrow(NoClassDefFoundError::new);
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
+        //TODO : authentication에서 조회
         Member member = Member.createMember("temp","temp","김현석바보","ROLE_USER");
 
         List<MenuInfo> orderMenuList = createOrderRequest.getOrderMenuList();
@@ -40,5 +48,37 @@ public class OrderAppService {
 
         Long orderId = orderService.createOrder(orderInfo);
         return orderId;
+    }
+
+    private boolean template(Order order, Authentication authentication,Runnable orderCallback) {
+        Shop shop = order.getShop();
+        Member member = shop.getOwner(); // TODO : 나중에 securityContext에서 조회
+        if(!member.equals(authentication)) throw new AccessDeniedException("member.equals(authentication) 실패");
+        if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
+        orderCallback.run();
+        return true;
+    }
+    @Transactional
+    public boolean accept(Long orderId, Authentication authentication) {
+        Order order = orderService.findById(orderId).orElseThrow();
+        return template(order,authentication, order::accept);
+    }
+
+    @Transactional
+    public boolean deliver(Long orderId, Authentication authentication) {
+        Order order = orderService.findById(orderId).orElseThrow();
+        return template(order,authentication, order::deliver);
+    }
+
+    @Transactional
+    public boolean cancel(Long orderId, Authentication authentication) {
+        Order order = orderService.findById(orderId).orElseThrow();
+        return template(order,authentication, order::cancel);
+    }
+
+    @Transactional
+    public boolean complete(Long orderId, Authentication authentication) {
+        Order order = orderService.findById(orderId).orElseThrow();
+        return template(order,authentication, order::complete);
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.momstouch.momstouchbe.domain.shop.model.QMenu.menu;
 import static com.momstouch.momstouchbe.domain.shop.model.QOptionGroupSpecification.optionGroupSpecification;
 
 @RequiredArgsConstructor
@@ -22,34 +21,22 @@ public class OrderValidationRepository {
          return jpaQueryFactory
                 .select(optionGroupSpecification)
                 .from(QMenu.menu)
-                .leftJoin(QMenu.menu.optionGroupList)
+                .leftJoin(QMenu.menu.optionGroupList,optionGroupSpecification)
                 .where(QMenu.menu.id.eq(menu.getId())
                         .and(optionGroupSpecification.name.eq(orderOptionGroup.getName()))
                 ).fetch();
     }
 
     public boolean existOrderOptionInOptionGroupSpecification(OrderOption orderOption, OptionGroupSpecification optionGroupSpecification) {
-        QOptionSpecification option = new QOptionSpecification("option");
-        QOptionGroupSpecification group = new QOptionGroupSpecification("group");
+        QOptionSpecification option = new QOptionSpecification("optionSpecification");
+        QOptionGroupSpecification group = new QOptionGroupSpecification("optionGroupSpecification");
         return jpaQueryFactory
                 .from(group)
                 .leftJoin(group.optionList,option).fetchJoin()
                 .where(option.name.eq(orderOption.getName())
                         .and(option.price.eq(orderOption.getPrice()))
-                        .and(group.name.eq(optionGroupSpecification.getName())))
+                        .and(group.id.eq(optionGroupSpecification.getId())))
                 .fetchFirst() != null;
-    }
-
-    public List<OptionSpecification> test(OrderOption orderOption, OptionGroupSpecification optionGroupSpecification) {
-        QOptionSpecification qOptionSpecification = new QOptionSpecification("option");
-        QOptionGroupSpecification qOptionGroupSpecification = new QOptionGroupSpecification("group");
-        List<OptionSpecification> fetch = jpaQueryFactory
-                .select(qOptionSpecification)
-                .from(qOptionSpecification)
-                .leftJoin(qOptionGroupSpecification)
-                .on(qOptionGroupSpecification.id.eq(qOptionSpecification.id))
-                .fetch();
-        return fetch;
     }
 
 }

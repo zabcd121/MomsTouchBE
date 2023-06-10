@@ -19,9 +19,15 @@ public class AmountDiscountPolicy extends DiscountPolicy {
     private Long id;
 
     @NotNull
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "base_amount"))
+    })
     private Money baseAmount;
 
     @NotNull
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "discount_amount"))
+    })
     private Money discountAmount;
 
     @Builder

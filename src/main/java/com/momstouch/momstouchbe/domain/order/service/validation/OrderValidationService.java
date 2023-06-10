@@ -24,11 +24,16 @@ public class OrderValidationService {
     private final MenuRepository menuRepository;
     private final OrderValidationRepository orderValidationRepository;
 
-    public void validate(Order order) {
+    public boolean validate(Order order) {
         List<OrderMenu> orderMenuList = order.getOrderMenuList();
+        for (OrderMenu orderMenu : orderMenuList) {
+            validate(orderMenu);
+        }
+
+        return true;
     }
 
-    public void validate(OrderMenu orderMenu) {
+    private void validate(OrderMenu orderMenu) {
         List<OrderOptionGroup> orderOptionGroupList = orderMenu.getOrderOptionGroupList();
         Menu menu = orderMenu.getMenu();
 
@@ -37,32 +42,22 @@ public class OrderValidationService {
         }
     }
 
-    public void validate(Menu menu, OrderOptionGroup orderOptionGroup) {
-        //menu에 orderOptionGroup이 데이터로 OptionGroupSpecification 조회 쿼리
+    private void validate(Menu menu, OrderOptionGroup orderOptionGroup) {
         List<OptionGroupSpecification> optionGroupList = orderValidationRepository.findByOrderOptionGroupInMenu(orderOptionGroup,menu);
+        List<OrderOption> orderOptionList = orderOptionGroup.getOrderOptionList();
 
         for (OptionGroupSpecification optionGroupSpecification : optionGroupList) {
-
+            for (OrderOption orderOption : orderOptionList) {
+                validate(optionGroupSpecification,orderOption);
+            }
         }
-
     }
-//
-//    private boolean equals(OptionGroupSpecification optionGroupSpecification, OrderOptionGroup orderOptionGroup) {
-//
-//        List<OptionSpecification> optionList = optionGroupSpecification.getOptionList();
-//        List<OrderOption> orderOptionList = orderOptionGroup.getOrderOptionList();
-//
-//
-//    }
-//
-//
-//
-//    public void validate(OptionGroupSpecification optionGroupSpecification, OrderOption orderOption) {
-//        //TODO : optionGroupSpecification에 orderOption으로 조회하는 쿼리
-//
-//
-//
-//    }
-//
+
+    private void validate(OptionGroupSpecification optionGroupSpecification, OrderOption orderOption) {
+        //TODO : optionGroupSpecification에 orderOption으로 조회하는 쿼리
+        boolean exist = orderValidationRepository.existOrderOptionInOptionGroupSpecification(orderOption, optionGroupSpecification);
+
+        if(!exist) throw new IllegalStateException();
+    }
 
 }

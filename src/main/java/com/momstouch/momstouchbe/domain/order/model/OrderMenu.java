@@ -43,13 +43,17 @@ public class OrderMenu {
         }
     }
 
+    public void addOrderOptionGroup(OrderOptionGroup orderOptionGroup) {
+        orderOptionGroupList.add(orderOptionGroup);
+    }
+
     public Money getTotalPrice() {
         Money menuPrice = menu.getPrice();
         for (OrderOptionGroup orderOptionGroup : orderOptionGroupList) {
             menuPrice = menuPrice.plus(orderOptionGroup.totalPrice());
         }
 
-        return menuPrice.times(count);
+        return menu.applyDiscountPolicy(menuPrice.times(count));
     }
 
     @Override
@@ -57,11 +61,11 @@ public class OrderMenu {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderMenu orderMenu = (OrderMenu) o;
-        return Objects.equals(id, orderMenu.id);
+        return Objects.equals(getId(), orderMenu.getId()) && Objects.equals(getOrder(), orderMenu.getOrder()) && Objects.equals(getMenu(), orderMenu.getMenu()) && Objects.equals(getOrderOptionGroupList(), orderMenu.getOrderOptionGroupList()) && Objects.equals(getCount(), orderMenu.getCount());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId(), getOrder(), getMenu(), getOrderOptionGroupList(), getCount());
     }
 }

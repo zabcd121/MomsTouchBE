@@ -4,6 +4,7 @@ import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Entity
@@ -16,7 +17,11 @@ public class OptionSpecification {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String name;
+
+    @NotNull
+    @Embedded
     private Money price;
 
 }
