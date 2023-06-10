@@ -39,7 +39,8 @@ public class OrderAppService {
 
         Long shopId = createOrderRequest.getShopId();
 
-        Shop shop = shopRepository.findById(shopId).orElseThrow(NoClassDefFoundError::new);
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
+        //TODO : authentication에서 조회
         Member member = Member.createMember("temp","temp","김현석바보","ROLE_USER");
 
         List<MenuInfo> orderMenuList = createOrderRequest.getOrderMenuList();
@@ -51,9 +52,9 @@ public class OrderAppService {
 
     private boolean template(Order order, Authentication authentication,Runnable orderCallback) {
         Shop shop = order.getShop();
-        Member member = order.getMember();
+        Member member = shop.getOwner(); // TODO : 나중에 securityContext에서 조회
         if(!member.equals(authentication)) throw new AccessDeniedException("member.equals(authentication) 실패");
-        if(shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
+        if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
         orderCallback.run();
         return true;
     }

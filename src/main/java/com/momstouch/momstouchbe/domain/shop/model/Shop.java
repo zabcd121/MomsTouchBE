@@ -53,7 +53,7 @@ public class Shop {
     }
 
     public boolean isOwn(Member member) {
-        return member.equals(owner);
+        return member.getId() == owner.getId();
     }
 
 

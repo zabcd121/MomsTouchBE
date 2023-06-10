@@ -34,7 +34,7 @@ public class OrderController {
         return new ResponseEntity<>(orderRes,HttpStatus.OK);
     }
 
-    @Secured(value = {"ROLE_OWNER"})
+
     @PostMapping("/order/{orderId}")
     public ResponseEntity<?> acceptOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,15 +42,13 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured(value = {"ROLE_OWNER"})
-    @PutMapping("/order/{orderId}/deliver")
+    @PutMapping("/order/{orderId}/delivery")
     public ResponseEntity<?> deliverOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         orderAppService.deliver(orderId,authentication);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured(value = {"ROLE_OWNER"})
     @DeleteMapping("/order/{orderId}")
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -58,7 +56,6 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Secured(value = {"ROLE_OWNER"})
     @PutMapping("/order/{orderId}/complete")
     public ResponseEntity<?> completeOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
