@@ -1,4 +1,12 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 484166861149-9dt7gks5gisuvj9gpoprvp83l13eh205.apps.googleusercontent.com
+            client-secret: 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
+            scope: email, profile
   datasource:
     url: jdbc:h2:mem:food
     username: sa
@@ -6,8 +14,8 @@ spring:
     driverClassName: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: create
-    show-sql: false
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
