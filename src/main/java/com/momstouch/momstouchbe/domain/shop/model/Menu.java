@@ -6,6 +6,7 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.global.domain.Money;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,22 +30,19 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="discount_policy_id")
     private DiscountPolicy discountPolicy;
-
+    @NotNull
     private String name;
+
     private String description;
+
+    @NotNull
     private Money price;
     private String imageURL;
 
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    public Money getTotalPrice() {
-        Money zero = Money.ZERO;
-        Money total = zero.plus(price);
-        for (OptionGroupSpecification optionGroupSpecification : optionGroupList) {
-            total = total.plus(optionGroupSpecification.getTotalPrice());
-        }
-
-        return total;
+    public Money applyDiscountPolicy(Money orderPrice) {
+        return discountPolicy.discount(orderPrice);
     }
 }

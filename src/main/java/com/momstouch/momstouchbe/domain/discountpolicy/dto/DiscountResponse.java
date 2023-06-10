@@ -48,10 +48,25 @@ public class DiscountResponse {
             return new DiscountListResponse(amountDiscountPolicyResponseList,rateDiscountPolicyResponses,timeDiscountPolicyResponses);
         }
     }
+    public abstract static class DiscountPolicyResponse {
 
+        public static DiscountPolicyResponse of(DiscountPolicy discountPolicy) {
+            Class<? extends DiscountPolicy> discountPolicyClass = discountPolicy.getClass();
+            if(discountPolicyClass.isAssignableFrom(AmountDiscountPolicy.class)) {
+
+                return AmountDiscountPolicyResponse.of((AmountDiscountPolicy)discountPolicy);
+            } else if(discountPolicyClass.isAssignableFrom(RateDiscountPolicy.class)) {
+                return RateDiscountPolicyResponse.of((RateDiscountPolicy)discountPolicy);
+            } else if(discountPolicyClass.isAssignableFrom(TimeDiscountPolicy.class)) {
+                return TimeDiscountPolicyResponse.of((TimeDiscountPolicy)discountPolicy);
+            } else {
+                return null;
+            }
+        }
+    }
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
-    public static class AmountDiscountPolicyResponse {
+    public static class AmountDiscountPolicyResponse extends DiscountPolicyResponse {
         private Long id;
         private BigDecimal baseAmount;
         private BigDecimal discountAmount;
@@ -65,7 +80,7 @@ public class DiscountResponse {
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
-    public static class TimeDiscountPolicyResponse {
+    public static class TimeDiscountPolicyResponse extends DiscountPolicyResponse {
         private Long id;
         private LocalTime baseTime;
         private BigDecimal discountAmount;
@@ -79,7 +94,7 @@ public class DiscountResponse {
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
-    public static class RateDiscountPolicyResponse {
+    public static class RateDiscountPolicyResponse extends DiscountPolicyResponse {
         private Long id;
         private BigDecimal baseAmount;
         private double discountRate;

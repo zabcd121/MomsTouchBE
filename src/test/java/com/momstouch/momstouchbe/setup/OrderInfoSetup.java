@@ -10,8 +10,10 @@ import java.util.List;
 
 @Component
 public class OrderInfoSetup {
+    public static final String ADDRESS = "address";
+    public static final String PHONE = "1234";
 
     public OrderInfo of(Shop shop, Member member,List<MenuInfo> orderMenuList) {
-       return OrderInfo.of(member,shop,orderMenuList,"address","1234");
+       return OrderInfo.of(member,shop,orderMenuList,ADDRESS,PHONE);
     }
 }

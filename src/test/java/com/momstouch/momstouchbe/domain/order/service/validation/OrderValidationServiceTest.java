@@ -1,12 +1,12 @@
-package com.momstouch.momstouchbe.domain.order.service;
+package com.momstouch.momstouchbe.domain.order.service.validation;
 
-import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.order.model.Order;
-import com.momstouch.momstouchbe.domain.order.model.OrderMenu;
-import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
+import com.momstouch.momstouchbe.domain.order.model.OrderOption;
+import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
+import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.global.domain.Money;
@@ -20,35 +20,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class OrderServiceTest {
+class OrderValidationServiceTest {
 
+    @Autowired private OrderValidationService orderValidationService;
     @Autowired private OrderService orderService;
-    @Autowired private ShopSetup shopSetup;
     @Autowired private OrderInfoSetup orderInfoSetup;
+    @Autowired private MenuInfoSetup menuInfoSetup;
     @Autowired private MenuRepository menuRepository;
 
-    @Autowired private MenuInfoSetup menuInfoSetup;
-
-    @Autowired private MemberSetup memberSetup;
-
     @Autowired private DiscountPolicyService discountPolicyService;
+
+    @Autowired private ShopSetup shopSetup;
+    @Autowired private MemberSetup memberSetup;
+    @PersistenceContext EntityManager entityManager;
+
     @Test
-    public void 주문_생성_테스트() {
+    public void 검증_서비스_테스트() {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
                 LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
 
-        Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
+        Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,10000, 1000);
 
         Menu menu1 = Menu.builder()
                 .category(Category.MAIN)
@@ -92,9 +97,8 @@ class OrderServiceTest {
                                         ).build()
                         )
                 ).build();
-
-        menuRepository.save(menu1);
         menuRepository.save(menu2);
+        menuRepository.save(menu1);
 
         MenuInfo menuInfo1 = menuInfoSetup.of(menu1, menu1.getOptionGroupList(), 1);
         MenuInfo menuInfo2 = menuInfoSetup.of(menu2, menu2.getOptionGroupList(), 2);
@@ -103,18 +107,12 @@ class OrderServiceTest {
 
         Long orderId = orderService.createOrder(orderInfo);
 
+        entityManager.flush();
+        entityManager.clear();
 
-        Optional<Order> byId = orderService.findById(orderId);
+        Order order = orderService.findById(orderId).orElseThrow(NoSuchElementException::new);
+        boolean validate = orderValidationService.validate(order);
+        Assertions.assertThat(validate).isTrue();
 
-        Assertions.assertThat(byId.isPresent()).isTrue();
-
-        Order order = byId.get();
-
-        Assertions.assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER);
-        Assertions.assertThat(order.getShop()).isEqualTo(shop);
-        Assertions.assertThat(order.getMember()).isEqualTo(member);
-        List<OrderMenu> orderMenuList = order.getOrderMenuList();
-        Assertions.assertThat(orderMenuList.size()).isEqualTo(2);
-        Assertions.assertThat(order.getTotalPrice()).isEqualTo(Money.of(26000));
     }
 }

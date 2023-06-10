@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,8 +36,7 @@ class OrderValidationRepositoryTest {
     @Autowired private ShopSetup shopSetup;
     @Autowired private MemberSetup memberSetup;
 
-    @PersistenceContext
-    EntityManager entityManager;
+    @PersistenceContext EntityManager entityManager;
 
     @Test
     public void 검증_쿼리_테스트() {
@@ -80,13 +80,6 @@ class OrderValidationRepositoryTest {
         OrderOption orderOption = new OrderOption("감자튀김" ,Money.of(1500));
 
         boolean b = orderValidationRepository.existOrderOptionInOptionGroupSpecification(orderOption, optionGroupSpecification);
-//        List<OptionSpecification> test = orderValidationRepository.test(orderOption, optionGroupSpecification);
-//
-//        System.out.println(test.size());
-//        for (OptionSpecification optionSpecification : test) {
-//            System.out.println("optionSpecification.getName() = " + optionSpecification.getName());
-//        }
-
         Assertions.assertThat(b).isTrue();
     }
 }

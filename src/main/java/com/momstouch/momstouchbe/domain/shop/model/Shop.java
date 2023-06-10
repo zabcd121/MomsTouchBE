@@ -52,5 +52,9 @@ public class Shop {
         discountPolicyList.add(discountPolicy);
     }
 
+    public boolean isOwn(Member member) {
+        return member.equals(owner);
+    }
+
 
 }

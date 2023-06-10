@@ -1,13 +1,12 @@
 package com.momstouch.momstouchbe.domain.member.model;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.Authentication;
 
 import javax.persistence.Embeddable;
 
 @Embeddable
+@Getter
 //@Builder
 //@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,5 +28,10 @@ public class Account {
         }
 
         this.role = role;
+    }
+
+    public boolean equals(Authentication authentication) {
+        //TODO: 본인 확인 로직
+        return true;
     }
 }

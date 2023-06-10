@@ -1,14 +1,13 @@
 package com.momstouch.momstouchbe.domain.member.model;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.Authentication;
 
 import javax.persistence.*;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
@@ -28,6 +27,10 @@ public class Member {
                         .role(role)
                         .build())
                 .build();
+    }
+
+    public boolean equals(Authentication authentication) {
+        return account.equals(authentication);
     }
 
 

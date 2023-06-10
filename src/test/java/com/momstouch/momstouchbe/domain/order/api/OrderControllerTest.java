@@ -1,12 +1,11 @@
-package com.momstouch.momstouchbe.domain.order.service;
+package com.momstouch.momstouchbe.domain.order.api;
 
-import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.order.model.Order;
-import com.momstouch.momstouchbe.domain.order.model.OrderMenu;
-import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
+import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
+import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.global.domain.Money;
@@ -14,35 +13,45 @@ import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.MenuInfoSetup;
 import com.momstouch.momstouchbe.setup.OrderInfoSetup;
 import com.momstouch.momstouchbe.setup.ShopSetup;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountRequest.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 @Transactional
-class OrderServiceTest {
+class OrderControllerTest {
 
-    @Autowired private OrderService orderService;
-    @Autowired private ShopSetup shopSetup;
-    @Autowired private OrderInfoSetup orderInfoSetup;
-    @Autowired private MenuRepository menuRepository;
+    @Autowired MockMvc mvc;
+    @Autowired MemberSetup memberSetup;
+    @Autowired ShopSetup shopSetup;
+    @Autowired DiscountPolicyService discountPolicyService;
+    @Autowired OrderService orderService;
+    @Autowired MenuRepository menuRepository;
+    @Autowired MenuInfoSetup menuInfoSetup;
+    @Autowired OrderInfoSetup orderInfoSetup;
 
-    @Autowired private MenuInfoSetup menuInfoSetup;
 
-    @Autowired private MemberSetup memberSetup;
-
-    @Autowired private DiscountPolicyService discountPolicyService;
     @Test
-    public void 주문_생성_테스트() {
+    public void 주문_조회_테스트() throws Exception{
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
@@ -101,20 +110,26 @@ class OrderServiceTest {
 
         OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1, menuInfo2));
 
-        Long orderId = orderService.createOrder(orderInfo);
+        Long basicOrderId = orderService.createOrder(orderInfo);
+        ResultActions perform = mvc.perform(
+                get("/api/order/{orderId}", basicOrderId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(csrf())
+        );
 
-
-        Optional<Order> byId = orderService.findById(orderId);
-
-        Assertions.assertThat(byId.isPresent()).isTrue();
-
-        Order order = byId.get();
-
-        Assertions.assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER);
-        Assertions.assertThat(order.getShop()).isEqualTo(shop);
-        Assertions.assertThat(order.getMember()).isEqualTo(member);
-        List<OrderMenu> orderMenuList = order.getOrderMenuList();
-        Assertions.assertThat(orderMenuList.size()).isEqualTo(2);
-        Assertions.assertThat(order.getTotalPrice()).isEqualTo(Money.of(26000));
+        perform.andDo(print())
+                .andExpect(jsonPath("$.orderId").value(basicOrderId))
+                .andExpect(jsonPath("$.address").value(OrderInfoSetup.ADDRESS))
+                .andExpect(jsonPath("$.phoneNumber").value(OrderInfoSetup.PHONE))
+                .andExpect(jsonPath("$.totalPrice").value(26000.00))
+                .andExpect(jsonPath("$.status").value("ORDER"))
+                .andExpect(jsonPath("$.shop").isNotEmpty())
+                    .andExpect(jsonPath("$.shop.shopName").value(shop.getName()))
+                .andExpect(jsonPath("$.customer").isNotEmpty())
+                    .andExpect(jsonPath("$.customer.name").value(member.getAccount().getName()))
+                .andExpect(jsonPath("$.orderMenus.size()").value(2))
+            .andExpect(status().isOk());
     }
 }
