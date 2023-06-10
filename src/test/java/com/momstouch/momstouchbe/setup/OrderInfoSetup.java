@@ -11,13 +11,7 @@ import java.util.List;
 @Component
 public class OrderInfoSetup {
 
-    public static OrderInfo of(Shop shop, Member member,List<MenuInfo> orderMenuList) {
-        return OrderInfo.builder()
-                .shop(shop)
-                .member(member)
-                .address("address")
-                .phoneNumber("1234")
-                .orderMenuList(orderMenuList)
-                .build();
+    public OrderInfo of(Shop shop, Member member,List<MenuInfo> orderMenuList) {
+       return OrderInfo.of(member,shop,orderMenuList,"address","1234");
     }
 }

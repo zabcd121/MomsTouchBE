@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -41,6 +42,7 @@ public class OrderService {
                 .member(member)
                 .shop(shop)
                 .address(orderInfo.getAddress())
+                .phoneNumber(orderInfo.getPhoneNumber())
                 .totalPrice(totalPrice)
                 .build();
 
@@ -51,7 +53,6 @@ public class OrderService {
             OrderMenu orderMenu = OrderMenu.builder()
                     .count(menuInfo.getCount())
                     .menu(menu)
-                    .order(order)
                     .build();
 
             for (OptionGroupSelectInfo optionGroupSelectInfo : optionGroupSelectInfoList) {
@@ -69,12 +70,15 @@ public class OrderService {
                 orderMenu.order(order);
             }
 
+            orderRepository.save(order);
+
         }
 
-        orderRepository.save(order);
-
-
         return order.getId();
+    }
+
+    public Optional<Order> findById(Long id) {
+        return orderRepository.findById(id);
     }
 
 }

@@ -39,11 +39,10 @@ public class OrderMenu {
     private Integer count;
 
     public void order(Order order) {
-        if(!this.order.equals(order)) {
+        if(this.order == null || !this.order.equals(order)) {
             this.order = order;
+            order.addOrderMenu(this);
         }
-
-        order.addOrderMenu(this);
     }
 
     public Money getTotalPrice() {
