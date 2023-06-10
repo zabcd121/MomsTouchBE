@@ -69,7 +69,7 @@ public class OrderService {
 
                 orderMenu.order(order);
             }
-
+            //TODO : OrderValidationService -> 사이드만 있는지 메뉴의 OptionSpectification의 가격, 이름 일치하는지 검사
             orderRepository.save(order);
 
         }

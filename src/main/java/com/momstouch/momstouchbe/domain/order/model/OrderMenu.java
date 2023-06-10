@@ -2,10 +2,7 @@ package com.momstouch.momstouchbe.domain.order.model;
 
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.global.domain.Money;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -15,6 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderMenu {
