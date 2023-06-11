@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 public class OptionGroupSpecification {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

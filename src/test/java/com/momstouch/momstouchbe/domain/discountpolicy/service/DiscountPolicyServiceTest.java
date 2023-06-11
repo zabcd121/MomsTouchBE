@@ -30,7 +30,7 @@ class DiscountPolicyServiceTest {
     @Test
     public void 할인정책_생성_테스트() {
         LocalTime baseTime = LocalTime.of(12, 12);
-        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER","email");
         Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
 
         Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,1000, 200);
@@ -57,7 +57,7 @@ class DiscountPolicyServiceTest {
     @Test
     public void 할인정책_삭제_테스트() {
         LocalTime baseTime = LocalTime.of(12, 12);
-        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER","email");
         Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
 
         Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,1000, 200);

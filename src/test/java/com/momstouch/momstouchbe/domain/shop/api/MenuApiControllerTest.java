@@ -43,7 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@Rollback(value = false)
 class MenuApiControllerTest {
 
     @Autowired
@@ -88,7 +87,7 @@ class MenuApiControllerTest {
         shop.addMenu(menu2);
 
         ResultActions resultActions = mvc.perform(
-                        get("/api/shop/{shopId}/menus", 1L)
+                        get("/api/shop/{shopId}/menus", shop.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8")
                                 .accept(MediaType.APPLICATION_JSON))

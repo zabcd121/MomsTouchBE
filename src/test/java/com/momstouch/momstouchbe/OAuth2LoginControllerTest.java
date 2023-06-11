@@ -7,6 +7,7 @@ import com.momstouch.momstouchbe.domain.member.Service.CustomOAuth2UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -30,29 +31,24 @@ import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(OAuth2LoginController.class)
 @AutoConfigureMockMvc
-@Import(TestSecurityConfiguration.class)
 public class OAuth2LoginControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired MockMvc mockMvc;
 
-    @MockBean
-    private MemberRepository memberRepository;
+    @MockBean private MemberRepository memberRepository;
 
-
-    @MockBean
-    TestService testService;
+    @MockBean TestService testService;
 
 
 
     @Test
     @WithMockUser(roles = "MEMBER")
     void 회원_가입() throws Exception {
-        Member member =  Member.createMember("인증키","인증번호","이름","email");
+        Member member =  Member.createMember("인증키","인증번호","이름","ROLE_MEMBER","email");
         when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(member));
 
         ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", 1L));
@@ -66,7 +62,7 @@ public class OAuth2LoginControllerTest {
     @Test
     @WithMockUser(roles = "MEMBER")
     void 어드민_테스트() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/admins/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/admins/1234"))
                 .andExpect(status().isForbidden());
     }
 
