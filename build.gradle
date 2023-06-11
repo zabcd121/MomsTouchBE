@@ -13,6 +13,10 @@ plugins {
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 
 group = 'com.momstouch'
 version = '0.0.1-SNAPSHOT'
@@ -57,26 +61,49 @@ dependencies {
 
 }
 
-tasks.named('test') {
+tasks.test {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
 }
 
-jacoco {
-    toolVersion = "0.8.7"
-}
 
-jacocoTestReport {
+
+tasks.jacocoTestReport {
     reports {
         html.enabled true
         xml.enabled false
         csv.enabled false
     }
+
+    def Qdomains = []
+    for (qPattern in "**/QA".."**/QZ") {
+        Qdomains.add(qPattern + "*")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: ["**/*BEApplication*",
+                                                "**/*Config*",
+                                                "**/*Dto*",
+                                                "**/*Jwt*",
+                                                "**/*DataFormatProvider*",
+                                                "**/*ControllerAdvice*",
+                                                "**/*Exception*",
+                                                "**/*Condition*",
+                                                "**/*Init*",
+                                                "**/*BaseTime**",
+                                                "**/*Foramtter**",
+                                                "**/*ReservationStatusReqConverter**"
+                    ] + Qdomains)
+                }))
+    }
+
     finalizedBy 'jacocoTestCoverageVerification'
 }
 
-jacocoTestCoverageVerification {
-    var Qdomains = []
+tasks.jacocoTestCoverageVerification {
+    def Qdomains = []
 
     for (qPattern in 'A' .. 'Z') {
         Qdomains.add("*.Q${qPattern}*")
@@ -135,6 +162,10 @@ jacocoTestCoverageVerification {
         }
 
     }
+}
+
+springBoot {
+    buildInfo()
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
