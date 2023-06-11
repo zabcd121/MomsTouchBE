@@ -35,7 +35,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountRequest.*;
-import static com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;

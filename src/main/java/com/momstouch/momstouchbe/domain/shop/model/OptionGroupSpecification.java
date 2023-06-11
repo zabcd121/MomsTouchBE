@@ -5,11 +5,13 @@ import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -24,6 +26,7 @@ public class OptionGroupSpecification {
     @JoinColumn(name="option_group_id")
     private List<OptionSpecification> optionList = new ArrayList<>();
 
+    @NotNull
     private String name;
 
     public Money getTotalPrice() {

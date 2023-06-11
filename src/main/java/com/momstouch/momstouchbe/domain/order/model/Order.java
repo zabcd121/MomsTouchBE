@@ -55,10 +55,24 @@ public class Order {
     public void addOrderMenu(OrderMenu orderMenu) {
         if(!orderMenuList.contains(orderMenu)) {
             orderMenuList.add(orderMenu);
+            orderMenu.order(this);
         }
-        orderMenu.order(this);
     }
 
+    public Money getTotalPrice() {
+        Money price = Money.ZERO;
+        for (OrderMenu orderMenu : orderMenuList) {
+            price = price.plus(orderMenu.getTotalPrice());
+        }
+
+        return price;
+    };
+
+    public void setTotalPrice(Money price) {
+        this.totalPrice = price;
+    }
+
+    public void accept() {orderStatus = OrderStatus.ACCEPT;}
     public void cancel() {
         orderStatus = OrderStatus.CANCEL;
     }

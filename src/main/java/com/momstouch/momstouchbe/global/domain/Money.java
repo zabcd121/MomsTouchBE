@@ -15,7 +15,6 @@ public class Money {
 
     public static final Money ZERO = Money.of(0);
 
-    @Column(insertable = false,updatable = false)
     private BigDecimal amount;
 
 

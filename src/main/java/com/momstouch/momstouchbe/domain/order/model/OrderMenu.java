@@ -2,10 +2,7 @@ package com.momstouch.momstouchbe.domain.order.model;
 
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.global.domain.Money;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -15,6 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderMenu {
@@ -39,11 +37,14 @@ public class OrderMenu {
     private Integer count;
 
     public void order(Order order) {
-        if(!this.order.equals(order)) {
+        if(this.order == null || !this.order.equals(order)) {
             this.order = order;
+            order.addOrderMenu(this);
         }
+    }
 
-        order.addOrderMenu(this);
+    public void addOrderOptionGroup(OrderOptionGroup orderOptionGroup) {
+        orderOptionGroupList.add(orderOptionGroup);
     }
 
     public Money getTotalPrice() {
@@ -52,7 +53,7 @@ public class OrderMenu {
             menuPrice = menuPrice.plus(orderOptionGroup.totalPrice());
         }
 
-        return menuPrice.times(count);
+        return menu.applyDiscountPolicy(menuPrice.times(count));
     }
 
     @Override
@@ -60,11 +61,11 @@ public class OrderMenu {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderMenu orderMenu = (OrderMenu) o;
-        return Objects.equals(id, orderMenu.id);
+        return Objects.equals(getId(), orderMenu.getId()) && Objects.equals(getOrder(), orderMenu.getOrder()) && Objects.equals(getMenu(), orderMenu.getMenu()) && Objects.equals(getOrderOptionGroupList(), orderMenu.getOrderOptionGroupList()) && Objects.equals(getCount(), orderMenu.getCount());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId(), getOrder(), getMenu(), getOrderOptionGroupList(), getCount());
     }
 }
