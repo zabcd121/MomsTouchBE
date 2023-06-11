@@ -6,6 +6,7 @@ import com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +44,12 @@ public class DiscountPolicyApiController {
     public ResponseEntity<Long> removeDiscountPolicy(@PathVariable Long id) {
         discountAppService.removeDiscountPolicy(id);
         return new ResponseEntity<>(id,HttpStatus.OK);
+    }
+
+    @Operation(summary = "할인 정책 적용")
+    @PostMapping("/discountPolicy/{discountPolicyId}")
+    public ResponseEntity updateDiscountPolicyOfMenu(@RequestBody UpdateDiscountPolicyRequest request,@PathVariable Long discountPolicyId) {
+        discountAppService.updateDiscountPolicyOfMenu(discountPolicyId,request.getMenuId());
+        return ResponseEntity.ok().build();
     }
 }

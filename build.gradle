@@ -94,7 +94,10 @@ tasks.jacocoTestReport {
                                                 "**/*Init*",
                                                 "**/*BaseTime**",
                                                 "**/*Foramtter**",
-                                                "**/*ReservationStatusReqConverter**"
+                                                "**/*ReservationStatusReqConverter**",
+                                                "**/*Response*.*",
+                                                "**/*Request*.*",
+                                                "**/*Builder*.*",
                     ] + Qdomains)
                 }))
     }
@@ -155,9 +158,9 @@ tasks.jacocoTestCoverageVerification {
 //            }
 
 
-            excludes = ["**/*Request*",
-                        "**/*Response*",
-                        "**/*Command*"
+            excludes = ["**/*Request*.*",
+                        "**/*Response*.*",
+                        "**/*Command*.*"
             ] + Qdomains
         }
 

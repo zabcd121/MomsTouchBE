@@ -7,6 +7,8 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.provider.DelegationDiscountPolicyProvider;
+import com.momstouch.momstouchbe.domain.shop.model.Menu;
+import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import static com.momstouch.momstouchbe.domain.discountpolicy.utis.command.Disco
 public class DiscountAppService {
 
     private final DiscountPolicyService discountPolicyService;
+    private final MenuRepository menuRepository;
     private final DelegationDiscountPolicyProvider delegationDiscountPolicyProvider;
 
     public DiscountListResponse searchAll() {
@@ -67,5 +70,12 @@ public class DiscountAppService {
     public Long removeDiscountPolicy(Long id) {
         //TODO : MENU 검색 레포지토리에서 연관 메뉴 조회하기
         return discountPolicyService.delete(id);
+    }
+
+    @Transactional
+    public void updateDiscountPolicyOfMenu(Long discountPolicyId,Long menuId) {
+        DiscountPolicy discountPolicy = discountPolicyService.findById(discountPolicyId).orElseThrow();
+        Menu menu = menuRepository.findById(menuId).orElseThrow();
+        menu.setDiscountPolicy(discountPolicy);
     }
 }

@@ -29,9 +29,13 @@ public class MenuApiController {
 
     @Operation(summary = "가게의 새로운 메뉴를 추가")
     @PostMapping("/shop/{shopId}/menus")
-    public ResponseEntity addMenu(@PathVariable Long shopId, @RequestPart("image") MultipartFile image, @RequestPart MenuCreateRequest menu) {
-        menuService.addMenu(shopId, image,menu);
-        return ResponseEntity.ok().build();
+    public ResponseEntity addMenu(@PathVariable Long shopId, @RequestPart(value = "image",required = false) MultipartFile image, @RequestPart MenuCreateRequest menu) {
+        try{
+            menuService.addMenu(shopId, image,menu);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "가게의 메뉴 상세 내역을 조회")

@@ -1,14 +1,20 @@
 package com.momstouch.momstouchbe.domain.shop.application;
 
+import com.fasterxml.classmate.MemberResolver;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
+import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.shop.dto.MenuRequest;
 import com.momstouch.momstouchbe.domain.shop.dto.MenuResponse;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
 import com.momstouch.momstouchbe.global.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +34,7 @@ public class MenuService {
     private final ShopRepository shopRepository;
     private final DiscountPolicyRepository discountPolicyRepository;
     private final FileUploadUtil fileUploadUtil;
-
+    private final MenuRepository menuRepository;
     public ShopMenuListResponse searchAllMenuInShop(Long shopId) {
         return ShopMenuListResponse.of(shopSearchableRepository.findWithMenuListByShopId(shopId));
     }
@@ -37,7 +43,12 @@ public class MenuService {
     public Shop addMenu(Long shopId, MultipartFile image, MenuCreateRequest menuRequest) {
         Shop shop = null;
         try {
+
+            String menuName = menuRequest.getName();
+            if(menuRepository.existsByName(menuName)) throw new IllegalStateException();
+
             shop = shopSearchableRepository.findWithMenuListByShopId(shopId);
+            //TODO : 소유주 확인
             shop.getDiscountPolicyList();
             String imageURL = fileUploadUtil.uploadMenuImage(image);
             shop.addMenu(
@@ -45,7 +56,7 @@ public class MenuService {
                             imageURL,
                             discountPolicyRepository.getReferenceById(menuRequest.getDiscountPolicyId())
                     ));
-        } catch (IOException e) {
+        } catch (IOException e) { //TODO : 예외 발생 테스트
             e.printStackTrace();
         }
         return shop;
@@ -75,7 +86,7 @@ public class MenuService {
 
             originMenu.update(updatedMenu);
 
-        } catch (IOException e) {
+        } catch (IOException e) { //TODO : 예외 발생 테스트
             e.printStackTrace();
         }
     }

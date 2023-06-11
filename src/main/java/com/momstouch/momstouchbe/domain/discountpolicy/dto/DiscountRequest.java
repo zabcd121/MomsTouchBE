@@ -20,4 +20,14 @@ public class DiscountRequest {
         private LocalTime baseTime;
     }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class UpdateDiscountPolicyRequest {
+
+        private Long menuId;
+    }
+
+
 }

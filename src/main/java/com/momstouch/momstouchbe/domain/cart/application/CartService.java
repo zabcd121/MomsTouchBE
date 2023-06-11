@@ -9,6 +9,8 @@ import com.momstouch.momstouchbe.domain.cart.model.repository.CartQueryRepositor
 import com.momstouch.momstouchbe.domain.cart.model.repository.CartRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
+import com.momstouch.momstouchbe.domain.shop.model.Menu;
+import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class CartService {
     @Transactional
     public void addCartMenu(Long memberId, CartMenuAddRequest cartMenuAddRequest) {
         Cart cart = null;
-        if(cartQueryRepository.existsByMemberId(memberId) == false) {
+        if(!cartQueryRepository.existsByMemberId(memberId)) {
              cart = Cart.builder()
                     .member(memberRepository.getReferenceById(memberId))
                     .build();
@@ -41,9 +43,11 @@ public class CartService {
             cart = cartQueryRepository.findByMemberId(memberId);
         }
 
+        Long menuId = cartMenuAddRequest.getMenuId();
+        //TODO : 장바구니 테스트
         cart.addCartMenu(
                 CartMenu.builder()
-                        .menuId(cartMenuAddRequest.getMenuId())
+                        .menuId(menuId)
                         .discountPolicy(discountPolicyRepository.getReferenceById(cartMenuAddRequest.getDiscountPolicyId()))
                         .quantity(cartMenuAddRequest.getQuantity())
                         .price(Money.of(cartMenuAddRequest.getPrice()))

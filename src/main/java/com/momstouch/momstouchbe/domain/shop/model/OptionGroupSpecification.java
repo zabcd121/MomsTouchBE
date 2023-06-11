@@ -28,20 +28,20 @@ public class OptionGroupSpecification {
     @NotNull
     private String name;
 
-    public Money getTotalPrice() {
-        Money total = Money.ZERO;
-
-        for (OptionSpecification optionSpecification : optionList) {
-            total = total.plus(optionSpecification.getPrice());
-        }
-
-        return total;
-    }
-
-    public void update(List<OptionSpecification> optionList, String name) {
-        this.optionList.clear();
-        this.optionList.addAll(optionList);
-        this.name = name;
-    }
+//    public Money getTotalPrice() {
+//        Money total = Money.ZERO;
+//
+//        for (OptionSpecification optionSpecification : optionList) {
+//            total = total.plus(optionSpecification.getPrice());
+//        }
+//
+//        return total;
+//    }
+//
+//    public void update(List<OptionSpecification> optionList, String name) {
+//        this.optionList.clear();
+//        this.optionList.addAll(optionList);
+//        this.name = name;
+//    }
 
 }
