@@ -8,9 +8,11 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'jacoco'
 
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
+
 
 group = 'com.momstouch'
 version = '0.0.1-SNAPSHOT'
@@ -50,11 +52,89 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.mockito:mockito-core:4.8.0'
 
+// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
 
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+        xml.enabled false
+        csv.enabled false
+    }
+    finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+    var Qdomains = []
+
+    for (qPattern in 'A' .. 'Z') {
+        Qdomains.add("*.Q${qPattern}*")
+    }
+
+    afterEvaluate {
+
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: ["**/*Application*",
+                                                "**/*Request*",
+                                                "**/*Command*",
+                                                "**/*Dto*",
+                                                "**/*BaseTime**",
+                                                "**/*Foramtter**",
+                                                "**/*ReservationStatusReqConverter**"
+                    ] + Qdomains)
+                }))
+    }
+
+
+    violationRules {
+        rule {
+            enabled = true // 활성화
+            element = 'CLASS' // 클래스 단위로 커버리지 체크
+
+
+            // includes = []
+
+//            // 라인 커버리지를 최소한 80% 만족시켜야 합니다.
+//            limit {
+//                counter = 'LINE'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.80
+//            }
+//
+//            // 브랜치 커버리지를 최소한 80% 만족시켜야 합니다.
+//            limit {
+//                counter = 'BRANCH'
+//                value = 'COVEREDRATIO'
+//                minimum = 0.80
+//            }
+//
+//            // 빈 줄을 제외한 코드의 라인수를 최대 200라인으로 제한합니다.
+//            limit {
+//                counter = 'LINE'
+//                value = 'TOTALCOUNT'
+//                maximum = 200
+//            }
+
+
+            excludes = ["**/*Request*",
+                        "**/*Response*",
+                        "**/*Command*"
+            ] + Qdomains
+        }
+
+    }
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
