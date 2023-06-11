@@ -99,6 +99,32 @@ class CartApiControllerTest {
     }
 
     @Test
+    void 장바구니추가_실패_운영시간X() throws Exception {
+        Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
+        LocalTime now = LocalTime.now();
+        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(now.getHour()+1, 30), LocalTime.of(now.getHour()+4, 0), 5000);
+
+        Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop, 10000, 1000);
+
+        Menu menu1 = getMenu1(discountPolicyId);
+
+        shop.addMenu(menu1);
+
+        em.flush();
+
+        CartMenuAddRequest cartMenuAddRequest = getCarMenuAddRequest(menu1);
+
+        mvc.perform(
+                        post("/api/members/{memberId}/carts", member.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(cartMenuAddRequest))
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+
+    }
+
+    @Test
     void 장바구니조회_성공() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);

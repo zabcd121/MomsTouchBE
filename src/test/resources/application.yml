@@ -2,11 +2,11 @@ spring:
   config:
     import:
       - application-filedir.yml
-      - application-mariadb.yml
-#      - application-h2db.yml
+      #- application-mariadb.yml
+      - application-h2db.yml
   profiles:
-    active: mariadb # dev, prod, test
-    include: mariadb
+    active: h2db # dev, prod, test
+    include: h2db
   security:
     oauth2:
       client:
