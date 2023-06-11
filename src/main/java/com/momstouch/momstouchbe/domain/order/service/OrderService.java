@@ -8,6 +8,7 @@ import com.momstouch.momstouchbe.domain.order.model.OrderOption;
 import com.momstouch.momstouchbe.domain.order.model.OrderOptionGroup;
 import com.momstouch.momstouchbe.domain.order.model.repository.OrderRepository;
 import com.momstouch.momstouchbe.domain.order.service.validation.OrderValidationService;
+import com.momstouch.momstouchbe.domain.shop.model.Category;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.global.domain.Money;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,17 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderValidationService orderValidationService;
 
+    private boolean hasOnlySideMenu(List<OrderMenu> orderMenuList) {
+        boolean hasOnlySideMenu = false;
+        for (OrderMenu orderMenu : orderMenuList) {
+            Menu menu = orderMenu.getMenu();
+            Category category = menu.getCategory();
+            hasOnlySideMenu |= category.equals(Category.MAIN);
+        }
+
+        return hasOnlySideMenu;
+    }
+
 
     @Transactional
     public Long createOrder(OrderInfo orderInfo) {
@@ -33,6 +46,10 @@ public class OrderService {
 
         Member member = orderInfo.getMember();
         Shop shop = orderInfo.getShop();
+
+        if(!shop.isRunningTime(LocalTime.now())) {
+            throw new IllegalStateException("영업시간이 아님");
+        }
 
         Order order = Order.builder()
                 .member(member)
@@ -70,6 +87,11 @@ public class OrderService {
 
         //TODO : OrderValidationService -> 사이드만 있는지 메뉴의 OptionSpectification의 가격, 이름 일치하는지 검사
         Money orderTotalPrice = order.getTotalPrice();
+
+        if(!shop.overMinOrderPrice(orderTotalPrice)) {
+            throw new IllegalStateException("최소 주문 금액을 넘지 못함");
+        }
+
         order.setTotalPrice(orderTotalPrice);
 
         boolean validate = orderValidationService.validate(order);
