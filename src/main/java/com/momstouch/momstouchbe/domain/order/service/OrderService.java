@@ -74,6 +74,7 @@ public class OrderService {
 
         boolean validate = orderValidationService.validate(order);
 
+        //TODO : validation 테스트 필요함
         if(!validate) {
             throw new IllegalStateException();
         }

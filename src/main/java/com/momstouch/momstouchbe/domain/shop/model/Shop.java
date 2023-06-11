@@ -52,6 +52,7 @@ public class Shop {
         discountPolicyList.add(discountPolicy);
     }
 
+    //TODO : isOwn false 테스트
     public boolean isOwn(Member member) {
         return member.getId() == owner.getId();
     }

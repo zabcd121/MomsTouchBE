@@ -44,22 +44,6 @@ public class Money {
         return new Money(amount.multiply(BigDecimal.valueOf(percent)));
     }
 
-    public Money divide(double percent) {
-        return new Money(amount.divide(BigDecimal.valueOf(percent)));
-    }
-
-    public boolean lessThan(Money o) {
-        return amount.compareTo(o.amount) < 0;
-    }
-
-    public boolean moreThan(Money o) {
-        return amount.compareTo(o.amount) > 0;
-    }
-
-    public boolean equalOrLess(Money o) {
-        return amount.compareTo(o.amount) <= 0;
-    }
-
     public boolean equalsOrMore(Money o) {
         return amount.compareTo(o.amount) >= 0;
     }
@@ -75,10 +59,5 @@ public class Money {
     @Override
     public int hashCode() {
         return Objects.hash(amount);
-    }
-
-    @Override
-    public String toString() {
-        return amount.toString();
     }
 }
