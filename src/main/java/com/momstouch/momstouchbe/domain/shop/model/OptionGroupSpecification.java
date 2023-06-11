@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class OptionGroupSpecification {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +37,12 @@ public class OptionGroupSpecification {
         }
 
         return total;
+    }
+
+    public void update(List<OptionSpecification> optionList, String name) {
+        this.optionList.clear();
+        this.optionList.addAll(optionList);
+        this.name = name;
     }
 
 }

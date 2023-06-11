@@ -24,4 +24,10 @@ public class OptionSpecification {
     @Embedded
     private Money price;
 
+
+//    public void update(String name, Money price) {
+//        this.name = name;
+//        this.price = price;
+//    }
+
 }

@@ -45,4 +45,19 @@ public class Menu {
     public Money applyDiscountPolicy(Money orderPrice) {
         return discountPolicy.discount(orderPrice);
     }
+
+    public void update(Menu updatedMenu) {
+        this.optionGroupList = new ArrayList<>(this.optionGroupList);
+        this.optionGroupList.clear();
+        this.optionGroupList.addAll(updatedMenu.getOptionGroupList());
+        this.discountPolicy = updatedMenu.getDiscountPolicy();
+        this.name = updatedMenu.getName();
+        this.description = updatedMenu.getDescription();
+        this.price = updatedMenu.getPrice();
+        this.category = updatedMenu.getCategory();
+
+        if(updatedMenu.getImageURL() != null) {
+            this.imageURL = updatedMenu.getImageURL();
+        }
+    }
 }

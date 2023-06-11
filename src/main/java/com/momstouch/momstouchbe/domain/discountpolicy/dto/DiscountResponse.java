@@ -4,10 +4,7 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.AmountDiscountPolic
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -106,4 +103,43 @@ public class DiscountResponse {
         }
     }
 
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class DiscountPolicyValueResponse {
+        private String type;
+        private Integer baseAmount;
+        private Integer discountAmount;
+        private Double discountRate;
+        private LocalTime baseTime;
+
+        public static DiscountPolicyValueResponse of(DiscountPolicy discountPolicy) {
+            if (discountPolicy instanceof AmountDiscountPolicy) {
+                AmountDiscountPolicy policy = (AmountDiscountPolicy) discountPolicy;
+                return new DiscountPolicyValueResponse(
+                        policy.getClass().getName(),
+                        policy.getBaseAmount().getAmount().intValueExact(),
+                        policy.getDiscountAmount().getAmount().intValueExact(),
+                        null,
+                        null);
+            } else if (discountPolicy instanceof RateDiscountPolicy) {
+                RateDiscountPolicy policy = (RateDiscountPolicy) discountPolicy;
+                return new DiscountPolicyValueResponse(
+                        policy.getClass().getName(),
+                        policy.getBaseAmount().getAmount().intValueExact(),
+                        null,
+                        policy.getDiscountRate(),
+                        null);
+            } else if (discountPolicy instanceof TimeDiscountPolicy) {
+                TimeDiscountPolicy policy = (TimeDiscountPolicy) discountPolicy;
+                return new DiscountPolicyValueResponse(
+                        policy.getClass().getName(),
+                        null,
+                        policy.getDiscountAmount().getAmount().intValueExact(),
+                        null,
+                        policy.getBaseTime());
+            } else return null;
+        }
+    }
 }
