@@ -21,6 +21,39 @@ public class ShopResponse {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
+    public static class ShopListResponse {
+        @Builder.Default
+        private List<ShopSimpleResponse> shopList = new ArrayList<>();
+
+        public static ShopListResponse of(List<Shop> ownerShopList) {
+            return ShopListResponse.builder()
+                    .shopList(ownerShopList.stream()
+                            .map(ShopSimpleResponse::of)
+                            .collect(Collectors.toList()))
+                    .build();
+        }
+    }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter
+    public static class ShopSimpleResponse {
+        private Long shopId;
+        private String shopName;
+
+        public static ShopSimpleResponse of(Shop shop) {
+            return ShopSimpleResponse.builder()
+                    .shopId(shop.getId())
+                    .shopName(shop.getName())
+                    .build();
+        }
+    }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter
     public static class ShopMenuListResponse {
         private Long shopId;
         private String shopName;

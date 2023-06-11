@@ -8,10 +8,9 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Builder
-@Data
-@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Getter
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
