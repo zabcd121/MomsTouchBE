@@ -6,9 +6,7 @@ import com.momstouch.momstouchbe.domain.order.model.*;
 import com.momstouch.momstouchbe.domain.shop.dto.ShopResponse;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountResponse.*;
 
-@Data
+@Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class OrderResponse {
 
@@ -48,7 +46,7 @@ public class OrderResponse {
     }
 
 
-    @Data
+    @Getter
     private static class OrderMemberResponse {
 
         private Long id;
@@ -60,7 +58,7 @@ public class OrderResponse {
         }
     }
 
-    @Data
+    @Getter
     private static class OrderShopResponse {
         private Long shopId;
         private String shopName;
@@ -71,7 +69,7 @@ public class OrderResponse {
         }
     }
 
-    @Data
+    @Getter
     private static class OrderMenuResponse {
         private Long orderMenuId;
         private Integer count;
@@ -95,7 +93,7 @@ public class OrderResponse {
 
 
 
-    @Data
+    @Getter
     private static class OrderMenuOptionGroupResponse {
         private List<OrderMenuOptionResponse> orderOptions;
         private String name;
@@ -110,7 +108,7 @@ public class OrderResponse {
         }
     }
 
-    @Data
+    @Getter
     private static class OrderMenuOptionResponse {
         private String name;
         private BigDecimal price;

@@ -26,7 +26,6 @@ public class Menu {
     @JoinColumn(name="menu_id")
     private List<OptionGroupSpecification> optionGroupList = new ArrayList<>();
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="discount_policy_id")
     private DiscountPolicy discountPolicy;
@@ -41,7 +40,9 @@ public class Menu {
 
     @Enumerated(EnumType.STRING)
     private Category category;
-
+    public void setDiscountPolicy(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+    }
     public Money applyDiscountPolicy(Money orderPrice) {
         return discountPolicy.discount(orderPrice);
     }
@@ -56,7 +57,7 @@ public class Menu {
         this.price = updatedMenu.getPrice();
         this.category = updatedMenu.getCategory();
 
-        if(updatedMenu.getImageURL() != null) {
+        if(updatedMenu.getImageURL() != null) { //TODO : 이미지 null 테스트
             this.imageURL = updatedMenu.getImageURL();
         }
     }

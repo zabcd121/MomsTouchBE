@@ -13,6 +13,7 @@ import java.util.Objects;
 @Entity
 @Builder
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderMenu {
@@ -54,18 +55,5 @@ public class OrderMenu {
         }
 
         return menu.applyDiscountPolicy(menuPrice.times(count));
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderMenu orderMenu = (OrderMenu) o;
-        return Objects.equals(getId(), orderMenu.getId()) && Objects.equals(getOrder(), orderMenu.getOrder()) && Objects.equals(getMenu(), orderMenu.getMenu()) && Objects.equals(getOrderOptionGroupList(), orderMenu.getOrderOptionGroupList()) && Objects.equals(getCount(), orderMenu.getCount());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getOrder(), getMenu(), getOrderOptionGroupList(), getCount());
     }
 }
