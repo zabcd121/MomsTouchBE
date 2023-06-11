@@ -1,9 +1,7 @@
 package com.momstouch.momstouchbe.domain.member.model;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.Authentication;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,7 +22,7 @@ public class Member {
     @Embedded
     private Account account;
 
-    public static Member createMember(String loginId, String password, String name, String role) {
+    public static Member createMember(String loginId, String password, String name, String role,String email) {
         return Member.builder()
                 .account(Account.builder()
                         .loginId(loginId)
@@ -33,7 +31,7 @@ public class Member {
                         .role(role)
                         .build())
                 //TODO: 수정
-                .email("email")
+                .email(email)
                 .build();
     }
     public String getRole(){

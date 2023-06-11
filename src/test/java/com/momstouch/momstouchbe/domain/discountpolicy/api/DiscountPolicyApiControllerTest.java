@@ -11,7 +11,9 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.discountpolicy.utis.command.DiscountPolicyCreateCommand;
 import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.ShopSetup;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -54,12 +56,17 @@ class DiscountPolicyApiControllerTest {
     ShopSetup shopSetup;
 
     @Autowired
+    MemberSetup memberSetup;
+
+    @Autowired
     private DiscountPolicyService discountPolicyService;
 
+    @Autowired
+    private MemberRepository memberRepository;
     @Test
     public void 할인정책_목록조회_테스트() throws Exception {
         LocalTime now = LocalTime.of(1,1,1);
-        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
 
         discountPolicyService.createAmountDiscountPolicy(shop,10000,1000);
@@ -94,10 +101,15 @@ class DiscountPolicyApiControllerTest {
 
     @Test
     public void 정량_할인정책_등록_테스트() throws Exception {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "누네띠네 사장이된 김현석", "ROLE_OWNER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
+                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
 
         CreateDiscountPolicyRequest createDiscountPolicyRequest = new CreateDiscountPolicyRequest();
         createDiscountPolicyRequest.setBaseAmount(100000);
         createDiscountPolicyRequest.setDiscountAmount(10000);
+        createDiscountPolicyRequest.setShopId(shop.getId());
 
         List<DiscountPolicy> beforeCreate = discountPolicyService.findAll();
         Assertions.assertThat(beforeCreate.size()).isEqualTo(0);
@@ -123,10 +135,15 @@ class DiscountPolicyApiControllerTest {
 
     @Test
     public void 정률_할인정책_등록_테스트() throws Exception {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "누네띠네 사장이된 김현석", "ROLE_OWNER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
+                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
 
         CreateDiscountPolicyRequest createDiscountPolicyRequest = new CreateDiscountPolicyRequest();
         createDiscountPolicyRequest.setBaseAmount(100000);
         createDiscountPolicyRequest.setDiscountRate(10.00);
+        createDiscountPolicyRequest.setShopId(shop.getId());
 
         List<DiscountPolicy> beforeCreate = discountPolicyService.findAll();
         Assertions.assertThat(beforeCreate.size()).isEqualTo(0);
@@ -152,10 +169,15 @@ class DiscountPolicyApiControllerTest {
 
     @Test
     public void 조조_할인정책_등록_테스트() throws Exception {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "누네띠네 사장이된 김현석", "ROLE_OWNER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
+                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
 
         CreateDiscountPolicyRequest createDiscountPolicyRequest = new CreateDiscountPolicyRequest();
         createDiscountPolicyRequest.setBaseTime(LocalTime.now());
         createDiscountPolicyRequest.setDiscountAmount(10000);
+        createDiscountPolicyRequest.setShopId(shop.getId());
 
         List<DiscountPolicy> beforeCreate = discountPolicyService.findAll();
         Assertions.assertThat(beforeCreate.size()).isEqualTo(0);
@@ -181,7 +203,7 @@ class DiscountPolicyApiControllerTest {
 
     @Test
     public void 할인정책_삭제_테스트() throws Exception {
-        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER");
+        Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER","email");
         Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);
         Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,10000, 1000);
         Optional<DiscountPolicy> beforeDelete = discountPolicyService.findById(amountDiscountPolicyId);
