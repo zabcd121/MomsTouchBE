@@ -2,6 +2,8 @@ package com.momstouch.momstouchbe.domain.order.api;
 
 import com.momstouch.momstouchbe.domain.order.application.OrderAppService;
 import com.momstouch.momstouchbe.domain.order.dto.OrderResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +14,16 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.momstouch.momstouchbe.domain.order.dto.OrderRequest.*;
 
+@Tag(name = "주문")
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class OrderController {
 
     private final OrderAppService orderAppService;
-    @GetMapping("/order")
+
+    @Operation(summary = "고객이 주문을 요청")
+    @PostMapping("/order")
     public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -28,13 +33,14 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "주문의 상세 정보를 조회")
     @GetMapping("/order/{orderId}")
     public ResponseEntity<OrderResponse> findOrder(@PathVariable Long orderId) {
         OrderResponse orderRes = orderAppService.findOrderById(orderId);
         return new ResponseEntity<>(orderRes,HttpStatus.OK);
     }
 
-
+    @Operation(summary = "점주가 주문을 승낙함")
     @PostMapping("/order/{orderId}")
     public ResponseEntity<?> acceptOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -42,6 +48,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "점주가 주문의 상태를 배달로 변경")
     @PutMapping("/order/{orderId}/delivery")
     public ResponseEntity<?> deliverOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -49,6 +56,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "점주가 주문을 거절함")
     @DeleteMapping("/order/{orderId}")
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -56,6 +64,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @Operation(summary = "점주가 주문의 상태를 완료로 변경")
     @PutMapping("/order/{orderId}/complete")
     public ResponseEntity<?> completeOrder(@PathVariable Long orderId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

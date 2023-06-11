@@ -27,8 +27,8 @@ public class ShopSearchRepository implements ShopSearchableRepository {
                 .selectFrom(shop)
                 .distinct()
                 .leftJoin(shop.menuList, menu).fetchJoin()
-                //.leftJoin(shop.discountPolicyList, discountPolicy).fetchJoin()
-//                .leftJoin(menu.discountPolicy, discountPolicy).fetchJoin()
+//                .leftJoin(shop.discountPolicyList, discountPolicy).fetchJoin()
+                .leftJoin(menu.discountPolicy, discountPolicy).fetchJoin()
                 .where(shop.id.eq(shopId))
                 .fetchOne();
     }

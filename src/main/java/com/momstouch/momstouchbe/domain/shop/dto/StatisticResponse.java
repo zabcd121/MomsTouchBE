@@ -31,10 +31,10 @@ public class StatisticResponse {
         private Long menuId;
         private String menuName;
         private String description;
-        private Long count;
+        private Integer count;
         private Category category;
 
-        public OrderMenuStatisticResponse(Long menuId, String menuName, String description, Long count, Category category) {
+        public OrderMenuStatisticResponse(Long menuId, String menuName, String description, Integer count, Category category) {
             this.menuId = menuId;
             this.menuName = menuName;
             this.description = description;

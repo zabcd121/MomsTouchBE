@@ -27,7 +27,6 @@ public class ShopStatisticRepository {
         return jpaQueryFactory
                 .select(Projections.constructor(OrderStatisticResponse.class,order.count(),order.totalPrice.amount.sum()))
                 .from(order)
-                .join(order.shop, QShop.shop).fetchJoin()
                 .where(order.shop.id.eq(shopId))
                 .fetchOne();
     }
@@ -38,10 +37,10 @@ public class ShopStatisticRepository {
                         orderMenu.menu.id,
                         orderMenu.menu.name,
                         orderMenu.menu.description,
-                        orderMenu.menu.count(),
+                        orderMenu.count,
                         orderMenu.menu.category))
                 .from(orderMenu)
-                .join(orderMenu.menu, QMenu.menu).fetchJoin()
+                .join(orderMenu.menu, QMenu.menu)
                 .join(orderMenu.order, order)
                 .join(order.shop,QShop.shop)
                 .where(QShop.shop.id.eq(shopId))

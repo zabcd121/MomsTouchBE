@@ -2,6 +2,7 @@ package com.momstouch.momstouchbe.domain.order.api;
 
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.order.application.OrderAppService;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
@@ -50,6 +51,8 @@ class OrderControllerTest {
     @Autowired MenuRepository menuRepository;
     @Autowired MenuInfoSetup menuInfoSetup;
     @Autowired OrderInfoSetup orderInfoSetup;
+
+    @Autowired OrderAppService orderAppService;
 
     Long basicOrderId;
     Member member;
@@ -205,6 +208,7 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 배달_완료_상태_변경_테스트() throws Exception {
+        orderAppService.deliver(basicOrderId,null);
         ResultActions perform = mvc.perform(
                 put("/api/order/{orderId}/complete", basicOrderId)
                         .contentType(MediaType.APPLICATION_JSON)

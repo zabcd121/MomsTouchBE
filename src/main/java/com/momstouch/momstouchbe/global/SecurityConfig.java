@@ -3,10 +3,8 @@ package com.momstouch.momstouchbe.global;
 import com.momstouch.momstouchbe.domain.member.Service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -19,7 +17,6 @@ import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity // 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
 @RequiredArgsConstructor
-@Configuration
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     @Bean // 인증 실패 처리 관련 객체
