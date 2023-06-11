@@ -1,28 +1,21 @@
-package com.momstouch.momstouchbe.domain.shop.model;
+package com.momstouch.momstouchbe.domain.cart.model;
 
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
 
 @Entity
 @Builder
-@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class OptionSpecification {
+@Getter
+public class CartMenuOption {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_menu_option_id")
     private Long id;
 
-    private String name;
+    private Long menuOptionId;
     private Money price;
-
-
-//    public void update(String name, Money price) {
-//        this.name = name;
-//        this.price = price;
-//    }
-
 }

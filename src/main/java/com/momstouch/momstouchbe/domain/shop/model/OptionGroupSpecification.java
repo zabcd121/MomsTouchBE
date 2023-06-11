@@ -2,10 +2,7 @@ package com.momstouch.momstouchbe.domain.shop.model;
 
 
 import com.momstouch.momstouchbe.global.domain.Money;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +12,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class OptionGroupSpecification {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +34,12 @@ public class OptionGroupSpecification {
         }
 
         return total;
+    }
+
+    public void update(List<OptionSpecification> optionList, String name) {
+        this.optionList.clear();
+        this.optionList.addAll(optionList);
+        this.name = name;
     }
 
 }

@@ -7,6 +7,7 @@ import com.momstouch.momstouchbe.domain.shop.model.OptionGroupSpecification;
 import com.momstouch.momstouchbe.domain.shop.model.OptionSpecification;
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +19,36 @@ public class MenuRequest {
     @Getter
     @Setter
     public static class MenuCreateRequest {
+        private String name;
+        private String description;
+        private Integer price;
+        private Category category; //category=MAIN
+        private List<OptionGroupRequest> optionGroupList;
+        private Long discountPolicyId;
+
+        public Menu toEntity(String imageURL, DiscountPolicy discountPolicy) {
+            return Menu.builder()
+                    .optionGroupList(
+                            optionGroupList.stream()
+                                    .map(optionGroupRequest -> optionGroupRequest.toEntity())
+                                    .toList()
+                    )
+                    .discountPolicy(discountPolicy)
+                    .name(name)
+                    .description(description)
+                    .price(Money.of(price))
+                    .imageURL(imageURL)
+                    .category(category)
+                    .build();
+        }
+    }
+
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter
+    @Setter
+    public static class MenuUpdateRequest {
         private String name;
         private String description;
         private Integer price;
