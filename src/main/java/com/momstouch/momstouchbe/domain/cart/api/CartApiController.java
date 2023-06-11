@@ -27,7 +27,11 @@ public class CartApiController {
     public ResponseEntity addCartMenu(@PathVariable Long memberId,
                                       @RequestBody CartMenuAddRequest cartMenuAddRequest) {
 
-        cartService.addCartMenu(memberId, cartMenuAddRequest);
+        try {
+            cartService.addCartMenu(memberId, cartMenuAddRequest);
+        } catch(IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
         return ResponseEntity.ok().build();
     }
 

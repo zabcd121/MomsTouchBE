@@ -10,12 +10,15 @@ import com.momstouch.momstouchbe.domain.cart.model.repository.CartRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
+import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
+import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 import static com.momstouch.momstouchbe.domain.cart.dto.CartRequest.*;
@@ -30,6 +33,7 @@ public class CartService {
     private final DiscountPolicyRepository discountPolicyRepository;
     private final CartRepository cartRepository;
     private final CartQueryRepository cartQueryRepository;
+    private final ShopRepository shopRepository;
 
     @Transactional
     public void addCartMenu(Long memberId, CartMenuAddRequest cartMenuAddRequest) {
@@ -44,6 +48,12 @@ public class CartService {
         }
 
         Long menuId = cartMenuAddRequest.getMenuId();
+        Shop shop = shopRepository.findShopByMenuId(menuId);
+        LocalTime now = LocalTime.now();
+        if(!(now.isAfter(shop.getOpenTime()) && now.isBefore(shop.getClosedTime()))) {
+            throw new IllegalStateException("현재 시간에는 주문이 불가능합니다.");
+        }
+
         //TODO : 장바구니 테스트
         cart.addCartMenu(
                 CartMenu.builder()
