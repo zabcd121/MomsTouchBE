@@ -1,10 +1,10 @@
 package com.momstouch.momstouchbe.domain.cart.application;
 
-import com.momstouch.momstouchbe.domain.cart.dto.CartRequest;
 import com.momstouch.momstouchbe.domain.cart.model.Cart;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenu;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenuOption;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenuOptionGroup;
+import com.momstouch.momstouchbe.domain.cart.model.repository.CartRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.member.model.repository.MemberRepository;
 import com.momstouch.momstouchbe.global.domain.Money;
@@ -23,7 +23,9 @@ public class CartService {
 
     private final MemberRepository memberRepository;
     private final DiscountPolicyRepository discountPolicyRepository;
+    private final CartRepository cartRepository;
 
+    @Transactional
     public void addCartMenu(Long memberId, CartMenuAddRequest cartMenuAddRequest) {
         Cart cart = Cart.builder()
                 .member(memberRepository.getReferenceById(memberId))
@@ -53,6 +55,8 @@ public class CartService {
                                         .collect(Collectors.toList())
                         ).build()
         );
+
+        cartRepository.save(cart);
 
     }
 }

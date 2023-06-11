@@ -2,21 +2,18 @@ package com.momstouch.momstouchbe;
 
 import com.momstouch.momstouchbe.domain.member.Service.TestService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
-import com.momstouch.momstouchbe.domain.member.Service.CustomOAuth2UserService;
+import com.momstouch.momstouchbe.domain.member.model.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import com.momstouch.momstouchbe.domain.member.web.OAuth2LoginController;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -32,9 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(OAuth2LoginController.class)
 @AutoConfigureMockMvc
 @Import(TestSecurityConfiguration.class)
+@SpringBootTest
 public class OAuth2LoginControllerTest {
 
     @Autowired

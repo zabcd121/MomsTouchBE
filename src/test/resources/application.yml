@@ -8,7 +8,8 @@ spring:
             client-secret: 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
             scope: email, profile
   config:
-    import: application-filedir.yml
+    import:
+     - application-filedir.yml
   datasource:
     url: jdbc:h2:mem:food
     username: sa

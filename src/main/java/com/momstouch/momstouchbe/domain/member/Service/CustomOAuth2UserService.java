@@ -2,7 +2,7 @@ package com.momstouch.momstouchbe.domain.member.Service;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.member.model.OAuthAttributes;
-import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
+import com.momstouch.momstouchbe.domain.member.model.repository.MemberRepository;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
