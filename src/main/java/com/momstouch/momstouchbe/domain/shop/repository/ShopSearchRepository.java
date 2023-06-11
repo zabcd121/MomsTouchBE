@@ -8,6 +8,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static com.momstouch.momstouchbe.domain.discountpolicy.model.QDiscountPolicy.*;
 import static com.momstouch.momstouchbe.domain.shop.model.QMenu.*;
 import static com.momstouch.momstouchbe.domain.shop.model.QOptionGroupSpecification.*;
@@ -32,6 +34,17 @@ public class ShopSearchRepository implements ShopSearchableRepository {
     }
 
     @Override
+    public List<Shop> findAllByMemberId(Long memberId) {
+        return queryFactory
+                .selectFrom(shop)
+                .distinct()
+                .leftJoin(shop.menuList, menu).fetchJoin()
+                //.leftJoin(shop.discountPolicyList, discountPolicy).fetchJoin()
+                .where(shop.owner.id.eq(memberId))
+                .fetch();
+    }
+
+    @Override
     public Menu findMenuByMenuId(Long menuId) {
         return queryFactory
                 .selectFrom(menu)
@@ -51,6 +64,7 @@ public class ShopSearchRepository implements ShopSearchableRepository {
                 .where(menu.id.eq(menuId))
                 .fetchOne();
     }
+
 
 //    @Override
 //    public List<ShopResponse.ShopMenuListSearchResponse> findMenuListByShopId(Long shopId) {

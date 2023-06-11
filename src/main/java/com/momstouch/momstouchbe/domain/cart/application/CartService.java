@@ -1,9 +1,11 @@
 package com.momstouch.momstouchbe.domain.cart.application;
 
+import com.momstouch.momstouchbe.domain.cart.dto.CartResponse;
 import com.momstouch.momstouchbe.domain.cart.model.Cart;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenu;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenuOption;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenuOptionGroup;
+import com.momstouch.momstouchbe.domain.cart.model.repository.CartQueryRepository;
 import com.momstouch.momstouchbe.domain.cart.model.repository.CartRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.stream.Collectors;
 
 import static com.momstouch.momstouchbe.domain.cart.dto.CartRequest.*;
+import static com.momstouch.momstouchbe.domain.cart.dto.CartResponse.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,12 +27,19 @@ public class CartService {
     private final MemberRepository memberRepository;
     private final DiscountPolicyRepository discountPolicyRepository;
     private final CartRepository cartRepository;
+    private final CartQueryRepository cartQueryRepository;
 
     @Transactional
     public void addCartMenu(Long memberId, CartMenuAddRequest cartMenuAddRequest) {
-        Cart cart = Cart.builder()
-                .member(memberRepository.getReferenceById(memberId))
-                .build();
+        Cart cart = null;
+        if(cartQueryRepository.existsByMemberId(memberId) == false) {
+             cart = Cart.builder()
+                    .member(memberRepository.getReferenceById(memberId))
+                    .build();
+
+        } else {
+            cart = cartQueryRepository.findByMemberId(memberId);
+        }
 
         cart.addCartMenu(
                 CartMenu.builder()
@@ -58,5 +68,10 @@ public class CartService {
 
         cartRepository.save(cart);
 
+    }
+
+    public CartSearchResponse searchCartMenuList(Long memberId) {
+        Cart cart = cartQueryRepository.findByMemberId(memberId);
+        return CartSearchResponse.of(cart);
     }
 }

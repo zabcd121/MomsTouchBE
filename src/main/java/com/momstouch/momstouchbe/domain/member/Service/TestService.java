@@ -1,7 +1,7 @@
 package com.momstouch.momstouchbe.domain.member.Service;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.member.model.repository.MemberRepository;
+import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

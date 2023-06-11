@@ -1,7 +1,7 @@
 package com.momstouch.momstouchbe.domain.member.web;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.member.model.repository.MemberRepository;
+import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
