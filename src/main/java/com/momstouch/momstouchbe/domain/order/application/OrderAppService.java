@@ -30,6 +30,7 @@ public class OrderAppService {
     private final OrderService orderService;
     private final MenuRepository menuRepository;
     private final ShopRepository shopRepository;
+    private final OrderAlarmService orderAlarmService;
 
     public OrderResponse findOrderById(Long orderId) {
         Order order = orderService.findByIdWithAll(orderId).orElseThrow();
@@ -48,6 +49,9 @@ public class OrderAppService {
         OrderInfo orderInfo = OrderInfo.of(member,shop,orderMenuList,createOrderRequest.getAddress(), createOrderRequest.getPhoneNumber());
 
         Long orderId = orderService.createOrder(orderInfo);
+        Order order = orderService.findById(orderId).orElseThrow();
+
+        orderAlarmService.send(shop.getOwner(), order, "맘스터치 주문!");
         return orderId;
     }
 
@@ -57,6 +61,7 @@ public class OrderAppService {
         if(!member.equals(authentication)) throw new AccessDeniedException("member.equals(authentication) 실패");
         if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
         orderCallback.run();
+        orderAlarmService.send(order.getMember(), order, "주문 상태 변경!");
         return true;
     }
     @Transactional
