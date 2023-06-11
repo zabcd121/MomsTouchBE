@@ -1,21 +1,32 @@
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 484166861149-9dt7gks5gisuvj9gpoprvp83l13eh205.apps.googleusercontent.com
+            client-secret: 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
+            scope: email, profile
   config:
     import: application-filedir.yml
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3305/MomsTouch?characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: love1994
-    hikari:
-      maximum-pool-size: 40
+    url: jdbc:h2:mem:food
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
   jpa:
     hibernate:
       ddl-auto: create
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true #To beautify or pretty print the SQL
-        default_batch_fetch_size: 100
-        #show_sql: true #show sql
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        default_batch_fetch_size: 1000
 
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 server:
   port: 8071

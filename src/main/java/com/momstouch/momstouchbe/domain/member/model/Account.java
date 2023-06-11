@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.security.core.Authentication;
 
 import javax.persistence.Embeddable;
-
+@Data
 @Embeddable
 @Getter
 //@Builder
@@ -15,7 +15,7 @@ public class Account {
     private String loginId;
     private String password;
     private String name;
-    private String role;
+    private String role;  //ROLE_TYPE
 
     @Builder
     private Account(String loginId, String password, String name, String role) {
