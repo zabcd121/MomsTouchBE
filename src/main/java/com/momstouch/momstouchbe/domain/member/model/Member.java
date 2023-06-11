@@ -21,7 +21,7 @@ public class Member {
     @Embedded
     private Account account;
 
-    public static Member createMember(String loginId, String password, String name, String role) {
+    public static Member createMember(String loginId, String password, String name, String role,String email) {
         return Member.builder()
                 .account(Account.builder()
                         .loginId(loginId)
@@ -30,7 +30,7 @@ public class Member {
                         .role(role)
                         .build())
                 //TODO: 수정
-                .email("email")
+                .email(email)
                 .build();
     }
     public String getRole(){

@@ -6,7 +6,7 @@ import com.momstouch.momstouchbe.domain.cart.model.CartMenuOption;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenuOptionGroup;
 import com.momstouch.momstouchbe.domain.cart.model.repository.CartRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
-import com.momstouch.momstouchbe.domain.member.model.repository.MemberRepository;
+import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

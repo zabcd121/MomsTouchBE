@@ -41,7 +41,7 @@ public class OrderAppService {
 
         Shop shop = shopRepository.findById(shopId).orElseThrow();
         //TODO : authentication에서 조회
-        Member member = Member.createMember("temp","temp","김현석바보","ROLE_USER");
+        Member member = Member.createMember("temp","temp","김현석바보","ROLE_USER","email");
 
         List<MenuInfo> orderMenuList = createOrderRequest.getOrderMenuList();
         OrderInfo orderInfo = OrderInfo.of(member,shop,orderMenuList,createOrderRequest.getAddress(), createOrderRequest.getPhoneNumber());
