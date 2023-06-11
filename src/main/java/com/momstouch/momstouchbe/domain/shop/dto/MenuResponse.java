@@ -16,6 +16,7 @@ public class MenuResponse {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class MenuSearchResponse {
+        private Long menuId;
         private String name;
         private BigDecimal price;
         private String description;
@@ -23,7 +24,7 @@ public class MenuResponse {
         private Category category;
 
         public static MenuSearchResponse of(Menu menu) {
-            return new MenuSearchResponse(menu.getName(), menu.getPrice().getAmount(), menu.getDescription(), menu.getImageURL(), menu.getCategory());
+            return new MenuSearchResponse(menu.getId(), menu.getName(), menu.getPrice().getAmount(), menu.getDescription(), menu.getImageURL(), menu.getCategory());
         }
     }
 
