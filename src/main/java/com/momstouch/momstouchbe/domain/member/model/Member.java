@@ -1,7 +1,9 @@
 package com.momstouch.momstouchbe.domain.member.model;
 
-import lombok.*;
-import org.springframework.security.core.Authentication;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
