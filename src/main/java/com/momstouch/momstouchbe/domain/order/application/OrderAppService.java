@@ -3,6 +3,7 @@ package com.momstouch.momstouchbe.domain.order.application;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.order.dto.OrderResponse;
 import com.momstouch.momstouchbe.domain.order.model.Order;
+import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
 import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
 import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
@@ -61,24 +62,28 @@ public class OrderAppService {
     @Transactional
     public boolean accept(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
+        if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException();
         return template(order,authentication, order::accept);
     }
 
     @Transactional
     public boolean deliver(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
+        if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException();
         return template(order,authentication, order::deliver);
     }
 
     @Transactional
     public boolean cancel(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
+        if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException();
         return template(order,authentication, order::cancel);
     }
 
     @Transactional
     public boolean complete(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
+        if(!order.getOrderStatus().equals(OrderStatus.DELIVERY)) throw new IllegalStateException();
         return template(order,authentication, order::complete);
     }
 }
