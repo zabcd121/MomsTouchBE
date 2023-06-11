@@ -1,4 +1,4 @@
-package com.momstouch.momstouchbe.global;
+package com.momstouch.momstouchbe.global.config;
 
 import com.momstouch.momstouchbe.domain.member.Service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
