@@ -57,5 +57,13 @@ public class Shop {
         return member.getId() == owner.getId();
     }
 
+    public boolean isRunningTime(LocalTime now) {
+        return openTime.isAfter(now) && now.isBefore(closedTime);
+    }
+
+    public boolean overMinOrderPrice(Money money) {
+        return money.equalsOrMore(minOrderPrice);
+    }
+
 
 }

@@ -26,11 +26,14 @@ public class OrderController {
     @PostMapping("/order")
     public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //TODO : Member 클래스로 변환
-        orderAppService.order(createOrderRequest,authentication);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            //TODO : Member 클래스로 변환
+            orderAppService.order(createOrderRequest,authentication);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Operation(summary = "주문의 상세 정보를 조회")
