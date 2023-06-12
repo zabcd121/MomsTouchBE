@@ -1,11 +1,16 @@
 package com.momstouch.momstouchbe.domain.member.web;
 
+import com.momstouch.momstouchbe.domain.member.dto.MemberResponse;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -57,25 +62,16 @@ public class OAuth2LoginController {
     }
 
     @Operation(summary = "사용자 정보 조회")
-    @GetMapping("/api/user/{id}")
-    public ResponseEntity<Member> getUser(@PathVariable Long id) {   //화면으로 정보 뿌려주는 API 현재는 name과 이메일을 뿌려줌
-        Member user = memberRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+    @GetMapping("/api/user")
+    public ResponseEntity<MemberResponse> findUserInfo() {
 
-        // Account 객체의 name 필드를 Member 객체에 설정
-        user.getAccount().setName(user.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null) throw new AccessDeniedException("로그인 필요");
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        return ResponseEntity.ok(user);
+        Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
+        return ResponseEntity.ok(MemberResponse.of(member));
     }
-
-
-    public class NotFoundException extends RuntimeException {
-        public NotFoundException(String message) {
-            super(message);
-        }
-    }
-
-
 }
 
 

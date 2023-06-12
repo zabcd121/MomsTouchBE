@@ -26,12 +26,10 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuthAuthenticationSuccessHandler oAuthAuthenticationSuccessHandler;
-
     @Bean // 인증 실패 처리 관련 객체
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 
     @Bean // 비밀번호 암호화 객체
     public BCryptPasswordEncoder passwordEncoder() {
@@ -61,7 +59,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+             http
                 .addFilter(corsFilter())//@CrossOrigin(인증x), 시큐리티 필터에 등록 인증(o)
                 .csrf().ignoringAntMatchers("/h2-console/**").disable()
                 .headers().frameOptions().disable().and()

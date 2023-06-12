@@ -66,7 +66,7 @@ class StatisticControllerTest {
         member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "누네띠네 사장이된 김현석", "ROLE_OWNER");
         shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+                LocalTime.of(0,0,0),LocalTime.of(23,0,0),20000);
 
         Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
 

@@ -74,7 +74,7 @@ class OrderControllerTest {
         member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "누네띠네 사장이된 김현석", "ROLE_OWNER");
         shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+                LocalTime.of(0,0,0),LocalTime.of(23,59,59),20000);
 
         Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
 
@@ -159,9 +159,10 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 주문_하기_테스트() throws Exception {
+        Authentication authentication = memberSetup.getAuthentication(member);
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+                LocalTime.of(0,0,0),LocalTime.of(23,0,0),20000);
 
         Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
 
@@ -299,7 +300,7 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 배달_완료_상태_변경_테스트() throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = memberSetup.getAuthentication(member);
         orderAppService.accept(basicOrderId,authentication);
         orderAppService.deliver(basicOrderId,authentication);
         ResultActions perform = mvc.perform(

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,9 +62,9 @@ class ShopApiControllerTest {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
         Shop shop1 = shopSetup.saveShop(member, "맘스터치 금오공대점", "금오공대 햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
         Shop shop2 = shopSetup.saveShop(member, "맘스터치 강남점", "강남 햄버거집입니다.", "서울시 강남구 12길", "010-5678-9123", LocalTime.of(12, 0), LocalTime.of(22, 0), 8000);
-
+        Authentication authentication = memberSetup.getAuthentication(member);
         ResultActions resultActions = mvc.perform(
-                get("/api/members/{memberId}/shops", member.getId())
+                get("/api/members/shops")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8")
                         .accept(MediaType.APPLICATION_JSON))

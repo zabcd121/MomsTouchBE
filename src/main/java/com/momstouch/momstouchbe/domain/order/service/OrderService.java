@@ -32,7 +32,7 @@ public class OrderService {
     private final OrderValidationService orderValidationService;
     private final MenuRepository menuRepository;
 
-    private boolean hasOnlySideMenu(List<OrderMenu> orderMenuList) {
+    private boolean hasMainMenu(List<OrderMenu> orderMenuList) {
         boolean hasOnlySideMenu = false;
         for (OrderMenu orderMenu : orderMenuList) {
             Menu menu = orderMenu.getMenu();
@@ -99,18 +99,12 @@ public class OrderService {
             throw new IllegalStateException("최소 주문 금액을 넘지 못함");
         }
 
-        order.setTotalPrice(orderTotalPrice);
-
-        boolean validate = orderValidationService.validate(order);
-
-        if(!hasOnlySideMenu(order.getOrderMenuList())) {
+        if(!hasMainMenu(order.getOrderMenuList())) {
             throw new IllegalStateException("사이드 메뉴만 주문 불가능");
         }
+        order.setTotalPrice(orderTotalPrice);
 
-        //TODO : validation 테스트 필요함
-        if(!validate) {
-            throw new IllegalStateException();
-        }
+        orderValidationService.validate(order);
 
         orderRepository.save(order);
         return order.getId();

@@ -205,6 +205,45 @@ class DiscountPolicyApiControllerTest {
     }
 
     @Test
+    public void 타입_지원_테스트() throws Exception {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "누네띠네 사장이된 김현석", "ROLE_OWNER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
+                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+
+        CreateDiscountPolicyRequest createDiscountPolicyRequest = new CreateDiscountPolicyRequest();
+        createDiscountPolicyRequest.setBaseTime(LocalTime.now());
+        createDiscountPolicyRequest.setDiscountAmount(10000);
+        createDiscountPolicyRequest.setShopId(shop.getId());
+
+        List<DiscountPolicy> beforeCreate = discountPolicyService.findAll();
+        Assertions.assertThat(beforeCreate.size()).isEqualTo(0);
+
+        ResultActions actions = mvc.perform(
+                post("/api/discountPolicy")
+                        .queryParam("type","INVALID")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDiscountPolicyRequest))
+                        .with(csrf())
+        );
+
+        actions.andDo(print())
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(
+                post("/api/discountPolicy")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDiscountPolicyRequest))
+                        .with(csrf())
+        ).andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void 할인정책_삭제_테스트() throws Exception {
         Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_USER","email");
         Shop shop = shopSetup.saveShop(member,"shop","description","address","phoneNumber",LocalTime.now(),LocalTime.now(),10000);

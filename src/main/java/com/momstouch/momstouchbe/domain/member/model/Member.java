@@ -39,25 +39,11 @@ public class Member extends BaseTime {
     }
 
     public List<String> getAuthorities() {
-        List roleList = new ArrayList();
-
-        if(!account.getRole().equals("")) {
-            roleList.add(account.getRole());
-        }
-
-        return roleList;
+        return List.of(account.getRole());
     }
 
     public String getRole(){
         return account.getRole();
-    }
-
-    public Member update(String name){
-        return Member.builder()
-                .account(Account.builder()
-                        .name(name)
-                        .build())
-                .build();
     }
 
 
