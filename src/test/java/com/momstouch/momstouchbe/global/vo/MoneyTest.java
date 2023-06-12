@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.global.vo;
 
+import com.momstouch.momstouchbe.global.vo.Money;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

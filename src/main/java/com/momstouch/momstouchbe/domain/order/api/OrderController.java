@@ -26,11 +26,14 @@ public class OrderController {
     @PostMapping("/order")
     public ResponseEntity<?> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //TODO : Member 클래스로 변환
-        orderAppService.order(createOrderRequest,authentication);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            //TODO : Member 클래스로 변환
+            orderAppService.order(createOrderRequest,authentication);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Operation(summary = "주문의 상세 정보를 조회")
@@ -43,32 +46,48 @@ public class OrderController {
     @Operation(summary = "점주가 주문을 승낙함")
     @PostMapping("/order/{orderId}")
     public ResponseEntity<?> acceptOrder(@PathVariable Long orderId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.accept(orderId,authentication);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            orderAppService.accept(orderId,authentication);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "점주가 주문의 상태를 배달로 변경")
     @PutMapping("/order/{orderId}/delivery")
     public ResponseEntity<?> deliverOrder(@PathVariable Long orderId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.deliver(orderId,authentication);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            orderAppService.deliver(orderId,authentication);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "점주가 주문을 거절함")
     @DeleteMapping("/order/{orderId}")
     public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.cancel(orderId,authentication);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            orderAppService.cancel(orderId,authentication);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "점주가 주문의 상태를 완료로 변경")
     @PutMapping("/order/{orderId}/complete")
     public ResponseEntity<?> completeOrder(@PathVariable Long orderId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.complete(orderId,authentication);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            orderAppService.complete(orderId,authentication);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

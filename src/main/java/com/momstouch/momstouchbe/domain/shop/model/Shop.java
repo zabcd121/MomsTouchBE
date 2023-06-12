@@ -58,5 +58,13 @@ public class Shop extends BaseTime {
         return member.getId() == owner.getId();
     }
 
+    public boolean isRunningTime(LocalTime now) {
+        return openTime.isBefore(now) && now.isBefore(closedTime);
+    }
+
+    public boolean overMinOrderPrice(Money money) {
+        return money.equalsOrMore(minOrderPrice);
+    }
+
 
 }

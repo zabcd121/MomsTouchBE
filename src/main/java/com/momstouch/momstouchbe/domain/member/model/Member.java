@@ -64,8 +64,8 @@ public class Member extends BaseTime {
         return  account.getName();
     }
 
-    public boolean equals(Authentication authentication) {
-        return account.equals(authentication);
+    public boolean isEquals(Authentication authentication) {
+        return account.isEquals(authentication);
     }
 
 

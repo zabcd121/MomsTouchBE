@@ -44,8 +44,8 @@ public class InitData {
                     .name("맘스터치")
                     .phoneNumber("054-478-3214")
                     .address("경상북도 구미시")
-                    .openTime(LocalTime.of(9,0,0))
-                    .closedTime(LocalTime.of(20,0,0))
+                    .openTime(LocalTime.of(0,0,1))
+                    .closedTime(LocalTime.of(23,59,59))
                     .minOrderPrice(Money.of(10000))
                     .build();
 
@@ -134,7 +134,7 @@ public class InitData {
                     .toList();
             return MenuInfo
                     .builder()
-                    .menu(menu)
+                    .menuId(menu.getId())
                     .optionGroupSelectInfoList(optionGroupSelectInfoList)
                     .count(count)
                     .build();

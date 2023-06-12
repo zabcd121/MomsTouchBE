@@ -31,7 +31,7 @@ public class MenuInfoSetup {
                 .toList();
         return MenuInfo
                 .builder()
-                .menu(menu)
+                .menuId(menu.getId())
                 .optionGroupSelectInfoList(optionGroupSelectInfoList)
                 .count(count)
                 .build();

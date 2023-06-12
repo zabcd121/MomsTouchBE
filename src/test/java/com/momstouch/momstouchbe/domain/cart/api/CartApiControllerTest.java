@@ -65,7 +65,8 @@ class CartApiControllerTest {
     @Test
     void 장바구니추가_성공() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
-        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
+        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678",
+                LocalTime.of(0, 0,0), LocalTime.of(23, 59,59), 5000);
 
         Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop, 10000, 1000);
 
@@ -123,7 +124,8 @@ class CartApiControllerTest {
     @Test
     void 장바구니조회_성공() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
-        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
+        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678",
+                LocalTime.of(0,0, 0), LocalTime.of(23 ,59,59), 5000);
 
         Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop, 10000, 1000);
 

@@ -187,6 +187,8 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 주문_배달상태_변경_테스트() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        orderAppService.accept(basicOrderId,authentication);
         ResultActions perform = mvc.perform(
                 put("/api/order/{orderId}/delivery", basicOrderId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -206,7 +208,9 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 배달_완료_상태_변경_테스트() throws Exception {
-        orderAppService.deliver(basicOrderId,null);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        orderAppService.accept(basicOrderId,authentication);
+        orderAppService.deliver(basicOrderId,authentication);
         ResultActions perform = mvc.perform(
                 put("/api/order/{orderId}/complete", basicOrderId)
                         .contentType(MediaType.APPLICATION_JSON)

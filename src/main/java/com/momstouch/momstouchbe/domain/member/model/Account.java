@@ -30,7 +30,7 @@ public class Account {
         this.role = role;
     }
 
-    public boolean equals(Authentication authentication) {
+    public boolean isEquals(Authentication authentication) {
         //TODO: 본인 확인 로직
         return true;
     }
