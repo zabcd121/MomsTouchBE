@@ -72,7 +72,9 @@ public class MenuService {
 
             Menu updatedMenu = menuUpdateRequest.toEntity(
                     imageURL,
-                    discountPolicyRepository.getReferenceById(menuUpdateRequest.getDiscountPolicyId())
+                    menuUpdateRequest.getDiscountPolicyId()==null ?
+                            null :
+                            discountPolicyRepository.getReferenceById(menuUpdateRequest.getDiscountPolicyId())
             );
 
             Menu originMenu = shopSearchableRepository.findMenuWithOptionGroupByMenuId(menuId);
