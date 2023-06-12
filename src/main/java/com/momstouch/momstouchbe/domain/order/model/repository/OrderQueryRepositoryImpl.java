@@ -1,9 +1,11 @@
 package com.momstouch.momstouchbe.domain.order.model.repository;
 
+import com.momstouch.momstouchbe.domain.discountpolicy.model.QDiscountPolicy;
 import com.momstouch.momstouchbe.domain.member.model.QMember;
 import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.model.QOrder;
 import com.momstouch.momstouchbe.domain.order.model.QOrderMenu;
+import com.momstouch.momstouchbe.domain.shop.model.QMenu;
 import com.momstouch.momstouchbe.domain.shop.model.QShop;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .select(order)
                 .from(order)
                 .join(order.orderMenuList, QOrderMenu.orderMenu).fetchJoin()
+                .join(QOrderMenu.orderMenu.menu, QMenu.menu).fetchJoin()
+                .join(QMenu.menu.discountPolicy, QDiscountPolicy.discountPolicy).fetchJoin()
                 .join(order.member, QMember.member).fetchJoin()
                 .join(order.shop, QShop.shop).fetchJoin()
                 .where(order.id.eq(orderId))
@@ -34,6 +38,8 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .select(order).distinct()
                 .from(order)
                 .join(order.orderMenuList, QOrderMenu.orderMenu).fetchJoin()
+                .join(QOrderMenu.orderMenu.menu, QMenu.menu).fetchJoin()
+                .join(QMenu.menu.discountPolicy, QDiscountPolicy.discountPolicy).fetchJoin()
                 .join(order.member, QMember.member).fetchJoin()
                 .join(order.shop, QShop.shop).fetchJoin()
                 .where(order.member.id.eq(memberId))
@@ -45,6 +51,8 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .select(order).distinct()
                 .from(order)
                 .join(order.orderMenuList, QOrderMenu.orderMenu).fetchJoin()
+                .join(QOrderMenu.orderMenu.menu, QMenu.menu).fetchJoin()
+                .join(QMenu.menu.discountPolicy, QDiscountPolicy.discountPolicy).fetchJoin()
                 .join(order.member, QMember.member).fetchJoin()
                 .join(order.shop, QShop.shop).fetchJoin()
                 .where(order.shop.id.eq(shopId))
