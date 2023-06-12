@@ -8,6 +8,8 @@ import com.momstouch.momstouchbe.domain.shop.model.QShop;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import static com.momstouch.momstouchbe.domain.order.model.QOrder.order;
 
 @RequiredArgsConstructor
@@ -25,5 +27,16 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .join(order.shop, QShop.shop).fetchJoin()
                 .where(order.id.eq(orderId))
                 .fetchOne();
+    }
+
+    public List<Order> findByMemberIdWithAll(Long memberId) {
+        return jpaQueryFactory
+                .select(order)
+                .from(order)
+                .join(order.orderMenuList, QOrderMenu.orderMenu).fetchJoin()
+                .join(order.member, QMember.member).fetchJoin()
+                .join(order.shop, QShop.shop).fetchJoin()
+                .where(order.member.id.eq(memberId))
+                .fetch();
     }
 }

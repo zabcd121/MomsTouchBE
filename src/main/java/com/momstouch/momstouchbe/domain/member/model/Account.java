@@ -2,6 +2,7 @@ package com.momstouch.momstouchbe.domain.member.model;
 
 import lombok.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Embeddable;
 @Data
@@ -28,10 +29,5 @@ public class Account {
         }
 
         this.role = role;
-    }
-
-    public boolean isEquals(Authentication authentication) {
-        //TODO: 본인 확인 로직
-        return true;
     }
 }

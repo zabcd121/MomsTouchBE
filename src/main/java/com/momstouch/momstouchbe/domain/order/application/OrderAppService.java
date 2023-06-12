@@ -10,9 +10,12 @@ import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
+import com.momstouch.momstouchbe.global.jwt.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,15 +33,22 @@ import static com.momstouch.momstouchbe.domain.order.dto.OrderRequest.*;
 public class OrderAppService {
 
     private final OrderService orderService;
-    private final MenuRepository menuRepository;
     private final MemberRepository memberRepository;
     private final ShopRepository shopRepository;
     private final OrderAlarmService orderAlarmService;
+
+    private final MemberDetailsService memberDetailsService;
 
     public OrderResponse findOrderById(Long orderId) {
         Order order = orderService.findByIdWithAll(orderId).orElseThrow();
         return OrderResponse.of(order);
     }
+
+//    public void findMyOrderList(Authentication authentication) {
+//        String name = authentication.getName();
+//        memberRepository.findByEmail()
+//        orderService.findAllMyOrder()
+//    }
 
     @Transactional
     public Long order(CreateOrderRequest createOrderRequest, Authentication authentication) {
@@ -48,8 +58,15 @@ public class OrderAppService {
         Shop shop = shopRepository.findById(shopId).orElseThrow();
 
         //TODO : authentication에서 조회로 수정
-        Member member = Member.createMember("temp","temp","김현석바보","ROLE_USER","email");
-        memberRepository.save(member);
+//        Member member = Member.createMember("temp","temp","김현석바보","ROLE_USER","email");
+//        memberRepository.save(member);
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        // ===
+        List<Member> all = memberRepository.findAll();
+        // ===
+        Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
 
         List<MenuInfo> orderMenuList = createOrderRequest.getOrderMenuList();
         OrderInfo orderInfo = OrderInfo.of(member,shop,orderMenuList,createOrderRequest.getAddress(), createOrderRequest.getPhoneNumber());
@@ -63,9 +80,9 @@ public class OrderAppService {
 
     private boolean template(Order order, Authentication authentication,Runnable orderCallback) {
         Shop shop = order.getShop();
-        Member member = shop.getOwner(); // TODO : 나중에 securityContext에서 조회
+        Member member = shop.getOwner();
         boolean equals = member.isEquals(authentication);
-        if(!equals) throw new AccessDeniedException("member.equals(authentication) 실패"); //TODO :
+        if(!equals) throw new AccessDeniedException("member.equals(authentication) 실패");
         if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
         orderCallback.run();
         orderAlarmService.send(order.getMember(), order, "주문 상태 변경!");

@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.member.Service;
 
+import com.momstouch.momstouchbe.domain.member.model.Account;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.member.model.OAuthAttributes;
 
@@ -17,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -46,8 +50,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         Member member = saveOrUpdate(attributes);
 
-
-        
         httpSession.setAttribute("user", (member));
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(member.getRole())),
@@ -57,11 +59,36 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     @Transactional
     public Member saveOrUpdate(OAuthAttributes attributes) {
-        Member member = memberRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName()))
-                .orElse(attributes.toEntity());
 
-        return memberRepository.save(member);
+        Map<String, Object> googleAttribute = attributes.getAttributes();
+        String sub = (String)googleAttribute.get("sub");
+        Optional<Member> byEmail = memberRepository.findBySub(sub);
+
+        if(byEmail.isPresent()) {
+            return byEmail.get();
+        }
+
+        Member member = Member.builder()
+                .email(attributes.getEmail())
+                .account(Account.builder()
+                        .name(attributes.getName())
+                        .loginId(sub)
+                        .password(UUID.randomUUID().toString())
+                        .role("ROLE_MEMBER")
+                        .build())
+                .build();
+
+        memberRepository.save(member);
+
+        return member;
+
+
+
+//        Member member = memberRepository.findByEmail(attributes.getEmail())
+//                .map(entity -> entity.update(attributes.getName()))
+//                .orElse(attributes.toEntity());
+//
+//        return memberRepository.save(member);
     }
 
 

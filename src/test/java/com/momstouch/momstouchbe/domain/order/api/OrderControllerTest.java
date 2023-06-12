@@ -158,8 +158,8 @@ class OrderControllerTest {
     //TODO: 주문 생성 테스트 api 필요
 
     @Test
+    @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 주문_하기_테스트() throws Exception {
-        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
                 LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);

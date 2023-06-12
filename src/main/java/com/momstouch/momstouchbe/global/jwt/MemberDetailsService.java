@@ -23,7 +23,7 @@ public class MemberDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws IllegalArgumentException {
         System.out.println("MemberDetailsService loadUserByUsername: 진입");
-        Member member = memberRepository.findById(Long.parseLong(username))
+        Member member = memberRepository.findBySub(username)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         log.info("loadUserByUsername 통과 ");
@@ -35,9 +35,10 @@ public class MemberDetailsService implements UserDetailsService {
                 .map(authority -> new SimpleGrantedAuthority(authority))
                 .collect(Collectors.toList());
 
-        return new User(member.getId().toString(),
+        return new User(member.getAccount().getLoginId(),
                 member.getAccount().getPassword(),
                 grantedAuthorities);
     }
+
 
 }
