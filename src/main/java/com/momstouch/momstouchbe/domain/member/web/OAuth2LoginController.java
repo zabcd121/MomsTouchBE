@@ -62,12 +62,12 @@ public class OAuth2LoginController {
     }
 
     @Operation(summary = "사용자 정보 조회")
-    @GetMapping("/api/user/")
+    @GetMapping("/api/user")
     public ResponseEntity<MemberResponse> findUserInfo() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null) throw new AccessDeniedException("로그인 필요");
-        UserDetails userDetails = (UserDetails) authentication;
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
         return ResponseEntity.ok(MemberResponse.of(member));
