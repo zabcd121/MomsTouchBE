@@ -25,6 +25,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.momstouch.momstouchbe.domain.order.dto.OrderRequest.*;
@@ -110,9 +111,9 @@ public class OrderAppService {
         Order order = orderService.findById(orderId).orElseThrow();
         if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException(); //TODO :
 
-        Duration duration = Duration.between(order.getOrderDateTime(), LocalDateTime.now());
-        if(duration.toMinutes() > 1) {
+        if(LocalDateTime.now().isAfter(order.getOrderDateTime().plus(1, ChronoUnit.MINUTES))) {
             order.cancel();
+//            orderService.cancel(order);
             throw new IllegalStateException("주문 접수 가능 시간 초과");
         }
 

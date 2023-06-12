@@ -890,7 +890,7 @@ public class TestClass {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
-                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 20000);
+                LocalTime.of(0, 0, 0), LocalTime.of(23, 0, 0), 20000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, 8000, 10.0);
 
@@ -931,7 +931,7 @@ public class TestClass {
         orderRepository.save(newOrder);
         em.flush();
         em.clear();
-
+        memberSetup.getAuthentication(member);
         Order findOrder = orderService.findById(newOrder.getId()).get();
 
         mvc.perform(
