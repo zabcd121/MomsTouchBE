@@ -124,4 +124,7 @@ public class OrderService {
         return orderRepository.findByMemberIdWithAll(memberId);
     }
 
+    public List<Order> findOrderListByShopId(Long shopId) {
+        return orderRepository.findOrderListByShopId(shopId);
+    }
 }

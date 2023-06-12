@@ -71,6 +71,15 @@ public class Order extends BaseTime {
         return price;
     };
 
+    public Money getDiscountPrice() {
+        Money price = Money.ZERO;
+        for (OrderMenu orderMenu : orderMenuList) {
+            price = price.plus(orderMenu.getDiscountPrice());
+        }
+
+        return price;
+    }
+
     public void setTotalPrice(Money price) {
         this.totalPrice = price;
     }
