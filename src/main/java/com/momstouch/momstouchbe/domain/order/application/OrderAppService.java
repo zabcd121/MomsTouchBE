@@ -101,7 +101,7 @@ public class OrderAppService {
         if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException(); //TODO :
 
         Duration duration = Duration.between(order.getOrderDateTime(), LocalDateTime.now());
-        if(duration.toSeconds() > 60) {
+        if(duration.toMinutes() > 1) {
             order.cancel();
             throw new IllegalStateException("주문 접수 가능 시간 초과");
         }
