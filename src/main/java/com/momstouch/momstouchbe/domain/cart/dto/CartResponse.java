@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.cart.dto;
 
 import com.momstouch.momstouchbe.domain.cart.model.Cart;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -17,13 +18,25 @@ public class CartResponse {
         List<CartMenuResponse> cartMenuList = new ArrayList<>();
 
         public static CartSearchResponse of(Cart cart) {
+
+
+
             CartSearchResponse cartSearchResponse = new CartSearchResponse();
             cart.getCartMenuList().forEach(cartMenu -> {
+                int originPrice = cartMenu.getPrice().getAmount().intValueExact();
+                originPrice += cartMenu.getCartMenuOptionGroupList().stream()
+                        .mapToInt(cartMenuOptionGroup -> cartMenuOptionGroup.getCartMenuOptionList().stream()
+                                .mapToInt(cartMenuOption -> cartMenuOption.getPrice().getAmount().intValueExact())
+                                .sum())
+                        .sum();
+                int discountedPrice = cartMenu.getDiscountPolicy().discount(Money.of(originPrice)).getAmount().intValueExact();
                 CartMenuResponse cartMenuResponse = CartMenuResponse.builder()
                         .menuId(cartMenu.getMenuId())
                         .discountPolicyId(cartMenu.getDiscountPolicy().getId())
                         .quantity(cartMenu.getQuantity())
-                        .price(cartMenu.getPrice().getAmount().intValueExact())
+                        .originPrice(originPrice)
+                        .discountPrice(originPrice - discountedPrice)
+                        .discountedPrice(discountedPrice)
                         .build();
                 cartMenu.getCartMenuOptionGroupList().forEach(cartMenuOptionGroup -> {
                     CartMenuOptionGroupResponse cartMenuOptionGroupResponse = CartMenuOptionGroupResponse.builder()
@@ -53,7 +66,9 @@ public class CartResponse {
         private Long menuId;
         private Long discountPolicyId;
         private Integer quantity;
-        private Integer price;
+        private Integer originPrice;
+        private Integer discountPrice;
+        private Integer discountedPrice;
 
         @Builder.Default
         private List<CartMenuOptionGroupResponse> cartMenuOptionGroupList = new ArrayList<>();

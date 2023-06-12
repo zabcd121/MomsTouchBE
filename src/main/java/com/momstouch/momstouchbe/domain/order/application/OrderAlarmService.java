@@ -5,6 +5,7 @@ import com.momstouch.momstouchbe.domain.order.dto.OrderResponse;
 import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.repository.EmitterRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -65,9 +66,10 @@ public class OrderAlarmService {
     private void sendToClient(SseEmitter emitter, String id, Object data) {
         try {
             emitter.send(SseEmitter.event()
+                    .reconnectTime(500)
                     .id(id)
                     .name("sse")
-                    .data(data));
+                    .data(data), MediaType.APPLICATION_JSON);
         } catch (IOException exception) {
             emitterRepository.deleteById(id);
             throw new RuntimeException("연결 오류!");

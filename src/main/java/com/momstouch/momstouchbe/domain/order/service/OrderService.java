@@ -10,7 +10,7 @@ import com.momstouch.momstouchbe.domain.order.model.repository.OrderRepository;
 import com.momstouch.momstouchbe.domain.order.service.validation.OrderValidationService;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

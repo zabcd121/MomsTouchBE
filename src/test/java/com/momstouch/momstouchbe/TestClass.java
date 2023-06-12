@@ -1,18 +1,14 @@
 package com.momstouch.momstouchbe;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountRequest;
-import com.momstouch.momstouchbe.domain.discountpolicy.model.AmountDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.shop.dto.MenuRequest;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
-import com.momstouch.momstouchbe.setup.DiscountPolicySetup;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.MockMultipartFileSetup;
 import com.momstouch.momstouchbe.setup.ShopSetup;

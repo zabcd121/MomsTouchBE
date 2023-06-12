@@ -1,6 +1,5 @@
 package com.momstouch.momstouchbe.domain.cart.application;
 
-import com.momstouch.momstouchbe.domain.cart.dto.CartResponse;
 import com.momstouch.momstouchbe.domain.cart.model.Cart;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenu;
 import com.momstouch.momstouchbe.domain.cart.model.CartMenuOption;
@@ -9,11 +8,9 @@ import com.momstouch.momstouchbe.domain.cart.model.repository.CartQueryRepositor
 import com.momstouch.momstouchbe.domain.cart.model.repository.CartRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
-import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
-import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +47,7 @@ public class CartService {
         Long menuId = cartMenuAddRequest.getMenuId();
         Shop shop = shopRepository.findShopByMenuId(menuId);
         LocalTime now = LocalTime.now();
+
         if(!(now.isAfter(shop.getOpenTime()) && now.isBefore(shop.getClosedTime()))) {
             throw new IllegalStateException("현재 시간에는 주문이 불가능합니다.");
         }

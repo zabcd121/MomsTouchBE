@@ -2,18 +2,14 @@ package com.momstouch.momstouchbe;
 
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
 import com.momstouch.momstouchbe.domain.order.service.OptionGroupSelectInfo;
 import com.momstouch.momstouchbe.domain.order.service.OptionSelectInfo;
 import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
-import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
-import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +26,7 @@ public class InitData {
     private final InitService initService;
     @PostConstruct
     public void init() throws Exception {
-//        initService.init();
+        //initService.init();
     }
 
     @Component

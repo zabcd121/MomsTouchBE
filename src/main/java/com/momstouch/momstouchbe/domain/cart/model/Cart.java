@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.cart.model;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.global.vo.BaseTime;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "carts")
-public class Cart {
+public class Cart extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")

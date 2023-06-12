@@ -1,9 +1,9 @@
 package com.momstouch.momstouchbe.domain.shop.model;
 
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
+import com.momstouch.momstouchbe.global.vo.BaseTime;
 import lombok.*;
-import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Menu {
+public class Menu extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="menu_id")

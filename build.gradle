@@ -51,6 +51,18 @@ dependencies {
     // File 관련 메서드
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20220320'
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    /*implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'*/
+
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'

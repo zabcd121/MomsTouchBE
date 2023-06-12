@@ -5,9 +5,8 @@ import com.momstouch.momstouchbe.domain.shop.model.Category;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.OptionGroupSpecification;
 import com.momstouch.momstouchbe.domain.shop.model.OptionSpecification;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

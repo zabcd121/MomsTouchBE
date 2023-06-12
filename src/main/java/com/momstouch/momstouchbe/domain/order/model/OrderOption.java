@@ -1,6 +1,6 @@
 package com.momstouch.momstouchbe.domain.order.model;
 
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

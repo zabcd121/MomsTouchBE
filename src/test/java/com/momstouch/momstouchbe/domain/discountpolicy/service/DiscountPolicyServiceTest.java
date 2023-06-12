@@ -6,7 +6,7 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.ShopSetup;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

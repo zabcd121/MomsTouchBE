@@ -1,6 +1,6 @@
 package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
