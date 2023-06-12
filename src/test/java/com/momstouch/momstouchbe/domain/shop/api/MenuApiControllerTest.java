@@ -161,7 +161,7 @@ class MenuApiControllerTest {
                 .andExpect(jsonPath("$.name").value(menu1.getName()))
                 .andExpect(jsonPath("$.description").value(menu1.getDescription()))
                 .andExpect(jsonPath("$.price").value(menu1.getPrice().getAmount().intValueExact()))
-                .andExpect(jsonPath("$.discountPolicy.type").value(AmountDiscountPolicy.class.getName()))
+                .andExpect(jsonPath("$.discountPolicy.type").value("amount"))
                 .andExpect(jsonPath("$.optionGroupList.size()").value(menu1.getOptionGroupList().size()))
                 .andExpect(jsonPath("$.optionGroupList[0].name").value(menu1.getOptionGroupList().get(0).getName()))
                 .andExpect(jsonPath("$.optionGroupList[0].optionList.size()").value(menu1.getOptionGroupList().get(0).getOptionList().size()))

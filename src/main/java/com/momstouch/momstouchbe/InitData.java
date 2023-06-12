@@ -75,6 +75,7 @@ public class InitData {
                     .category(Category.MAIN)
                     .name("싸이버거")
                     .description("풍미좋은 햄버거")
+                    .imageURL("/api/images/menus/2023/6/12/1663630773-JQZAP.png")
                     .price(Money.of(6500)) //6500 + 1500 = 8000
                     .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
                     .optionGroupList(
@@ -96,6 +97,7 @@ public class InitData {
                     .category(Category.MAIN)
                     .name("화이트갈릭버거")
                     .description("마요 갈릭 버거입니다.")
+                    .imageURL("/api/images/menus/2023/6/12/1680133163-UWULA.png")
                     .price(Money.of(5500)) //(5500 + 3500) *2 = 18000
                     .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
                     .optionGroupList(

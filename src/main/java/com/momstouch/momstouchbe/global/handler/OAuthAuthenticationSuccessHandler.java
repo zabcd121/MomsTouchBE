@@ -23,5 +23,6 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
                                         Authentication authentication) throws IOException, ServletException {
         String accessToken = jwtTokenProvider.createAccessToken(authentication);
         response.setHeader(JwtTokenProvider.AUTHORIZATION_HEADER,accessToken);
+        response.sendRedirect("http://localhost:3000/token?id=" + accessToken);
     }
 }
