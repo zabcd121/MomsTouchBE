@@ -35,11 +35,10 @@ public class CartService {
     @Transactional
     public void addCartMenu(Long memberId, CartMenuAddRequest cartMenuAddRequest) {
         Cart cart = null;
-        if(!cartQueryRepository.existsByMemberId(memberId)) {
-             cart = Cart.builder()
+        if (!cartQueryRepository.existsByMemberId(memberId)) {
+            cart = Cart.builder()
                     .member(memberRepository.getReferenceById(memberId))
                     .build();
-
         } else {
             cart = cartQueryRepository.findByMemberId(memberId);
         }
@@ -48,13 +47,14 @@ public class CartService {
         Shop shop = shopRepository.findShopByMenuId(menuId);
         LocalTime now = LocalTime.now();
 
-        if(!(now.isAfter(shop.getOpenTime()) && now.isBefore(shop.getClosedTime()))) {
+        if (!(now.isAfter(shop.getOpenTime()) && now.isBefore(shop.getClosedTime()))) {
             throw new IllegalStateException("현재 시간에는 주문이 불가능합니다.");
         }
 
         cart.addCartMenu(
                 CartMenu.builder()
                         .menuId(menuId)
+                        .menuName(cartMenuAddRequest.getMenuName())
                         .discountPolicy(discountPolicyRepository.getReferenceById(cartMenuAddRequest.getDiscountPolicyId()))
                         .quantity(cartMenuAddRequest.getQuantity())
                         .price(Money.of(cartMenuAddRequest.getPrice()))
@@ -62,20 +62,22 @@ public class CartService {
                                 cartMenuAddRequest.getCartMenuOptionGroupList().stream()
                                         .map(cartMenuOptionGroupRequest ->
                                                 CartMenuOptionGroup.builder()
-                                                .menuOptionGroupId(cartMenuOptionGroupRequest.getMenuOptionGroupId())
-                                                .cartMenuOptionList(
-                                                        cartMenuOptionGroupRequest.getCartMenuOptionList().stream()
-                                                                .map(cartMenuOptionRequest ->
-                                                                        CartMenuOption.builder()
-                                                                        .menuOptionId(cartMenuOptionRequest.getMenuOptionId())
-                                                                        .price(Money.of(cartMenuOptionRequest.getPrice()))
-                                                                        .build())
-                                                                .collect(Collectors.toList())
-                                                )
-                                                .build())
-                                        .collect(Collectors.toList())
-                        ).build()
-        );
+                                                        .menuOptionGroupId(cartMenuOptionGroupRequest.getMenuOptionGroupId())
+                                                        .menuOptionGroupName(cartMenuOptionGroupRequest.getMenuOptionGroupName())
+                                                                .cartMenuOptionList(
+                                                                        cartMenuOptionGroupRequest.getCartMenuOptionList().stream()
+                                                                                .map(cartMenuOptionRequest ->
+                                                                                        CartMenuOption.builder()
+                                                                                                .menuOptionId(cartMenuOptionRequest.getMenuOptionId())
+                                                                                                .menuOptionName(cartMenuOptionRequest.getMenuOptionName())
+                                                                                                .price(Money.of(cartMenuOptionRequest.getPrice()))
+                                                                                                .build())
+                                                                                .collect(Collectors.toList())
+                                                                )
+                                                                .build())
+                                                        .collect(Collectors.toList())
+                                        ).build()
+                        );
 
         cartRepository.save(cart);
 
@@ -83,6 +85,7 @@ public class CartService {
 
     public CartSearchResponse searchCartMenuList(Long memberId) {
         Cart cart = cartQueryRepository.findByMemberId(memberId);
+
         return CartSearchResponse.of(cart);
     }
 }

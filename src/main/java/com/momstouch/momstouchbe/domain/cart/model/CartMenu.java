@@ -21,6 +21,8 @@ public class CartMenu extends BaseTime {
 
     private Long menuId;
 
+    private String menuName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "discount_policy_id")
     private DiscountPolicy discountPolicy;

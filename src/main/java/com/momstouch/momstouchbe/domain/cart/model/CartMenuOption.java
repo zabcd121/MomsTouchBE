@@ -18,5 +18,6 @@ public class CartMenuOption extends BaseTime {
     private Long id;
 
     private Long menuOptionId;
+    private String menuOptionName;
     private Money price;
 }
