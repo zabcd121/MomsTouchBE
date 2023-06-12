@@ -22,13 +22,12 @@ public class DelegatingDiscountPolicyConvertor extends DiscountPolicyConvertor{
 
     @Override
     protected DiscountPolicyResponse convertResponse(DiscountPolicy discountPolicy) {
-
         for (DiscountPolicyConvertor convertor : convertors) {
             DiscountPolicyResponse discountPolicyResponse = convertor.convertResponse(discountPolicy);
             if(discountPolicyResponse != null) return discountPolicyResponse;
         }
 
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
