@@ -8,6 +8,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,8 @@ public class Order extends BaseTime {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.ORDER;
 
+    private LocalDateTime orderDateTime;
+
     public void addOrderMenu(OrderMenu orderMenu) {
         if(!orderMenuList.contains(orderMenu)) {
             orderMenuList.add(orderMenu);
@@ -72,7 +75,9 @@ public class Order extends BaseTime {
         this.totalPrice = price;
     }
 
-    public void accept() {orderStatus = OrderStatus.ACCEPT;}
+    public void accept() {
+        orderStatus = OrderStatus.ACCEPT;
+    }
     public void cancel() {
         orderStatus = OrderStatus.CANCEL;
     }

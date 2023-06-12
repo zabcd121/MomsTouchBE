@@ -15,6 +15,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.List;
 
 import static com.momstouch.momstouchbe.domain.order.dto.OrderRequest.*;
@@ -66,6 +70,13 @@ public class OrderAppService {
     public boolean accept(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
         if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException();
+
+        Duration duration = Duration.between(order.getOrderDateTime(), LocalDateTime.now());
+        if(duration.toSeconds() > 60) {
+            order.cancel();
+            throw new IllegalStateException("주문 접수 가능 시간 초과");
+        }
+
         return template(order,authentication, order::accept);
     }
 

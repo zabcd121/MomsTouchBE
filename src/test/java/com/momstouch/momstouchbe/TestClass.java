@@ -11,11 +11,13 @@ import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.order.dto.OrderRequest.CreateOrderRequest;
 import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
+import com.momstouch.momstouchbe.domain.order.model.repository.OrderRepository;
 import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
 import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
+import com.momstouch.momstouchbe.global.vo.BaseTime;
 import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.*;
 import org.assertj.core.api.Assertions;
@@ -37,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
@@ -56,24 +59,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 public class TestClass {
-    @Autowired EntityManager em;
-    @Autowired MockMvc mvc;
-    @Autowired ObjectMapper objectMapper;
-    @Autowired MockMultipartFileSetup mockMultipartFileSetup;
-    @Autowired ShopSetup shopSetup;
-    @Autowired MemberSetup memberSetup;
-    @Autowired DiscountPolicyService discountPolicyService;
-    @Autowired ShopSearchableRepository shopSearchableRepository;
-    @Autowired DiscountPolicyRepository discountPolicyRepository;
-    @Autowired MenuRepository menuRepository;
-    @Autowired CartService cartService;
+    @Autowired
+    EntityManager em;
+    @Autowired
+    MockMvc mvc;
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    MockMultipartFileSetup mockMultipartFileSetup;
+    @Autowired
+    ShopSetup shopSetup;
+    @Autowired
+    MemberSetup memberSetup;
+    @Autowired
+    DiscountPolicyService discountPolicyService;
+    @Autowired
+    ShopSearchableRepository shopSearchableRepository;
+    @Autowired
+    DiscountPolicyRepository discountPolicyRepository;
+    @Autowired
+    MenuRepository menuRepository;
+    @Autowired
+    CartService cartService;
     @Autowired
     OrderInfoSetup orderInfoSetup;
 
-    @Autowired MenuInfoSetup menuInfoSetup;
+    @Autowired
+    MenuInfoSetup menuInfoSetup;
 
-    @Autowired OrderService orderService;
-    @Autowired OrderAppService orderAppService;
+    @Autowired
+    OrderService orderService;
+    @Autowired
+    OrderAppService orderAppService;
+    @Autowired
+    OrderRepository orderRepository;
 
     @Test()
     @DisplayName(value = "메뉴가 올바르게 등록 되는가? ")
@@ -91,7 +110,7 @@ public class TestClass {
                 LocalTime.of(10, 0),
                 LocalTime.of(21, 0), 5000);
 
-        Long discountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(23,0,0), 1000); //할인 정책 메뉴가 만원 넘을시 1000원 할인
+        Long discountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(23, 0, 0), 1000); //할인 정책 메뉴가 만원 넘을시 1000원 할인
 
         String menuName = "싸이버거";
         String menuDescription = "풍미좋은 햄버거";
@@ -201,17 +220,17 @@ public class TestClass {
                 .build();
 
         ResultActions resultActions = mvc.perform(
-                        multipart("/api/shop/{shopId}/menus", shop.getId())
-                                .file("image", mockMultipartFileSetup.getMockMultipartFile().getBytes())
-                                .file(new MockMultipartFile("menu", "menu", "application/json", objectMapper.writeValueAsString(menuCreateFailRequest).getBytes(StandardCharsets.UTF_8)))
-                                .characterEncoding("UTF-8")
-                                .accept(MediaType.APPLICATION_JSON));
+                multipart("/api/shop/{shopId}/menus", shop.getId())
+                        .file("image", mockMultipartFileSetup.getMockMultipartFile().getBytes())
+                        .file(new MockMultipartFile("menu", "menu", "application/json", objectMapper.writeValueAsString(menuCreateFailRequest).getBytes(StandardCharsets.UTF_8)))
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.APPLICATION_JSON));
         resultActions.andExpect(status().isBadRequest());
     }
 
     @Test
     @DisplayName(value = "메뉴 이름, 가격, 메뉴 설명이 올바르게 수정되는가?")
-    void 메뉴_수정() throws Exception{
+    void 메뉴_수정() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
 
@@ -290,13 +309,13 @@ public class TestClass {
         });
 
         mvc.perform(
-            builder
-                .file("image", mockMultipartFileSetup.getMockMultipartFile().getBytes())
-                .file(new MockMultipartFile("menu", "menu", "application/json", objectMapper.writeValueAsString(menuUpdateRequest).getBytes(StandardCharsets.UTF_8)))
-                .characterEncoding("UTF-8")
-                .accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isOk());
+                        builder
+                                .file("image", mockMultipartFileSetup.getMockMultipartFile().getBytes())
+                                .file(new MockMultipartFile("menu", "menu", "application/json", objectMapper.writeValueAsString(menuUpdateRequest).getBytes(StandardCharsets.UTF_8)))
+                                .characterEncoding("UTF-8")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
 
         Shop findShop = shopSearchableRepository.findWithMenuListByShopId(shop.getId());
         assertEquals(menuUpdateRequest.getName(), findShop.getMenuList().get(0).getName(), "메뉴 이름이 변경되었는지 확인");
@@ -312,8 +331,8 @@ public class TestClass {
     void 할인_설정() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "누네띠네 사장이된 김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
-                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+                "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
+                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 20000);
 
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(12, 0, 0), 1000);
 
@@ -350,13 +369,13 @@ public class TestClass {
         Long menuId = menu.getId();
         UpdateDiscountPolicyRequest updateDiscountPolicyRequest = new UpdateDiscountPolicyRequest(menuId);
         mvc.perform(
-                post("/api/discountPolicy/{discountPolicyId}",timeDiscountPolicyId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateDiscountPolicyRequest))
-                        .with(csrf())
-        ).andDo(print())
+                        post("/api/discountPolicy/{discountPolicyId}", timeDiscountPolicyId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateDiscountPolicyRequest))
+                                .with(csrf())
+                ).andDo(print())
                 .andExpect(status().isOk());
 
         Menu findMenu = menuRepository.findById(menuId).orElseThrow();
@@ -371,8 +390,8 @@ public class TestClass {
     void 주문_장바구니_운영시간이_아닐때() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "집게리아 사장이된 김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
-                "집게리아","집게리아에 오신걸 환영합니다." , "바다속","010-0000-1111",
-                LocalTime.of(0,0,0),LocalTime.of(0,0,1),8000);
+                "집게리아", "집게리아에 오신걸 환영합니다.", "바다속", "010-0000-1111",
+                LocalTime.of(0, 0, 0), LocalTime.of(0, 0, 1), 8000);
 
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(12, 0, 0), 1000);
 
@@ -415,13 +434,13 @@ public class TestClass {
                 .build();
 
         mvc.perform(
-                post("/api/members/{memberId}/carts",member.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
-                        .with(csrf())
-        ).andDo(print())
+                        post("/api/members/{memberId}/carts", member.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                                .with(csrf())
+                ).andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
@@ -430,8 +449,8 @@ public class TestClass {
     void 장바구니에_주_메뉴가_없을때() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "집게리아 사장이된 김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
-                "집게리아","집게리아에 오신걸 환영합니다." , "바다속","010-0000-1111",
-                LocalTime.of(0,0,0),LocalTime.of(0,0,1),8000);
+                "집게리아", "집게리아에 오신걸 환영합니다.", "바다속", "010-0000-1111",
+                LocalTime.of(0, 0, 0), LocalTime.of(0, 0, 1), 8000);
 
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(12, 0, 0), 1000);
 
@@ -494,14 +513,14 @@ public class TestClass {
         }).isInstanceOf(IllegalStateException.class);
 
         mvc.perform(
-            post("/api/order")
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request))
-                .with(csrf())
-        ).andDo(print())
-        .andExpect(status().isBadRequest());
+                        post("/api/order")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                                .with(csrf())
+                ).andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -509,8 +528,8 @@ public class TestClass {
     void 주문_장바구니에_가격이_8000원_미만일때() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "집게리아 사장이된 김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
-                "집게리아","집게리아에 오신걸 환영합니다." , "바다속","010-0000-1111",
-                LocalTime.of(0,0,0),LocalTime.of(0,0,1),8000);
+                "집게리아", "집게리아에 오신걸 환영합니다.", "바다속", "010-0000-1111",
+                LocalTime.of(0, 0, 0), LocalTime.of(0, 0, 1), 8000);
 
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(1, 0, 0), 1000);
 
@@ -586,11 +605,11 @@ public class TestClass {
     void 주문_생성_테스트() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
-                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+                "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
+                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 20000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, 8000, 10.0);
-        Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,10000, 1000);
+        Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop, 10000, 1000);
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(23, 59, 59), 1000);
 
         Menu menu1 = Menu.builder()
@@ -650,7 +669,7 @@ public class TestClass {
                                         .optionList( //1000
                                                 List.of(OptionSpecification.builder().name("콜라").price(Money.of(1000)).build(),
                                                         OptionSpecification.builder().name("사이다").price(Money.of(1000)).build()
-                                        )).build()
+                                                )).build()
                         )
                 ).build();
 
@@ -665,7 +684,7 @@ public class TestClass {
         MenuInfo menuInfo2 = menuInfoSetup.of(menu2, menu2.getOptionGroupList(), 2);
         MenuInfo menuInfo3 = menuInfoSetup.of(menu3, menu3.getOptionGroupList(), 1);
 
-        OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1, menuInfo2,menuInfo3));
+        OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1, menuInfo2, menuInfo3));
 
         Long orderId = orderService.createOrder(orderInfo);
 
@@ -691,8 +710,8 @@ public class TestClass {
     void 주문_고객_배달중_상태_변경() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
-                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),10000);
+                "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
+                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, Integer.MAX_VALUE, 10.0);
 
@@ -723,10 +742,10 @@ public class TestClass {
         OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1));
         Long orderId = orderService.createOrder(orderInfo);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.accept(orderId,authentication); // 관리자가 주문을 승낙함
+        orderAppService.accept(orderId, authentication); // 관리자가 주문을 승낙함
 
 
-        orderAppService.deliver(orderId,authentication); // 배달중으로 변경
+        orderAppService.deliver(orderId, authentication); // 배달중으로 변경
 
         ResultActions perform = mvc.perform( //취소 요청
                 delete("/api/order/{orderId}", orderId)
@@ -750,8 +769,8 @@ public class TestClass {
     void 주문_점주_주문_접수() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
-                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),10000);
+                "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
+                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, Integer.MAX_VALUE, 10.0);
 
@@ -783,12 +802,12 @@ public class TestClass {
         Long orderId = orderService.createOrder(orderInfo); // 주문 생성
 
         mvc.perform( // 주문 승낙 요청
-                post("/api/order/{orderId}",orderId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding("UTF-8")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(csrf())
-        )
+                        post("/api/order/{orderId}", orderId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(csrf())
+                )
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -796,7 +815,7 @@ public class TestClass {
         Assertions.assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ACCEPT);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.deliver(orderId,authentication);
+        orderAppService.deliver(orderId, authentication);
 
         em.flush();
         em.clear();
@@ -810,8 +829,8 @@ public class TestClass {
     void 배달_완료() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
-                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),10000);
+                "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
+                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, Integer.MAX_VALUE, 10.0);
 
@@ -843,14 +862,14 @@ public class TestClass {
         Long orderId = orderService.createOrder(orderInfo); // 주문 생성
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.accept(orderId,authentication);
-        orderAppService.deliver(orderId,authentication);
+        orderAppService.accept(orderId, authentication);
+        orderAppService.deliver(orderId, authentication);
 
         em.flush();
         em.clear();
 
         mvc.perform( // 주문 완료 요청
-                        put("/api/order/{orderId}/complete",orderId)
+                        put("/api/order/{orderId}/complete", orderId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8")
                                 .accept(MediaType.APPLICATION_JSON)
@@ -861,6 +880,67 @@ public class TestClass {
 
         Order order = orderService.findById(orderId).get();
         Assertions.assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.COMPLETE);
+    }
+
+    @Test
+    void 일분안에주문접수안할시취소_성공() throws Exception {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
+                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 20000);
+
+        Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, 8000, 10.0);
+
+        Menu menu1 = Menu.builder()
+                .category(Category.MAIN)
+                .name("싸이버거")
+                .description("풍미좋은 햄버거")
+                .price(Money.of(6500)) //6500 + 1500 = 8000
+                .discountPolicy(discountPolicyService.findById(rateDiscountPolicy).get())
+                .optionGroupList(
+                        List.of(
+                                OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                        .optionList( //0
+                                                List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("음료 선택")
+                                        .optionList( //1500
+                                                List.of(OptionSpecification.builder().name("커피").price(Money.of(1500)).build())
+                                        ).build()
+                        )
+                ).build();
+
+        shop.addMenu(menu1);
+
+        em.flush();
+        em.clear();
+
+        LocalDateTime now = LocalDateTime.now();
+        Order newOrder = Order.builder()
+                .member(member)
+                .shop(shop)
+                .orderStatus(OrderStatus.ORDER)
+                .address("서울시 강남구 대학로 1길 203호")
+                .phoneNumber("010-0000-1111")
+                .totalPrice(Money.of(30000))
+                .orderDateTime(LocalDateTime.now().minusMinutes(1).minusSeconds(1))
+                .build();
+        orderRepository.save(newOrder);
+        em.flush();
+        em.clear();
+
+        Order findOrder = orderService.findById(newOrder.getId()).get();
+
+        mvc.perform(
+                post("/api/order/{orderId}", findOrder.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(csrf())
+        ).andDo(print())
+                        .andExpect(status().is4xxClientError());
+        
+        Assertions.assertThat(findOrder.getOrderStatus()).isEqualTo(OrderStatus.CANCEL);
     }
 
     CartMenuAddRequest getCarMenuAddRequest(Menu menu) {

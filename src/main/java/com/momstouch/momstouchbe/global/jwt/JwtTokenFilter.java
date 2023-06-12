@@ -24,18 +24,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final RedisTemplate redisTemplate;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
             String resolvedToken = jwtTokenProvider.resolveToken(request.getHeader(AUTHORIZATION_HEADER));
             if (resolvedToken != null && jwtTokenProvider.validateToken(resolvedToken)) {
-                String isLogout = (String) redisTemplate.opsForValue().get(resolvedToken);
-                if (ObjectUtils.isEmpty(isLogout)) {
-                    Authentication authentication = jwtTokenProvider.getAuthentication(resolvedToken);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                Authentication authentication = jwtTokenProvider.getAuthentication(resolvedToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
         } catch (Exception e) {
