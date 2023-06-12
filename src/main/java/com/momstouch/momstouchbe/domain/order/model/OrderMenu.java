@@ -55,4 +55,15 @@ public class OrderMenu extends BaseTime {
 
         return menu.applyDiscountPolicy(menuPrice.times(count));
     }
+
+    public Money getDiscountPrice() {
+        Money menuPrice = menu.getPrice();
+        for (OrderOptionGroup orderOptionGroup : orderOptionGroupList) {
+            menuPrice = menuPrice.plus(orderOptionGroup.totalPrice());
+        }
+        menuPrice = menuPrice.times(count);
+        Money applyDiscountPolicy = menu.applyDiscountPolicy(menuPrice);
+
+        return menuPrice.minus(applyDiscountPolicy);
+    }
 }

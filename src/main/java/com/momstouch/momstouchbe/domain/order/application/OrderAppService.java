@@ -38,7 +38,6 @@ public class OrderAppService {
     private final MemberRepository memberRepository;
     private final ShopRepository shopRepository;
     private final OrderAlarmService orderAlarmService;
-
     private final MemberDetailsService memberDetailsService;
 
     public OrderResponse findOrderById(Long orderId) {
@@ -54,6 +53,19 @@ public class OrderAppService {
         List<Order> allMyOrder = orderService.findAllMyOrder(member.getId());
 
         return OrderListResponse.of(allMyOrder);
+    }
+
+    public OrderListResponse findOrderListByShopId(Authentication authentication,Long shopId) {
+        if(authentication == null) throw new AccessDeniedException("로그인 필요");
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
+        Shop shop = shopRepository.findById(shopId).orElseThrow();
+        if(!shop.getOwner().isEquals(authentication)) {
+            throw new IllegalArgumentException("가게 주인이 아님");
+        }
+
+        List<Order> orderListByShopId = orderService.findOrderListByShopId(shopId);
+        return OrderListResponse.of(orderListByShopId);
     }
 
     @Transactional

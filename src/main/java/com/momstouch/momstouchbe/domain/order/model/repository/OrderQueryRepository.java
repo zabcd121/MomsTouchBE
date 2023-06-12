@@ -8,4 +8,5 @@ public interface OrderQueryRepository {
 
     Order findByIdWithAll(Long orderId);
     List<Order> findByMemberIdWithAll(Long memberId);
+    List<Order> findOrderListByShopId(Long shopId);
 }

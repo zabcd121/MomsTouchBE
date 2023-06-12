@@ -101,4 +101,17 @@ public class OrderController {
         return new ResponseEntity<>(myOrderList,HttpStatus.OK);
     }
 
+    @Operation(summary = "점주가 가게에 들어온 주문 목록을 확인")
+    @GetMapping("/order/shop/{shopId}")
+    public ResponseEntity<OrderListResponse> findAllOrderInShop(@PathVariable Long shopId) {
+
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            OrderListResponse response = orderAppService.findOrderListByShopId(authentication, shopId);
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

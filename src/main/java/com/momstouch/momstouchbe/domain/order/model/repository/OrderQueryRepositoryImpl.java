@@ -39,4 +39,15 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
                 .where(order.member.id.eq(memberId))
                 .fetch();
     }
+
+    public List<Order> findOrderListByShopId(Long shopId) {
+        return jpaQueryFactory
+                .select(order).distinct()
+                .from(order)
+                .join(order.orderMenuList, QOrderMenu.orderMenu).fetchJoin()
+                .join(order.member, QMember.member).fetchJoin()
+                .join(order.shop, QShop.shop).fetchJoin()
+                .where(order.shop.id.eq(shopId))
+                .fetch();
+    }
 }
