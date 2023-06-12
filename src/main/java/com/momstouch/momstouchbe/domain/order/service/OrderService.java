@@ -127,4 +127,10 @@ public class OrderService {
     public List<Order> findOrderListByShopId(Long shopId) {
         return orderRepository.findOrderListByShopId(shopId);
     }
+
+    @Transactional()
+    public void cancel(Order order) {
+
+
+    }
 }
