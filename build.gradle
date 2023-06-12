@@ -108,8 +108,6 @@ tasks.jacocoTestReport {
                                                 "**/*Condition*",
                                                 "**/*Init*",
                                                 "**/*BaseTime**",
-                                                "**/*Foramtter**",
-                                                "**/*ReservationStatusReqConverter**",
                                                 "**/*Response*.*",
                                                 "**/*Request*.*",
                                                 "**/*Builder*.*",

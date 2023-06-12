@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +64,7 @@ class CartApiControllerTest {
     CartService cartService;
 
     @Test
+    @WithMockUser(username = "test" , roles = {"OWNER"})
     void 장바구니추가_성공() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678",
@@ -79,7 +81,7 @@ class CartApiControllerTest {
         CartMenuAddRequest cartMenuAddRequest = getCarMenuAddRequest(menu1);
 
         ResultActions resultActions = mvc.perform(
-                post("/api/members/{memberId}/carts", member.getId())
+                post("/api/carts", member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartMenuAddRequest))
                         .accept(MediaType.APPLICATION_JSON))
@@ -123,6 +125,7 @@ class CartApiControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "test" , roles = {"OWNER"})
     void 장바구니조회_성공() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678",
@@ -140,7 +143,7 @@ class CartApiControllerTest {
         em.flush();
 
         mvc.perform(
-                get("/api/members/{memberId}/carts", member.getId())
+                get("/api/carts", member.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

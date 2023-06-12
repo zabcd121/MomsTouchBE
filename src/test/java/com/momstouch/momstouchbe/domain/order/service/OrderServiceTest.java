@@ -43,7 +43,7 @@ class OrderServiceTest {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
-                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+                LocalTime.of(0,0,0),LocalTime.of(23,0,0),20000);
 
         Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
 
@@ -113,5 +113,141 @@ class OrderServiceTest {
         List<OrderMenu> orderMenuList = order.getOrderMenuList();
         Assertions.assertThat(orderMenuList.size()).isEqualTo(2);
         Assertions.assertThat(order.getTotalPrice()).isEqualTo(Money.of(26000));
+    }
+
+    @Test
+    public void 운영_시간_아닐때_테스트() {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
+                LocalTime.of(0,0,0),LocalTime.of(0,0,1),20000);
+
+        Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
+
+        Menu menu1 = Menu.builder()
+                .category(Category.MAIN)
+                .name("싸이버거")
+                .description("풍미좋은 햄버거")
+                .price(Money.of(6500)) //6500 + 1500 = 8000
+                .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
+                .optionGroupList(
+                        List.of(
+                                OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                        .optionList( //0
+                                                List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("음료 선택")
+                                        .optionList( //1500
+                                                List.of(OptionSpecification.builder().name("커피").price(Money.of(1500)).build())
+                                        ).build()
+                        )
+                ).build();
+
+
+        Menu menu2 = Menu.builder()
+                .category(Category.MAIN)
+                .name("화이트갈릭버거")
+                .description("마요 갈릭 버거입니다.")
+                .price(Money.of(5500)) //(5500 + 3500) *2 = 18000
+                .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
+                .optionGroupList(
+                        List.of(
+                                OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                        .optionList( //1000
+                                                List.of(OptionSpecification.builder().name("세트변경").price(Money.of(1000)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("사이드 선택")
+                                        .optionList( //1500
+                                                List.of(OptionSpecification.builder().name("감자튀김").price(Money.of(1500)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("음료 선택")
+                                        .optionList( //1000
+                                                List.of(OptionSpecification.builder().name("콜라").price(Money.of(1000)).build())
+                                        ).build()
+                        )
+                ).build();
+
+        menuRepository.save(menu1);
+        menuRepository.save(menu2);
+
+        MenuInfo menuInfo1 = menuInfoSetup.of(menu1, menu1.getOptionGroupList(), 1);
+        MenuInfo menuInfo2 = menuInfoSetup.of(menu2, menu2.getOptionGroupList(), 2);
+
+        OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1, menuInfo2));
+
+        Assertions.assertThatThrownBy(() -> {
+            orderService.createOrder(orderInfo);
+        }).isInstanceOf(IllegalStateException.class);
+
+    }
+
+    @Test
+    public void 주문_정보_조작() {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
+                LocalTime.of(0,0,0),LocalTime.of(23,59,59),1000);
+
+        Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
+
+        Menu menu1 = Menu.builder()
+                .category(Category.MAIN)
+                .name("싸이버거")
+                .description("풍미좋은 햄버거")
+                .price(Money.of(6500)) //6500 + 1500 = 8000
+                .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
+                .optionGroupList(
+                        List.of(
+                                OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                        .optionList( //0
+                                                List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("음료 선택")
+                                        .optionList( //1500
+                                                List.of(OptionSpecification.builder().name("커피").price(Money.of(1500)).build())
+                                        ).build()
+                        )
+                ).build();
+
+
+        Menu menu2 = Menu.builder()
+                .category(Category.MAIN)
+                .name("화이트갈릭버거")
+                .description("마요 갈릭 버거입니다.")
+                .price(Money.of(5500)) //(5500 + 3500) *2 = 18000
+                .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
+                .optionGroupList(
+                        List.of(
+                                OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                        .optionList( //1000
+                                                List.of(OptionSpecification.builder().name("세트변경").price(Money.of(1000)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("사이드 선택")
+                                        .optionList( //1500
+                                                List.of(OptionSpecification.builder().name("감자튀김").price(Money.of(1500)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("음료 선택")
+                                        .optionList( //1000
+                                                List.of(OptionSpecification.builder().name("콜라").price(Money.of(1000)).build())
+                                        ).build()
+                        )
+                ).build();
+
+        menuRepository.save(menu1);
+        menuRepository.save(menu2);
+
+        List<OptionGroupSpecification> invalidOptionGroup = List.of(OptionGroupSpecification.builder().name("음료 선택")
+                .optionList(
+                        List.of(OptionSpecification.builder().name("카페인").price(Money.of(0)).build()) // 가격을 0원으로 변경
+                ).build());
+        MenuInfo menuInfo1 = menuInfoSetup.of(menu1, invalidOptionGroup, 1);
+        MenuInfo menuInfo2 = menuInfoSetup.of(menu2, menu2.getOptionGroupList(), 2);
+
+        OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1, menuInfo2));
+
+        Assertions.assertThatThrownBy(() -> {
+            orderService.createOrder(orderInfo);
+        }).isInstanceOf(IllegalStateException.class);
+
     }
 }

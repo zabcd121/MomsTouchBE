@@ -382,12 +382,12 @@ public class TestClass {
 
     @Test
     @DisplayName(value = "운영 시간이 아닌 시점에서 장바구니 담기 예외가 발생하는가?")
+    @WithMockUser(username = "loginId", roles = {"OWNER"})
     void 주문_장바구니_운영시간이_아닐때() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "집게리아 사장이된 김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
                 "집게리아", "집게리아에 오신걸 환영합니다.", "바다속", "010-0000-1111",
-                LocalTime.of(0, 0, 0), LocalTime.of(0, 0, 1), 8000);
-
+                LocalTime.of(0, 0, 0), LocalTime.of(0, 0, 1), 0);
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(12, 0, 0), 1000);
 
         Menu menu = Menu.builder()
@@ -429,7 +429,7 @@ public class TestClass {
                 .build();
 
         mvc.perform(
-                        post("/api/members/{memberId}/carts", member.getId())
+                        post("/api/carts")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("UTF-8")
                                 .accept(MediaType.APPLICATION_JSON)
@@ -525,7 +525,7 @@ public class TestClass {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "집게리아 사장이된 김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
                 "집게리아", "집게리아에 오신걸 환영합니다.", "바다속", "010-0000-1111",
-                LocalTime.of(0, 0, 0), LocalTime.of(0, 0, 1), 8000);
+                LocalTime.of(0, 0, 0), LocalTime.of(23, 59, 59), 8000);
 
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(1, 0, 0), 1000);
 
@@ -605,7 +605,7 @@ public class TestClass {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
-                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 20000);
+                LocalTime.of(0, 0, 0), LocalTime.of(23, 0, 0), 20000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, 8000, 10.0);
         Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop, 10000, 1000);
@@ -710,7 +710,7 @@ public class TestClass {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
-                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
+                LocalTime.of(0, 0, 0), LocalTime.of(23, 59, 59), 10000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, Integer.MAX_VALUE, 10.0);
 
@@ -773,7 +773,7 @@ public class TestClass {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
-                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
+                LocalTime.of(0, 0, 0), LocalTime.of(23, 0, 0), 10000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, Integer.MAX_VALUE, 10.0);
 
@@ -833,7 +833,7 @@ public class TestClass {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
-                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
+                LocalTime.of(0, 0, 0), LocalTime.of(23, 0, 0), 10000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, Integer.MAX_VALUE, 10.0);
 

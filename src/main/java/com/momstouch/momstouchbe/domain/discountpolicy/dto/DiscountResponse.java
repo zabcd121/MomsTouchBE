@@ -4,6 +4,8 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.AmountDiscountPolic
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.RateDiscountPolicy;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
+import com.momstouch.momstouchbe.domain.discountpolicy.utis.convertor.DelegatingDiscountPolicyConvertor;
+import com.momstouch.momstouchbe.domain.discountpolicy.utis.convertor.DiscountPolicyConvertor;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -13,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DiscountResponse {
-
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class DiscountListResponse {
@@ -48,17 +49,7 @@ public class DiscountResponse {
     public abstract static class DiscountPolicyResponse {
 
         public static DiscountPolicyResponse of(DiscountPolicy discountPolicy) {
-            Class<? extends DiscountPolicy> discountPolicyClass = discountPolicy.getClass();
-            if(discountPolicyClass.isAssignableFrom(AmountDiscountPolicy.class)) {
-
-                return AmountDiscountPolicyResponse.of((AmountDiscountPolicy)discountPolicy);
-            } else if(discountPolicyClass.isAssignableFrom(RateDiscountPolicy.class)) {
-                return RateDiscountPolicyResponse.of((RateDiscountPolicy)discountPolicy);
-            } else if(discountPolicyClass.isAssignableFrom(TimeDiscountPolicy.class)) {
-                return TimeDiscountPolicyResponse.of((TimeDiscountPolicy)discountPolicy);
-            } else {
-                return null;
-            }
+            return DelegatingDiscountPolicyConvertor.convert(discountPolicy);
         }
     }
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
