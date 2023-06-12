@@ -2,6 +2,7 @@ package com.momstouch.momstouchbe.domain.order.api;
 
 import com.momstouch.momstouchbe.domain.order.application.OrderAppService;
 import com.momstouch.momstouchbe.domain.order.dto.OrderResponse;
+import com.momstouch.momstouchbe.domain.order.dto.OrderResponse.OrderListResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -92,9 +93,12 @@ public class OrderController {
     }
 
 
-//    @Operation(summary = "고객이 본인의 주문 내역을 조회")
-//    @GetMapping("/order")
-//    public ResponseEntity<?> findOrderList() {
-//
-//    }
+    @Operation(summary = "고객이 본인의 주문 내역을 조회")
+    @GetMapping("/order")
+    public ResponseEntity<OrderListResponse> findOrderList() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        OrderListResponse myOrderList = orderAppService.findMyOrderList(authentication);
+        return new ResponseEntity<>(myOrderList,HttpStatus.OK);
+    }
+
 }

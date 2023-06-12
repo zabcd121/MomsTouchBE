@@ -7,6 +7,7 @@ import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.order.application.OrderAppService;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.order.dto.OrderRequest;
+import com.momstouch.momstouchbe.domain.order.dto.OrderResponse;
 import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
 import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
@@ -154,8 +155,6 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.orderMenus.size()").value(2))
             .andExpect(status().isOk());
     }
-
-    //TODO: 주문 생성 테스트 api 필요
 
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
@@ -318,4 +317,43 @@ class OrderControllerTest {
         OrderStatus orderStatus = order.getOrderStatus();
         Assertions.assertThat(orderStatus).isEqualTo(OrderStatus.COMPLETE);
     }
+
+
+    @Test
+    @WithMockUser(username = "loginId",roles = {"OWNER"})
+    public void 주문_목록_조회_테스트() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        OrderResponse.OrderListResponse myOrderList = orderAppService.findMyOrderList(authentication);
+
+        List<OrderResponse> orders = myOrderList.getOrders();
+        Assertions.assertThat(orders.size()).isEqualTo(1);
+        Assertions.assertThat(orders.get(0).getOrderMenus().size()).isEqualTo(2);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
