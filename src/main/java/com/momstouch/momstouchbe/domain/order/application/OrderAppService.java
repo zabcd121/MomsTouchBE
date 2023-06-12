@@ -12,6 +12,7 @@ import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
 import com.momstouch.momstouchbe.global.jwt.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +38,9 @@ public class OrderAppService {
     private final OrderService orderService;
     private final MemberRepository memberRepository;
     private final ShopRepository shopRepository;
-    private final OrderAlarmService orderAlarmService;
+    private final SimpMessageSendingOperations messagingTemplate;
+    //private final OrderAlarmService orderAlarmService;
+
     private final MemberDetailsService memberDetailsService;
 
     public OrderResponse findOrderById(Long orderId) {
@@ -89,7 +92,8 @@ public class OrderAppService {
         Long orderId = orderService.createOrder(orderInfo);
         Order order = orderService.findById(orderId).orElseThrow();
 
-        orderAlarmService.send(shop.getOwner(), order, "맘스터치 주문!");
+        //orderAlarmService.send(shop.getOwner(), order, "맘스터치 주문!");
+        messagingTemplate.convertAndSend("/sub/" + shop.getOwner().getId(), OrderResponse.of(order));
         return orderId;
     }
 
@@ -100,7 +104,8 @@ public class OrderAppService {
         if(!equals) throw new AccessDeniedException("member.equals(authentication) 실패");
         if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
         orderCallback.run();
-        orderAlarmService.send(order.getMember(), order, "주문 상태 변경!");
+        //orderAlarmService.send(order.getMember(), order, "주문 상태 변경!");
+        messagingTemplate.convertAndSend("/sub/" + order.getMember().getId(), OrderResponse.of(order));
         return true;
     }
     @Transactional
@@ -109,7 +114,7 @@ public class OrderAppService {
         if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException(); //TODO :
 
         Duration duration = Duration.between(order.getOrderDateTime(), LocalDateTime.now());
-        if(duration.toSeconds() > 60) {
+        if(duration.toMinutes() > 1) {
             order.cancel();
             throw new IllegalStateException("주문 접수 가능 시간 초과");
         }

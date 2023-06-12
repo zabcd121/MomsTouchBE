@@ -52,6 +52,7 @@ public class OrderController {
             orderAppService.accept(orderId,authentication);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (RuntimeException e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }

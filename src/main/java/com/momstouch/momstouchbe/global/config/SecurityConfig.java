@@ -65,37 +65,34 @@ public class SecurityConfig {
                 .headers().frameOptions().disable().and()
                 .httpBasic().disable()
                 .formLogin().disable()
-                     .authorizeRequests()
-                     .antMatchers("/admins/**")
-                     .access("hasRole('ROLE_ADMIN')")
+                .authorizeRequests()
+                .antMatchers("/ws-stomp/**", "/sub/**", "/pub/**")
+                .permitAll()
+                .antMatchers("/admins/**")
+                .access("hasRole('ROLE_ADMIN')")
                 .anyRequest()
                 .permitAll()
                 .and()
-                     .oauth2Login()
-                     .successHandler(oAuthAuthenticationSuccessHandler)
-                     .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
-                     .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
+                .oauth2Login()
+                .successHandler(oAuthAuthenticationSuccessHandler)
+                .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
+                .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
 
         http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-                   return http.build();
+        return http.build();
 
     }
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.addAllowedOrigin("http://localhost:3000");
-//        configuration.addAllowedMethod("*");
-//        configuration.addAllowedHeader("*");
-//        configuration.setAllowCredentials(true);
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
-
-
-
-
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 
 }

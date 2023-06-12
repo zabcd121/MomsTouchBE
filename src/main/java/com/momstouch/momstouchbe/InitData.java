@@ -38,7 +38,7 @@ public class InitData {
 
         private final DiscountPolicyService discountPolicyService;
         public void init(){
-            Member member = Member.createMember("loginId", UUID.randomUUID().toString(),"김현석","ROLE_MEMBER","alswhd1113@gmail.com");
+            Member member = Member.createMember("114396781105370304636", UUID.randomUUID().toString(),"김현석","ROLE_OWNER","dog1239121@gmail.com");
             Shop shop = Shop.builder()
                     .owner(member)
                     .name("맘스터치")
