@@ -41,7 +41,7 @@ public class SecurityConfig {
      */
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web -> web.ignoring().mvcMatchers("/h2-console/**"));
+        return (web -> web.ignoring().mvcMatchers("/h2-console/**", "/ws/**"));
     }
 
     @Bean
@@ -66,7 +66,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .authorizeRequests()
-                .antMatchers("/ws-stomp/**", "/sub/**", "/pub/**")
+                .antMatchers("/ws/**", "/sub/**", "/pub/**")
                 .permitAll()
                 .antMatchers("/admins/**")
                 .access("hasRole('ROLE_ADMIN')")
