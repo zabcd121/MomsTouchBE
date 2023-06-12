@@ -19,8 +19,6 @@ public class CartResponse {
 
         public static CartSearchResponse of(Cart cart) {
 
-
-
             CartSearchResponse cartSearchResponse = new CartSearchResponse();
             cart.getCartMenuList().forEach(cartMenu -> {
                 int originPrice = cartMenu.getPrice().getAmount().intValueExact();
@@ -32,6 +30,7 @@ public class CartResponse {
                 int discountedPrice = cartMenu.getDiscountPolicy().discount(Money.of(originPrice)).getAmount().intValueExact();
                 CartMenuResponse cartMenuResponse = CartMenuResponse.builder()
                         .menuId(cartMenu.getMenuId())
+                        .menuName(cartMenu.getMenuName())
                         .discountPolicyId(cartMenu.getDiscountPolicy().getId())
                         .quantity(cartMenu.getQuantity())
                         .originPrice(originPrice)
@@ -40,11 +39,13 @@ public class CartResponse {
                         .build();
                 cartMenu.getCartMenuOptionGroupList().forEach(cartMenuOptionGroup -> {
                     CartMenuOptionGroupResponse cartMenuOptionGroupResponse = CartMenuOptionGroupResponse.builder()
+                            .menuOptionGroupName(cartMenuOptionGroup.getMenuOptionGroupName())
                             .menuOptionGroupId(cartMenuOptionGroup.getMenuOptionGroupId())
                             .build();
                     cartMenuOptionGroup.getCartMenuOptionList().forEach(cartMenuOption -> {
                         CartMenuOptionResponse cartMenuOptionResponse = CartMenuOptionResponse.builder()
                                 .menuOptionId(cartMenuOption.getMenuOptionId())
+                                .menuOptionName(cartMenuOption.getMenuOptionName())
                                 .price(cartMenuOption.getPrice().getAmount().intValueExact())
                                 .build();
                         cartMenuOptionGroupResponse.getCartMenuOptionList().add(cartMenuOptionResponse);
@@ -64,6 +65,7 @@ public class CartResponse {
     public static class CartMenuResponse {
 
         private Long menuId;
+        private String menuName;
         private Long discountPolicyId;
         private Integer quantity;
         private Integer originPrice;
@@ -82,6 +84,7 @@ public class CartResponse {
     @Getter @Setter
     public static class CartMenuOptionGroupResponse {
         private Long menuOptionGroupId;
+        private String menuOptionGroupName;
 
         @Builder.Default
         private List<CartMenuOptionResponse> cartMenuOptionList = new ArrayList<>();
@@ -93,6 +96,7 @@ public class CartResponse {
     @Getter @Setter
     public static class CartMenuOptionResponse {
         private Long menuOptionId;
+        private String menuOptionName;
         private Integer price;
     }
 }

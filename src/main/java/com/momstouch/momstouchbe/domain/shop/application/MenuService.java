@@ -62,6 +62,8 @@ public class MenuService {
 
     @Transactional
     public void updateMenuDetail(Long shopId, Long menuId, MultipartFile image, MenuUpdateRequest menuUpdateRequest) {
+        System.out.println("menuUpdateRequest = " + menuUpdateRequest.getDiscountPolicyId());
+        System.out.println("menuUpdateRequest.getName() = " + menuUpdateRequest.getName());
         try {
             String imageURL = null;
             if(image != null) {

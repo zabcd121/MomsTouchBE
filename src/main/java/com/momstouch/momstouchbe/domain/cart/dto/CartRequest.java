@@ -14,6 +14,7 @@ public class CartRequest {
     @Getter @Setter
     public static class CartMenuAddRequest {
         private Long menuId;
+        private String menuName;
         private Long discountPolicyId;
         private Integer quantity;
         private Integer price;
@@ -30,6 +31,7 @@ public class CartRequest {
     @Getter @Setter
     public static class CartMenuOptionGroupRequest {
         private Long menuOptionGroupId;
+        private String menuOptionGroupName;
 
         @Builder.Default
         private List<CartMenuOptionRequest> cartMenuOptionList = new ArrayList<>();
@@ -41,6 +43,7 @@ public class CartRequest {
     @Getter @Setter
     public static class CartMenuOptionRequest {
         private Long menuOptionId;
+        private String menuOptionName;
         private Integer price;
     }
 }

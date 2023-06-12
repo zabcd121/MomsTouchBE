@@ -120,7 +120,7 @@ public class DiscountResponse {
                 AmountDiscountPolicy policy = (AmountDiscountPolicy) discountPolicy;
                 return new DiscountPolicyValueResponse(
                         policy.getId(),
-                        policy.getClass().getName(),
+                        "amount",
                         policy.getBaseAmount().getAmount().intValueExact(),
                         policy.getDiscountAmount().getAmount().intValueExact(),
                         null,
@@ -128,8 +128,8 @@ public class DiscountResponse {
             } else if (discountPolicy instanceof RateDiscountPolicy) {
                 RateDiscountPolicy policy = (RateDiscountPolicy) discountPolicy;
                 return new DiscountPolicyValueResponse(
-                        policy.getId(),
-                        policy.getClass().getName(),
+                        discountPolicy.getId(),
+                        "rate",
                         policy.getBaseAmount().getAmount().intValueExact(),
                         null,
                         policy.getDiscountRate(),
@@ -138,7 +138,7 @@ public class DiscountResponse {
                 TimeDiscountPolicy policy = (TimeDiscountPolicy) discountPolicy;
                 return new DiscountPolicyValueResponse(
                         policy.getId(),
-                        policy.getClass().getName(),
+                        "time",
                         null,
                         policy.getDiscountAmount().getAmount().intValueExact(),
                         null,

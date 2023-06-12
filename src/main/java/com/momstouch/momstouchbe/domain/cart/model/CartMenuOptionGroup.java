@@ -19,6 +19,8 @@ public class CartMenuOptionGroup extends BaseTime {
 
     private Long menuOptionGroupId;
 
+    private String menuOptionGroupName;
+
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cart_menu_option_group_id")
