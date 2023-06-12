@@ -26,10 +26,12 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuthAuthenticationSuccessHandler oAuthAuthenticationSuccessHandler;
+
     @Bean // 인증 실패 처리 관련 객체
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
 
     @Bean // 비밀번호 암호화 객체
     public BCryptPasswordEncoder passwordEncoder() {
@@ -41,9 +43,7 @@ public class SecurityConfig {
      */
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web -> web.ignoring().mvcMatchers("/h2-console/**",
-                "/api/shop/*/menus",
-                "/api/order/**"));
+        return (web -> web.ignoring().mvcMatchers("/h2-console/**"));
     }
 
     @Bean
@@ -61,43 +61,40 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-             http
+        http
                 .addFilter(corsFilter())//@CrossOrigin(인증x), 시큐리티 필터에 등록 인증(o)
                 .csrf().ignoringAntMatchers("/h2-console/**").disable()
                 .headers().frameOptions().disable().and()
                 .httpBasic().disable()
                 .formLogin().disable()
-                     .authorizeRequests()
-                     .antMatchers("/admins/**")
-                     .access("hasRole('ROLE_ADMIN')")
+                .authorizeRequests()
+                .antMatchers("/ws-stomp/**", "/sub/**", "/pub/**")
+                .permitAll()
+                .antMatchers("/admins/**")
+                .access("hasRole('ROLE_ADMIN')")
                 .anyRequest()
                 .permitAll()
                 .and()
-                     .oauth2Login()
-                     .successHandler(oAuthAuthenticationSuccessHandler)
-                     .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
-                     .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
+                .oauth2Login()
+                .successHandler(oAuthAuthenticationSuccessHandler)
+                .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
+                .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
 
-        //http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-                   return http.build();
+        http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
 
     }
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.addAllowedOrigin("http://localhost:3000");
-//        configuration.addAllowedMethod("*");
-//        configuration.addAllowedHeader("*");
-//        configuration.setAllowCredentials(true);
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
-
-
-
-
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedHeader("*");
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 
 }
