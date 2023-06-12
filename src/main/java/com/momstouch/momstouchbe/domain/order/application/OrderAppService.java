@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.time.Period;
 import java.util.List;
 
 import static com.momstouch.momstouchbe.domain.order.dto.OrderRequest.*;
+import static com.momstouch.momstouchbe.domain.order.dto.OrderResponse.*;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -41,14 +43,18 @@ public class OrderAppService {
 
     public OrderResponse findOrderById(Long orderId) {
         Order order = orderService.findByIdWithAll(orderId).orElseThrow();
-        return OrderResponse.of(order);
+        return of(order);
     }
 
-//    public void findMyOrderList(Authentication authentication) {
-//        String name = authentication.getName();
-//        memberRepository.findByEmail()
-//        orderService.findAllMyOrder()
-//    }
+    public OrderListResponse findMyOrderList(Authentication authentication) {
+        if(authentication == null) throw new AccessDeniedException("로그인 필요");
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
+
+        List<Order> allMyOrder = orderService.findAllMyOrder(member.getId());
+
+        return OrderListResponse.of(allMyOrder);
+    }
 
     @Transactional
     public Long order(CreateOrderRequest createOrderRequest, Authentication authentication) {
@@ -63,9 +69,6 @@ public class OrderAppService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // ===
-        List<Member> all = memberRepository.findAll();
-        // ===
         Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
 
         List<MenuInfo> orderMenuList = createOrderRequest.getOrderMenuList();

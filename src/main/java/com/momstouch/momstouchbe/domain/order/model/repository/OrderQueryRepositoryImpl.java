@@ -31,7 +31,7 @@ public class OrderQueryRepositoryImpl implements OrderQueryRepository {
 
     public List<Order> findByMemberIdWithAll(Long memberId) {
         return jpaQueryFactory
-                .select(order)
+                .select(order).distinct()
                 .from(order)
                 .join(order.orderMenuList, QOrderMenu.orderMenu).fetchJoin()
                 .join(order.member, QMember.member).fetchJoin()

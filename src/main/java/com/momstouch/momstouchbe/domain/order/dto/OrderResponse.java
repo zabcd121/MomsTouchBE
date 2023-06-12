@@ -9,6 +9,7 @@ import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -116,6 +117,22 @@ public class OrderResponse {
         public OrderMenuOptionResponse(OrderOption orderOption) {
             this.name = orderOption.getName();
             this.price = orderOption.getPrice().getAmount();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class OrderListResponse {
+
+        private List<OrderResponse> orders;
+
+
+
+        public static OrderListResponse of(List<Order> orders) {
+            return builder()
+                    .orders(orders.stream()
+                            .map(OrderResponse::of).collect(Collectors.toList()))
+                    .build();
         }
     }
 
