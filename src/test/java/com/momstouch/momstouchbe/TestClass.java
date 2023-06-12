@@ -17,6 +17,7 @@ import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
+import com.momstouch.momstouchbe.global.jwt.MemberDetailsService;
 import com.momstouch.momstouchbe.global.vo.BaseTime;
 import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.*;
@@ -29,8 +30,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -74,6 +79,8 @@ public class TestClass {
     OrderInfoSetup orderInfoSetup;
 
     @Autowired MenuInfoSetup menuInfoSetup;
+    @Autowired
+    MemberDetailsService memberDetailsService;
 
     @Autowired
     OrderService orderService;
@@ -442,7 +449,6 @@ public class TestClass {
 
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(12, 0, 0), 1000);
 
-
         Menu menu = Menu.builder()
                 .category(Category.SIDE)
                 .name("집게 버거")
@@ -496,6 +502,8 @@ public class TestClass {
                 .orderMenuList(List.of(menuInfo1, menuInfo2))
                 .build();
 
+        Authentication authentication = memberSetup.getAuthentication(member);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         Assertions.assertThatThrownBy(() -> {
             orderService.createOrder(orderInfo);
         }).isInstanceOf(IllegalStateException.class);
@@ -572,6 +580,9 @@ public class TestClass {
                 .shopId(shop.getId())
                 .orderMenuList(List.of(menuInfo1))
                 .build();
+
+        Authentication authentication = memberSetup.getAuthentication(member);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Assertions.assertThatThrownBy(() -> {
             orderService.createOrder(orderInfo);
@@ -729,7 +740,10 @@ public class TestClass {
         MenuInfo menuInfo1 = menuInfoSetup.of(menu1, menu1.getOptionGroupList(), 2);
         OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1));
         Long orderId = orderService.createOrder(orderInfo);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Authentication authentication = memberSetup.getAuthentication(member);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         orderAppService.accept(orderId, authentication); // 관리자가 주문을 승낙함
 
 
@@ -754,8 +768,9 @@ public class TestClass {
 
     @Test
     @DisplayName(value = "점주는 상태가 “주문”인 주문에 대해 접수가 가능하고 상태가 “배달중”으로 변경되는가?")
+    @WithMockUser(username = "loginId", roles = {"OWNER"})
     void 주문_점주_주문_접수() throws Exception {
-        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
                 LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
@@ -802,7 +817,7 @@ public class TestClass {
         Order order = orderService.findById(orderId).get();
         Assertions.assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ACCEPT);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = memberSetup.getAuthentication(member);
         orderAppService.deliver(orderId, authentication);
 
         em.flush();
@@ -815,7 +830,7 @@ public class TestClass {
     @Test
     @DisplayName(value = "점주가 배달완료를 수행하면 해당 주문의 상태가 “완료”로 변경되는가?")
     void 배달_완료() throws Exception {
-        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
                 LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 10000);
@@ -848,8 +863,8 @@ public class TestClass {
         MenuInfo menuInfo1 = menuInfoSetup.of(menu1, menu1.getOptionGroupList(), 2);
         OrderInfo orderInfo = orderInfoSetup.of(shop, member, List.of(menuInfo1));
         Long orderId = orderService.createOrder(orderInfo); // 주문 생성
+        Authentication authentication = memberSetup.getAuthentication(member);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         orderAppService.accept(orderId,authentication);
         orderAppService.deliver(orderId,authentication);
 

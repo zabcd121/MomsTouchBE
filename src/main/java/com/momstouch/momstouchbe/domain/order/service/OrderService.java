@@ -126,4 +126,8 @@ public class OrderService {
         return Optional.of(order);
     }
 
+    public List<Order> findAllMyOrder(Long memberId) {
+        return orderRepository.findByMemberIdWithAll(memberId);
+    }
+
 }

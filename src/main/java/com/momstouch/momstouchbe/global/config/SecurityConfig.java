@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.global.config;
 
 import com.momstouch.momstouchbe.domain.member.Service.CustomOAuth2UserService;
+import com.momstouch.momstouchbe.global.handler.OAuthAuthenticationSuccessHandler;
 import com.momstouch.momstouchbe.global.jwt.JwtTokenFilter;
 import com.momstouch.momstouchbe.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final OAuthAuthenticationSuccessHandler oAuthAuthenticationSuccessHandler;
     @Bean // 인증 실패 처리 관련 객체
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -72,6 +74,7 @@ public class SecurityConfig {
                 .permitAll()
                 .and()
                      .oauth2Login()
+                     .successHandler(oAuthAuthenticationSuccessHandler)
                      .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
                      .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
 

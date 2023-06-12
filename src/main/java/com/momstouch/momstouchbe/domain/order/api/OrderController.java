@@ -90,4 +90,11 @@ public class OrderController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+
+//    @Operation(summary = "고객이 본인의 주문 내역을 조회")
+//    @GetMapping("/order")
+//    public ResponseEntity<?> findOrderList() {
+//
+//    }
 }

@@ -1,11 +1,6 @@
 package com.momstouch.momstouchbe.domain.shop.application;
 
-import com.fasterxml.classmate.MemberResolver;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
-import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
-import com.momstouch.momstouchbe.domain.shop.dto.MenuRequest;
-import com.momstouch.momstouchbe.domain.shop.dto.MenuResponse;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
@@ -13,8 +8,6 @@ import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
 import com.momstouch.momstouchbe.global.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +24,6 @@ import static com.momstouch.momstouchbe.domain.shop.dto.ShopResponse.*;
 public class MenuService {
 
     private final ShopSearchableRepository shopSearchableRepository;
-    private final ShopRepository shopRepository;
     private final DiscountPolicyRepository discountPolicyRepository;
     private final FileUploadUtil fileUploadUtil;
     private final MenuRepository menuRepository;

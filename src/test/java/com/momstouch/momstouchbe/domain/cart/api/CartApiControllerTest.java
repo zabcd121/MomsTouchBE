@@ -98,8 +98,9 @@ class CartApiControllerTest {
     @Test
     void 장바구니추가_실패_운영시간X() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
-        LocalTime now = LocalTime.now();
-        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(now.getHour()+1, 30), LocalTime.of(now.getHour()+4, 0), 5000);
+        LocalTime now = LocalTime.of(11,30,0);
+        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678",
+                LocalTime.of(now.getHour()+1, 30), LocalTime.of(now.getHour()+4, 0), 5000);
 
         Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop, 10000, 1000);
 

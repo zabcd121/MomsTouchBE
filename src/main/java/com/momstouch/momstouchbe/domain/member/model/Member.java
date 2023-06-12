@@ -3,6 +3,7 @@ package com.momstouch.momstouchbe.domain.member.model;
 import com.momstouch.momstouchbe.global.vo.BaseTime;
 import lombok.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -65,7 +66,8 @@ public class Member extends BaseTime {
     }
 
     public boolean isEquals(Authentication authentication) {
-        return account.isEquals(authentication);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userDetails.getUsername().equals(account.getLoginId());
     }
 
 
