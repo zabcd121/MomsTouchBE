@@ -38,7 +38,6 @@ public class OrderAppService {
     private final OrderService orderService;
     private final MemberRepository memberRepository;
     private final ShopRepository shopRepository;
-    private final SimpMessageSendingOperations messagingTemplate;
     //private final OrderAlarmService orderAlarmService;
 
     private final MemberDetailsService memberDetailsService;
@@ -93,7 +92,6 @@ public class OrderAppService {
         Order order = orderService.findById(orderId).orElseThrow();
 
         //orderAlarmService.send(shop.getOwner(), order, "맘스터치 주문!");
-        messagingTemplate.convertAndSend("/sub/" + shop.getOwner().getId(), OrderResponse.of(order));
         return orderId;
     }
 
@@ -105,7 +103,6 @@ public class OrderAppService {
         if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
         orderCallback.run();
         //orderAlarmService.send(order.getMember(), order, "주문 상태 변경!");
-        messagingTemplate.convertAndSend("/sub/" + order.getMember().getId(), OrderResponse.of(order));
         return true;
     }
     @Transactional
