@@ -17,7 +17,19 @@ public class DiscountRequest {
         private Integer baseAmount;
         private Integer discountAmount;
         private Double discountRate;
-        private LocalTime baseTime;
+        private int hour;
+        private int minute;
+        private int second;
+
+        public LocalTime getBaseTime() {
+            return LocalTime.of(hour,minute,second);
+        }
+
+        public void setBaseTime(LocalTime localTime) {
+            hour = localTime.getHour();
+            minute = localTime.getMinute();
+            second = localTime.getSecond();
+        }
     }
 
     @AllArgsConstructor

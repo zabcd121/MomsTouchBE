@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.shop.api;
 
 import com.momstouch.momstouchbe.domain.shop.application.StatisticAppService;
+import com.momstouch.momstouchbe.domain.shop.dto.StatisticResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class StatisticController {
     private final StatisticAppService statisticAppService;
 
     @GetMapping("/statistic/shop/{shopId}")
-    public ResponseEntity<?> statistic(@PathVariable Long shopId) {
+    public ResponseEntity<StatisticResponse> statistic(@PathVariable Long shopId) {
         return new ResponseEntity<>(statisticAppService.statisticPerShop(shopId), HttpStatus.OK);
     }
 
