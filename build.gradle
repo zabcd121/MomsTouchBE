@@ -115,6 +115,7 @@ tasks.jacocoTestReport {
                                                 "**/*Builder*.*",
                                                 "**/*Handler*.*",
                                                 "**/*Util*.*",
+                                                "**/*Alarm*.*",
                     ] + Qdomains)
                 }))
     }

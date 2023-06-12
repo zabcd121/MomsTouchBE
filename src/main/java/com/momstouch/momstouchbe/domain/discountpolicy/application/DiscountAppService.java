@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountRequest.*;
@@ -23,6 +25,7 @@ import static com.momstouch.momstouchbe.domain.discountpolicy.utis.command.Disco
 @Service
 public class DiscountAppService {
 
+    private final EntityManager em;
     private final DiscountPolicyService discountPolicyService;
     private final MenuRepository menuRepository;
     private final DelegationDiscountPolicyProvider delegationDiscountPolicyProvider;
@@ -65,10 +68,12 @@ public class DiscountAppService {
         return delegationDiscountPolicyProvider.createDiscountPolicyProvider(createCommand);
     }
 
-
     @Transactional
     public Long removeDiscountPolicy(Long id) {
         //TODO : MENU 검색 레포지토리에서 연관 메뉴 조회하기
+        em.flush();
+        em.clear();
+        int count = menuRepository.updateMenuDiscountPolicy(null, id);
         return discountPolicyService.delete(id);
     }
 

@@ -1,14 +1,15 @@
 package com.momstouch.momstouchbe.domain.discountpolicy.api;
 
-import com.momstouch.momstouchbe.domain.discountpolicy.annotation.DiscountPolicyType;
 import com.momstouch.momstouchbe.domain.discountpolicy.application.DiscountAppService;
 import com.momstouch.momstouchbe.domain.discountpolicy.dto.DiscountRequest;
+import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,9 +35,13 @@ public class DiscountPolicyApiController {
     @Operation(summary = "할인 정책 추가")
     @PostMapping("/discountPolicy")
     public ResponseEntity<Long> saveDiscountPolicy(@RequestBody CreateDiscountPolicyRequest request,
-                                                @DiscountPolicyType @RequestParam String type) {
-        Long discountPolicyId = discountAppService.saveDiscountPolicy(request, type);
-        return new ResponseEntity<>(discountPolicyId,HttpStatus.OK);
+                                                   @RequestParam String type) {
+        if(type != null && DiscountPolicy.DISCOUNT_POLICY_TYPES.contains(type)) {
+            Long discountPolicyId = discountAppService.saveDiscountPolicy(request, type);
+            return new ResponseEntity<>(discountPolicyId,HttpStatus.OK);
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @Operation(summary = "할인 정책 삭제")

@@ -1,9 +1,12 @@
 package com.momstouch.momstouchbe.domain.order.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.order.application.OrderAppService;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
+import com.momstouch.momstouchbe.domain.order.dto.OrderRequest;
 import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
 import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
@@ -29,8 +32,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -43,6 +48,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class OrderControllerTest {
 
+    @Autowired EntityManager em;
     @Autowired MockMvc mvc;
     @Autowired MemberSetup memberSetup;
     @Autowired ShopSetup shopSetup;
@@ -51,8 +57,9 @@ class OrderControllerTest {
     @Autowired MenuRepository menuRepository;
     @Autowired MenuInfoSetup menuInfoSetup;
     @Autowired OrderInfoSetup orderInfoSetup;
-
+    @Autowired ObjectMapper objectMapper;
     @Autowired OrderAppService orderAppService;
+    @Autowired MemberRepository memberRepository;
 
     Long basicOrderId;
     Member member;
@@ -146,6 +153,89 @@ class OrderControllerTest {
                     .andExpect(jsonPath("$.customer.name").value(member.getAccount().getName()))
                 .andExpect(jsonPath("$.orderMenus.size()").value(2))
             .andExpect(status().isOk());
+    }
+
+    //TODO: 주문 생성 테스트 api 필요
+
+    @Test
+    public void 주문_하기_테스트() throws Exception {
+        Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
+        Shop shop = shopSetup.saveShop(member,
+                "누네띠네","학교앞가게" , "학교앞","010-0000-1111",
+                LocalTime.of(9,0,0),LocalTime.of(23,0,0),20000);
+
+        Long discountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,Integer.MAX_VALUE, 1000);
+
+        Menu menu1 = Menu.builder()
+                .category(Category.MAIN)
+                .name("싸이버거")
+                .description("풍미좋은 햄버거")
+                .price(Money.of(6500)) //6500 + 1500 = 8000
+                .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
+                .optionGroupList(
+                        List.of(
+                                OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                        .optionList( //0
+                                                List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("음료 선택")
+                                        .optionList( //1500
+                                                List.of(OptionSpecification.builder().name("커피").price(Money.of(1500)).build())
+                                        ).build()
+                        )
+                ).build();
+
+        Menu menu2 = Menu.builder()
+                .category(Category.MAIN)
+                .name("화이트갈릭버거")
+                .description("마요 갈릭 버거입니다.")
+                .price(Money.of(5500)) //(5500 + 3500) *2 = 18000
+                .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
+                .optionGroupList(
+                        List.of(
+                                OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                        .optionList( //1000
+                                                List.of(OptionSpecification.builder().name("세트변경").price(Money.of(1000)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("사이드 선택")
+                                        .optionList( //1500
+                                                List.of(OptionSpecification.builder().name("감자튀김").price(Money.of(1500)).build())
+                                        ).build(),
+                                OptionGroupSpecification.builder().name("음료 선택")
+                                        .optionList( //1000
+                                                List.of(OptionSpecification.builder().name("콜라").price(Money.of(1000)).build())
+                                        ).build()
+                        )
+                ).build();
+
+        shop.addMenu(menu1);
+        shop.addMenu(menu2);
+
+        em.flush();
+        em.clear();
+
+        MenuInfo menuInfo1 = menuInfoSetup.of(menu1, menu1.getOptionGroupList(), 1);
+        MenuInfo menuInfo2 = menuInfoSetup.of(menu2, menu2.getOptionGroupList(), 2);
+
+        OrderRequest.CreateOrderRequest request = OrderRequest.CreateOrderRequest.builder()
+                .address("디지털관 337호")
+                .phoneNumber("010-1234-5678")
+                .shopId(shop.getId())
+                .orderMenuList(List.of(menuInfo1, menuInfo2))
+                .build();
+
+        em.flush();
+        em.clear();
+
+        mvc.perform(
+            post("/api/order")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding("UTF-8")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request))
+                    .with(csrf())
+                ).andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test

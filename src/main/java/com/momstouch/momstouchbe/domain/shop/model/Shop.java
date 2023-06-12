@@ -53,13 +53,13 @@ public class Shop extends BaseTime {
         discountPolicyList.add(discountPolicy);
     }
 
-    //TODO : isOwn false 테스트
+
     public boolean isOwn(Member member) {
-        return member.getId() == owner.getId();
+        return member.getId() == owner.getId(); //TODO : isOwn false 테스트
     }
 
     public boolean isRunningTime(LocalTime now) {
-        return openTime.isBefore(now) && now.isBefore(closedTime);
+        return openTime.isBefore(now) && now.isBefore(closedTime); //TODO :
     }
 
     public boolean overMinOrderPrice(Money money) {

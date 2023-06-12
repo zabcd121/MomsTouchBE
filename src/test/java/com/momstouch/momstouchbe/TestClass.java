@@ -59,33 +59,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 public class TestClass {
-    @Autowired
-    EntityManager em;
-    @Autowired
-    MockMvc mvc;
-    @Autowired
-    ObjectMapper objectMapper;
-    @Autowired
-    MockMultipartFileSetup mockMultipartFileSetup;
-    @Autowired
-    ShopSetup shopSetup;
-    @Autowired
-    MemberSetup memberSetup;
-    @Autowired
-    DiscountPolicyService discountPolicyService;
-    @Autowired
-    ShopSearchableRepository shopSearchableRepository;
-    @Autowired
-    DiscountPolicyRepository discountPolicyRepository;
-    @Autowired
-    MenuRepository menuRepository;
-    @Autowired
-    CartService cartService;
+    @Autowired EntityManager em;
+    @Autowired MockMvc mvc;
+    @Autowired ObjectMapper objectMapper;
+    @Autowired MockMultipartFileSetup mockMultipartFileSetup;
+    @Autowired ShopSetup shopSetup;
+    @Autowired MemberSetup memberSetup;
+    @Autowired DiscountPolicyService discountPolicyService;
+    @Autowired ShopSearchableRepository shopSearchableRepository;
+    @Autowired DiscountPolicyRepository discountPolicyRepository;
+    @Autowired MenuRepository menuRepository;
+    @Autowired CartService cartService;
     @Autowired
     OrderInfoSetup orderInfoSetup;
 
-    @Autowired
-    MenuInfoSetup menuInfoSetup;
+    @Autowired MenuInfoSetup menuInfoSetup;
 
     @Autowired
     OrderService orderService;
@@ -449,14 +437,14 @@ public class TestClass {
     void 장바구니에_주_메뉴가_없을때() throws Exception {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "집게리아 사장이된 김현석", "ROLE_OWNER");
         Shop shop = shopSetup.saveShop(member,
-                "집게리아", "집게리아에 오신걸 환영합니다.", "바다속", "010-0000-1111",
-                LocalTime.of(0, 0, 0), LocalTime.of(0, 0, 1), 8000);
+                "집게리아","집게리아에 오신걸 환영합니다." , "바다속","010-0000-1111",
+                LocalTime.of(0,0,0),LocalTime.of(23,59,59),8000);
 
         Long timeDiscountPolicyId = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(12, 0, 0), 1000);
 
 
         Menu menu = Menu.builder()
-                .category(Category.MAIN)
+                .category(Category.SIDE)
                 .name("집게 버거")
                 .description("사장님의 추천픽")
                 .price(Money.of(5800))
@@ -862,8 +850,8 @@ public class TestClass {
         Long orderId = orderService.createOrder(orderInfo); // 주문 생성
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        orderAppService.accept(orderId, authentication);
-        orderAppService.deliver(orderId, authentication);
+        orderAppService.accept(orderId,authentication);
+        orderAppService.deliver(orderId,authentication);
 
         em.flush();
         em.clear();
@@ -939,7 +927,7 @@ public class TestClass {
                         .with(csrf())
         ).andDo(print())
                         .andExpect(status().is4xxClientError());
-        
+
         Assertions.assertThat(findOrder.getOrderStatus()).isEqualTo(OrderStatus.CANCEL);
     }
 
