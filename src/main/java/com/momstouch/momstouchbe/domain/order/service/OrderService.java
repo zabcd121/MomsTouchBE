@@ -11,6 +11,7 @@ import com.momstouch.momstouchbe.domain.order.service.validation.OrderValidation
 import com.momstouch.momstouchbe.domain.shop.model.Category;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
 import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.RequiredArgsConstructor;

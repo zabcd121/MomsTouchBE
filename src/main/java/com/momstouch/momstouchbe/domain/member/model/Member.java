@@ -1,17 +1,20 @@
 package com.momstouch.momstouchbe.domain.member.model;
 
+import com.momstouch.momstouchbe.global.vo.BaseTime;
 import lombok.*;
 import org.springframework.security.core.Authentication;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
-public class Member {
+public class Member extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +36,17 @@ public class Member {
                 .email(email)
                 .build();
     }
+
+    public List<String> getAuthorities() {
+        List roleList = new ArrayList();
+
+        if(!account.getRole().equals("")) {
+            roleList.add(account.getRole());
+        }
+
+        return roleList;
+    }
+
     public String getRole(){
         return account.getRole();
     }

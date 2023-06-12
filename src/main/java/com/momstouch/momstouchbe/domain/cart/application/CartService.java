@@ -47,6 +47,7 @@ public class CartService {
         Long menuId = cartMenuAddRequest.getMenuId();
         Shop shop = shopRepository.findShopByMenuId(menuId);
         LocalTime now = LocalTime.now();
+
         if(!(now.isAfter(shop.getOpenTime()) && now.isBefore(shop.getClosedTime()))) {
             throw new IllegalStateException("현재 시간에는 주문이 불가능합니다.");
         }

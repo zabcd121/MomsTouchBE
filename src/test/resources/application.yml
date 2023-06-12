@@ -2,6 +2,7 @@ spring:
   config:
     import:
       - application-filedir.yml
+      - application-jwt.yml
       #- application-mariadb.yml
       - application-h2db.yml
   profiles:
@@ -15,7 +16,9 @@ spring:
             client-id: 484166861149-9dt7gks5gisuvj9gpoprvp83l13eh205.apps.googleusercontent.com
             client-secret: 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
             scope: email, profile
-
+  redis:
+    host: localhost
+    port: 6379
 logging:
   level:
     org.hibernate.SQL: DEBUG

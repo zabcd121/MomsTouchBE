@@ -2,6 +2,7 @@ package com.momstouch.momstouchbe.domain.shop.model;
 
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.global.vo.BaseTime;
 import lombok.*;
 import com.momstouch.momstouchbe.global.vo.Money;
 
@@ -15,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Shop {
+public class Shop extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

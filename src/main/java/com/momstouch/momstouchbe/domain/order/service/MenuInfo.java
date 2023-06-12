@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.order.service;
 
+import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import lombok.*;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 @Getter
 public class MenuInfo {
 
-    //TODO : 내일 수정하자
+    //TODO: 내일 수정하자
     private Long menuId;
     private List<OptionGroupSelectInfo> optionGroupSelectInfoList;
     private Integer count;

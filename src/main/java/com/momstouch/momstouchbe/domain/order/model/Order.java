@@ -3,6 +3,7 @@ package com.momstouch.momstouchbe.domain.order.model;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.global.vo.Money;
+import com.momstouch.momstouchbe.global.vo.BaseTime;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")

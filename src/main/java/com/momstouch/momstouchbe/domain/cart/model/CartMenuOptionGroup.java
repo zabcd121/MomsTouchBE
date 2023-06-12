@@ -1,5 +1,6 @@
 package com.momstouch.momstouchbe.domain.cart.model;
 
+import com.momstouch.momstouchbe.global.vo.BaseTime;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class CartMenuOptionGroup {
+public class CartMenuOptionGroup extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

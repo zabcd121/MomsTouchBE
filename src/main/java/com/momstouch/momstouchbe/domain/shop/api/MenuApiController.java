@@ -29,7 +29,9 @@ public class MenuApiController {
 
     @Operation(summary = "가게의 새로운 메뉴를 추가")
     @PostMapping("/shop/{shopId}/menus")
-    public ResponseEntity addMenu(@PathVariable Long shopId, @RequestPart(value = "image",required = false) MultipartFile image, @RequestPart MenuCreateRequest menu) {
+    public ResponseEntity addMenu(@PathVariable Long shopId, @RequestPart MultipartFile image, @RequestPart MenuCreateRequest menu) {
+        System.out.println("image: " + image.getName());
+        System.out.println("menu: " + menu.getName());
         try{
             menuService.addMenu(shopId, image,menu);
             return ResponseEntity.ok().build();
