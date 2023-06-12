@@ -890,7 +890,7 @@ public class TestClass {
         Member member = memberSetup.saveMember("loginId", UUID.randomUUID().toString(), "김현석", "ROLE_USER");
         Shop shop = shopSetup.saveShop(member,
                 "누네띠네", "학교앞가게", "학교앞", "010-0000-1111",
-                LocalTime.of(9, 0, 0), LocalTime.of(23, 0, 0), 20000);
+                LocalTime.of(0, 0, 0), LocalTime.of(23, 0, 0), 20000);
 
         Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, 8000, 10.0);
 
@@ -917,8 +917,7 @@ public class TestClass {
 
         em.flush();
         em.clear();
-
-        LocalDateTime now = LocalDateTime.now();
+        memberSetup.getAuthentication(member);
         Order newOrder = Order.builder()
                 .member(member)
                 .shop(shop)
@@ -926,7 +925,7 @@ public class TestClass {
                 .address("서울시 강남구 대학로 1길 203호")
                 .phoneNumber("010-0000-1111")
                 .totalPrice(Money.of(30000))
-                .orderDateTime(LocalDateTime.now().minusMinutes(1).minusSeconds(1))
+                .orderDateTime(LocalDateTime.now().minusMinutes(3).minusSeconds(1))
                 .build();
         orderRepository.save(newOrder);
         em.flush();

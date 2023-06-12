@@ -58,13 +58,13 @@ public class OrderAppService {
     }
 
     public OrderListResponse findOrderListByShopId(Authentication authentication,Long shopId) {
-        if(authentication == null) throw new AccessDeniedException("로그인 필요");
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
-        Shop shop = shopRepository.findById(shopId).orElseThrow();
-        if(!shop.getOwner().isEquals(authentication)) {
-            throw new IllegalArgumentException("가게 주인이 아님");
-        }
+//        if(authentication == null) throw new AccessDeniedException("로그인 필요");
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//        Member member = memberRepository.findBySub(userDetails.getUsername()).orElseThrow();
+//        Shop shop = shopRepository.findById(shopId).orElseThrow();
+//        if(!shop.getOwner().isEquals(authentication)) {
+//            throw new IllegalArgumentException("가게 주인이 아님");
+//        }
 
         List<Order> orderListByShopId = orderService.findOrderListByShopId(shopId);
         return OrderListResponse.of(orderListByShopId);
@@ -110,10 +110,10 @@ public class OrderAppService {
         Order order = orderService.findById(orderId).orElseThrow();
         if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException(); //TODO :
 
-        Duration duration = Duration.between(order.getOrderDateTime(), LocalDateTime.now());
-        if(duration.toMinutes() > 1) {
+//        Duration duration = Duration.between(order.getOrderDateTime(), LocalDateTime.now());
+
+        if(order.getOrderDateTime().) {
             order.cancel();
-            throw new IllegalStateException("주문 접수 가능 시간 초과");
         }
 
         return template(order,authentication, order::accept);
