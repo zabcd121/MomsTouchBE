@@ -930,7 +930,7 @@ public class TestClass {
         orderRepository.save(newOrder);
         em.flush();
         em.clear();
-
+        memberSetup.getAuthentication(member);
         Order findOrder = orderService.findById(newOrder.getId()).get();
 
         mvc.perform(
