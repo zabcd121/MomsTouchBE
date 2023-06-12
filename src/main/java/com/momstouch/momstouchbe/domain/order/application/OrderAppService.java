@@ -15,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static com.momstouch.momstouchbe.domain.order.dto.OrderRequest.*;
 
@@ -58,7 +55,8 @@ public class OrderAppService {
     private boolean template(Order order, Authentication authentication,Runnable orderCallback) {
         Shop shop = order.getShop();
         Member member = shop.getOwner(); // TODO : 나중에 securityContext에서 조회
-        if(!member.equals(authentication)) throw new AccessDeniedException("member.equals(authentication) 실패");
+        boolean equals = member.isEquals(authentication);
+        if(!equals) throw new AccessDeniedException("member.equals(authentication) 실패");
         if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
         orderCallback.run();
         orderAlarmService.send(order.getMember(), order, "주문 상태 변경!");
@@ -74,7 +72,7 @@ public class OrderAppService {
     @Transactional
     public boolean deliver(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
-        if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException();
+        if(!order.getOrderStatus().equals(OrderStatus.ACCEPT)) throw new IllegalStateException();
         return template(order,authentication, order::deliver);
     }
 

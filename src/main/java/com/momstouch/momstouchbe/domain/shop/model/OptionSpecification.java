@@ -1,11 +1,10 @@
 package com.momstouch.momstouchbe.domain.shop.model;
 
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 @Entity
 @Builder

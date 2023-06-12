@@ -1,11 +1,10 @@
-package com.momstouch.momstouchbe.global.domain;
+package com.momstouch.momstouchbe.global.vo;
 
+import com.momstouch.momstouchbe.global.vo.Money;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 class MoneyTest {

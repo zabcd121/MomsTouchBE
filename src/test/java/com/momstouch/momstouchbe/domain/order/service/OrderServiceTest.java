@@ -1,6 +1,5 @@
 package com.momstouch.momstouchbe.domain.order.service;
 
-import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
@@ -9,7 +8,7 @@ import com.momstouch.momstouchbe.domain.order.model.OrderMenu;
 import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.MenuInfoSetup;
 import com.momstouch.momstouchbe.setup.OrderInfoSetup;
@@ -24,8 +23,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

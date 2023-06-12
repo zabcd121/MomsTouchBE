@@ -31,6 +31,7 @@ public class MenuResponse {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class MenuDetailSearchResponse {
+        private Long menuId;
         private String name;
         private BigDecimal price;
         private String description;
@@ -41,7 +42,7 @@ public class MenuResponse {
 
         public static MenuDetailSearchResponse of(Menu menu) {
             menu.getDiscountPolicy();
-            return new MenuDetailSearchResponse(menu.getName(), menu.getPrice().getAmount(), menu.getDescription(), menu.getImageURL(), menu.getCategory(),
+            return new MenuDetailSearchResponse(menu.getId(),menu.getName(), menu.getPrice().getAmount(), menu.getDescription(), menu.getImageURL(), menu.getCategory(),
                     DiscountPolicyValueResponse.of(menu.getDiscountPolicy()),
                     menu.getOptionGroupList().stream()
                             .map(optionGroup -> OptionGroupResponse.of(optionGroup))
@@ -52,11 +53,14 @@ public class MenuResponse {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class OptionGroupResponse {
+
+        private Long optionGroupId;
         private String name;
         private List<OptionResponse> optionList;
 
         public static OptionGroupResponse of(OptionGroupSpecification optionGroupSpecification) {
             return new OptionGroupResponse(
+                    optionGroupSpecification.getId(),
                     optionGroupSpecification.getName(),
                     optionGroupSpecification.getOptionList().stream()
                             .map(option -> OptionResponse.of(option))
@@ -67,11 +71,12 @@ public class MenuResponse {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class OptionResponse {
+        private Long optionId;
         private String name;
         private Integer price;
 
         public static OptionResponse of(OptionSpecification optionSpecification) {
-            return new OptionResponse(optionSpecification.getName(), optionSpecification.getPrice().getAmount().intValueExact());
+            return new OptionResponse(optionSpecification.getId(),optionSpecification.getName(), optionSpecification.getPrice().getAmount().intValueExact());
         }
     }
 }

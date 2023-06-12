@@ -1,7 +1,6 @@
 package com.momstouch.momstouchbe.domain.shop.model;
 
 
-import com.momstouch.momstouchbe.global.domain.Money;
 import lombok.*;
 
 import javax.persistence.*;

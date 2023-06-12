@@ -4,7 +4,7 @@ import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

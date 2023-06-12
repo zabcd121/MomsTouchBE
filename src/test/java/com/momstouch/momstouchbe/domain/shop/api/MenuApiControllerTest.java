@@ -6,7 +6,7 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.Discount
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.ShopSearchableRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.DiscountPolicySetup;
 import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.MockMultipartFileSetup;
@@ -19,19 +19,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

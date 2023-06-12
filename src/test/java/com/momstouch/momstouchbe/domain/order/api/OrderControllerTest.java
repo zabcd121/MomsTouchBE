@@ -10,7 +10,7 @@ import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
 import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.MenuInfoSetup;
 import com.momstouch.momstouchbe.setup.OrderInfoSetup;
@@ -189,6 +189,8 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 주문_배달상태_변경_테스트() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        orderAppService.accept(basicOrderId,authentication);
         ResultActions perform = mvc.perform(
                 put("/api/order/{orderId}/delivery", basicOrderId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -208,7 +210,9 @@ class OrderControllerTest {
     @Test
     @WithMockUser(username = "loginId", roles = {"OWNER"})
     public void 배달_완료_상태_변경_테스트() throws Exception {
-        orderAppService.deliver(basicOrderId,null);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        orderAppService.accept(basicOrderId,authentication);
+        orderAppService.deliver(basicOrderId,authentication);
         ResultActions perform = mvc.perform(
                 put("/api/order/{orderId}/complete", basicOrderId)
                         .contentType(MediaType.APPLICATION_JSON)

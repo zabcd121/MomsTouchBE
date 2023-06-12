@@ -2,8 +2,7 @@ package com.momstouch.momstouchbe.domain.shop.model;
 
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import lombok.*;
-import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

@@ -4,24 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.momstouch.momstouchbe.domain.cart.application.CartService;
 import com.momstouch.momstouchbe.domain.cart.model.Cart;
 import com.momstouch.momstouchbe.domain.cart.model.repository.CartQueryRepository;
-import com.momstouch.momstouchbe.domain.cart.model.repository.CartRepository;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.repository.DiscountPolicyRepository;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import com.momstouch.momstouchbe.domain.shop.model.*;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.DiscountPolicySetup;
 import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.ShopSetup;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -69,7 +65,8 @@ class CartApiControllerTest {
     @Test
     void 장바구니추가_성공() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
-        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
+        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678",
+                LocalTime.of(0, 0,0), LocalTime.of(23, 59,59), 5000);
 
         Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop, 10000, 1000);
 
@@ -127,7 +124,8 @@ class CartApiControllerTest {
     @Test
     void 장바구니조회_성공() throws Exception {
         Member member = memberSetup.saveMember("test", "test1234!", "홍길동", "ROLE_OWNER");
-        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678", LocalTime.of(10, 0), LocalTime.of(21, 0), 5000);
+        Shop shop = shopSetup.saveShop(member, "맘스터치 금오공대점", "햄버거집입니다.", "구미시 대학로61", "010-1234-5678",
+                LocalTime.of(0,0, 0), LocalTime.of(23 ,59,59), 5000);
 
         Long discountPolicyId = discountPolicySetup.saveAmountDiscountPolicy(shop, 10000, 1000);
 

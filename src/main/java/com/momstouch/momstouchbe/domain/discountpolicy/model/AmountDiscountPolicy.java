@@ -1,8 +1,7 @@
 package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
