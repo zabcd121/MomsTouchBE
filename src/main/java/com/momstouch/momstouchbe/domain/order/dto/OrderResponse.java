@@ -23,6 +23,7 @@ public class OrderResponse {
     private String address;
     private String phoneNumber;
     private BigDecimal totalPrice;
+    private BigDecimal discountPrice;
 
     private OrderStatus status;
 
@@ -38,6 +39,7 @@ public class OrderResponse {
                 .address(order.getAddress())
                 .phoneNumber(order.getPhoneNumber())
                 .totalPrice(order.getTotalPrice().getAmount())
+                .discountPrice(order.getDiscountPrice().getAmount())
                 .status(order.getOrderStatus())
                 .shop(new OrderShopResponse(order.getShop()))
                 .customer(new OrderMemberResponse(order.getMember()))
