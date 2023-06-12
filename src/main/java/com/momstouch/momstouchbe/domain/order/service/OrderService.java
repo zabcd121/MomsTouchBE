@@ -103,6 +103,10 @@ public class OrderService {
 
         boolean validate = orderValidationService.validate(order);
 
+        if(!hasOnlySideMenu(order.getOrderMenuList())) {
+            throw new IllegalStateException("사이드 메뉴만 주문 불가능");
+        }
+
         //TODO : validation 테스트 필요함
         if(!validate) {
             throw new IllegalStateException();

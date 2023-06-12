@@ -108,6 +108,7 @@ public class DiscountResponse {
     @Getter
     @Setter
     public static class DiscountPolicyValueResponse {
+        private Long id;
         private String type;
         private Integer baseAmount;
         private Integer discountAmount;
@@ -118,6 +119,7 @@ public class DiscountResponse {
             if (discountPolicy instanceof AmountDiscountPolicy) {
                 AmountDiscountPolicy policy = (AmountDiscountPolicy) discountPolicy;
                 return new DiscountPolicyValueResponse(
+                        policy.getId(),
                         policy.getClass().getName(),
                         policy.getBaseAmount().getAmount().intValueExact(),
                         policy.getDiscountAmount().getAmount().intValueExact(),
@@ -126,6 +128,7 @@ public class DiscountResponse {
             } else if (discountPolicy instanceof RateDiscountPolicy) {
                 RateDiscountPolicy policy = (RateDiscountPolicy) discountPolicy;
                 return new DiscountPolicyValueResponse(
+                        policy.getId(),
                         policy.getClass().getName(),
                         policy.getBaseAmount().getAmount().intValueExact(),
                         null,
@@ -134,6 +137,7 @@ public class DiscountResponse {
             } else if (discountPolicy instanceof TimeDiscountPolicy) {
                 TimeDiscountPolicy policy = (TimeDiscountPolicy) discountPolicy;
                 return new DiscountPolicyValueResponse(
+                        policy.getId(),
                         policy.getClass().getName(),
                         null,
                         policy.getDiscountAmount().getAmount().intValueExact(),

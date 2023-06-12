@@ -1,6 +1,7 @@
 package com.momstouch.momstouchbe.domain.order.application;
 
 import com.momstouch.momstouchbe.domain.member.model.Member;
+import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.order.dto.OrderResponse;
 import com.momstouch.momstouchbe.domain.order.model.Order;
 import com.momstouch.momstouchbe.domain.order.model.OrderStatus;
@@ -30,6 +31,7 @@ public class OrderAppService {
 
     private final OrderService orderService;
     private final MenuRepository menuRepository;
+    private final MemberRepository memberRepository;
     private final ShopRepository shopRepository;
     private final OrderAlarmService orderAlarmService;
 
@@ -38,13 +40,16 @@ public class OrderAppService {
         return OrderResponse.of(order);
     }
 
+    @Transactional
     public Long order(CreateOrderRequest createOrderRequest, Authentication authentication) {
 
         Long shopId = createOrderRequest.getShopId();
 
         Shop shop = shopRepository.findById(shopId).orElseThrow();
-        //TODO : authentication에서 조회
+
+        //TODO : authentication에서 조회로 수정
         Member member = Member.createMember("temp","temp","김현석바보","ROLE_USER","email");
+        memberRepository.save(member);
 
         List<MenuInfo> orderMenuList = createOrderRequest.getOrderMenuList();
         OrderInfo orderInfo = OrderInfo.of(member,shop,orderMenuList,createOrderRequest.getAddress(), createOrderRequest.getPhoneNumber());
@@ -60,7 +65,7 @@ public class OrderAppService {
         Shop shop = order.getShop();
         Member member = shop.getOwner(); // TODO : 나중에 securityContext에서 조회
         boolean equals = member.isEquals(authentication);
-        if(!equals) throw new AccessDeniedException("member.equals(authentication) 실패");
+        if(!equals) throw new AccessDeniedException("member.equals(authentication) 실패"); //TODO :
         if(!shop.isOwn(member)) throw new AccessDeniedException("shop.isOwn(member) 실패");
         orderCallback.run();
         orderAlarmService.send(order.getMember(), order, "주문 상태 변경!");
@@ -69,7 +74,7 @@ public class OrderAppService {
     @Transactional
     public boolean accept(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
-        if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException();
+        if(!order.getOrderStatus().equals(OrderStatus.ORDER)) throw new IllegalStateException(); //TODO :
 
         Duration duration = Duration.between(order.getOrderDateTime(), LocalDateTime.now());
         if(duration.toSeconds() > 60) {
@@ -83,7 +88,7 @@ public class OrderAppService {
     @Transactional
     public boolean deliver(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
-        if(!order.getOrderStatus().equals(OrderStatus.ACCEPT)) throw new IllegalStateException();
+        if(!order.getOrderStatus().equals(OrderStatus.ACCEPT)) throw new IllegalStateException(); //TODO :
         return template(order,authentication, order::deliver);
     }
 
@@ -97,7 +102,7 @@ public class OrderAppService {
     @Transactional
     public boolean complete(Long orderId, Authentication authentication) {
         Order order = orderService.findById(orderId).orElseThrow();
-        if(!order.getOrderStatus().equals(OrderStatus.DELIVERY)) throw new IllegalStateException();
+        if(!order.getOrderStatus().equals(OrderStatus.DELIVERY)) throw new IllegalStateException(); //TODO :
         return template(order,authentication, order::complete);
     }
 }

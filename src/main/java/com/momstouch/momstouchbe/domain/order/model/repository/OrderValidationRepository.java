@@ -36,7 +36,7 @@ public class OrderValidationRepository {
                 .where(option.name.eq(orderOption.getName())
                         .and(option.price.eq(orderOption.getPrice()))
                         .and(group.id.eq(optionGroupSpecification.getId())))
-                .fetchFirst() != null;
+                .fetchFirst() != null; //TODO: 테스트
     }
 
 }

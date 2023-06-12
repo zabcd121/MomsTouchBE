@@ -30,6 +30,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.net.URI;
 import java.time.LocalTime;
 import java.util.List;
@@ -47,8 +49,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class DiscountPolicyApiControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+    @Autowired EntityManager entityManager;
+
+    @Autowired private MockMvc mvc;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -208,6 +211,11 @@ class DiscountPolicyApiControllerTest {
         Long amountDiscountPolicyId = discountPolicyService.createAmountDiscountPolicy(shop,10000, 1000);
         Optional<DiscountPolicy> beforeDelete = discountPolicyService.findById(amountDiscountPolicyId);
         Assertions.assertThat(beforeDelete.isPresent()).isTrue();
+
+        memberRepository.save(member);
+        entityManager.flush();
+        entityManager.clear();
+
 
         ResultActions actions = mvc.perform(
                 delete("/api/discountPolicy/{id}",amountDiscountPolicyId)

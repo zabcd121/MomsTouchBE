@@ -52,7 +52,6 @@ public class CartService {
             throw new IllegalStateException("현재 시간에는 주문이 불가능합니다.");
         }
 
-        //TODO : 장바구니 테스트
         cart.addCartMenu(
                 CartMenu.builder()
                         .menuId(menuId)
