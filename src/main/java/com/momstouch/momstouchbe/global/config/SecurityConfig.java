@@ -41,9 +41,7 @@ public class SecurityConfig {
      */
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web -> web.ignoring().mvcMatchers("/h2-console/**",
-                "/api/shop/*/menus",
-                "/api/order/**"));
+        return (web -> web.ignoring().mvcMatchers("/h2-console/**"));
     }
 
     @Bean
@@ -78,7 +76,7 @@ public class SecurityConfig {
                      .userInfoEndpoint() // OAuth2 로그인 성공 후 가져올 설정들
                      .userService(customOAuth2UserService); // 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
 
-        //http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
                    return http.build();
 
     }
