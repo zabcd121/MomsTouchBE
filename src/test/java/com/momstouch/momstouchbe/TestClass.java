@@ -917,8 +917,7 @@ public class TestClass {
 
         em.flush();
         em.clear();
-
-        LocalDateTime now = LocalDateTime.now();
+        memberSetup.getAuthentication(member);
         Order newOrder = Order.builder()
                 .member(member)
                 .shop(shop)
@@ -926,7 +925,7 @@ public class TestClass {
                 .address("서울시 강남구 대학로 1길 203호")
                 .phoneNumber("010-0000-1111")
                 .totalPrice(Money.of(30000))
-                .orderDateTime(LocalDateTime.now().minusMinutes(1).minusSeconds(1))
+                .orderDateTime(LocalDateTime.now().minusMinutes(3).minusSeconds(1))
                 .build();
         orderRepository.save(newOrder);
         em.flush();
