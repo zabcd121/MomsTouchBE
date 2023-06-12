@@ -1,13 +1,12 @@
 package com.momstouch.momstouchbe.domain.order.service;
 
-import com.momstouch.momstouchbe.global.domain.Money;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import com.momstouch.momstouchbe.global.vo.Money;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
 public class OptionSelectInfo {
 

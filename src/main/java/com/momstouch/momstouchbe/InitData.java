@@ -2,18 +2,14 @@ package com.momstouch.momstouchbe;
 
 import com.momstouch.momstouchbe.domain.discountpolicy.service.DiscountPolicyService;
 import com.momstouch.momstouchbe.domain.member.model.Member;
-import com.momstouch.momstouchbe.domain.member.repository.MemberRepository;
 import com.momstouch.momstouchbe.domain.order.application.OrderInfo;
 import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
 import com.momstouch.momstouchbe.domain.order.service.OptionGroupSelectInfo;
 import com.momstouch.momstouchbe.domain.order.service.OptionSelectInfo;
 import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
-import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
-import com.momstouch.momstouchbe.domain.shop.model.repository.ShopRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,8 +44,8 @@ public class InitData {
                     .name("맘스터치")
                     .phoneNumber("054-478-3214")
                     .address("경상북도 구미시")
-                    .openTime(LocalTime.of(9,0,0))
-                    .closedTime(LocalTime.of(20,0,0))
+                    .openTime(LocalTime.of(0,0,1))
+                    .closedTime(LocalTime.of(23,59,59))
                     .minOrderPrice(Money.of(10000))
                     .build();
 
@@ -138,7 +134,7 @@ public class InitData {
                     .toList();
             return MenuInfo
                     .builder()
-                    .menu(menu)
+                    .menuId(menu.getId())
                     .optionGroupSelectInfoList(optionGroupSelectInfoList)
                     .count(count)
                     .build();

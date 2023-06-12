@@ -7,7 +7,7 @@ import com.momstouch.momstouchbe.domain.order.service.MenuInfo;
 import com.momstouch.momstouchbe.domain.order.service.OrderService;
 import com.momstouch.momstouchbe.domain.shop.model.*;
 import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import com.momstouch.momstouchbe.setup.MemberSetup;
 import com.momstouch.momstouchbe.setup.MenuInfoSetup;
 import com.momstouch.momstouchbe.setup.OrderInfoSetup;
@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +25,6 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

@@ -3,7 +3,7 @@ package com.momstouch.momstouchbe.domain.shop.model;
 import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
 import com.momstouch.momstouchbe.domain.member.model.Member;
 import lombok.*;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -58,7 +58,7 @@ public class Shop {
     }
 
     public boolean isRunningTime(LocalTime now) {
-        return openTime.isAfter(now) && now.isBefore(closedTime);
+        return openTime.isBefore(now) && now.isBefore(closedTime);
     }
 
     public boolean overMinOrderPrice(Money money) {

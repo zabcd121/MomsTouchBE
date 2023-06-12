@@ -1,8 +1,6 @@
 package com.momstouch.momstouchbe.domain.discountpolicy.model;
 
-import com.momstouch.momstouchbe.domain.discountpolicy.model.DiscountPolicy;
-import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.global.vo.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

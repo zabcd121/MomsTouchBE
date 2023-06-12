@@ -11,7 +11,8 @@ import com.momstouch.momstouchbe.domain.order.service.validation.OrderValidation
 import com.momstouch.momstouchbe.domain.shop.model.Category;
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
-import com.momstouch.momstouchbe.global.domain.Money;
+import com.momstouch.momstouchbe.domain.shop.model.repository.MenuRepository;
+import com.momstouch.momstouchbe.global.vo.Money;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderValidationService orderValidationService;
+    private final MenuRepository menuRepository;
 
     private boolean hasOnlySideMenu(List<OrderMenu> orderMenuList) {
         boolean hasOnlySideMenu = false;
@@ -59,7 +61,9 @@ public class OrderService {
                 .build();
 
         for (MenuInfo menuInfo : orderMenuList) {
-            Menu menu = menuInfo.getMenu();
+            Long menuId = menuInfo.getMenuId();
+            Menu menu = menuRepository.findById(menuId).orElseThrow();
+
             List<OptionGroupSelectInfo> optionGroupSelectInfoList = menuInfo.getOptionGroupSelectInfoList();
 
             OrderMenu orderMenu = OrderMenu.builder()
