@@ -1,17 +1,19 @@
 package com.momstouch.momstouchbe.domain.order.service;
 
 import com.momstouch.momstouchbe.domain.shop.model.Menu;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
 public class MenuInfo {
-    private Menu menu;
+
+    //TODO: 내일 수정하자
+    private Long menuId;
     private List<OptionGroupSelectInfo> optionGroupSelectInfoList;
     private Integer count;
 }

@@ -1,6 +1,6 @@
 fileDir:
   inbound: /api/images
-  outbound: /Users/manjong
-#  outbound: /Users/khs/Documents/testImages
+ # outbound: /Users/manjong
+  outbound: /Users/khs/Documents/testImages
   menus: /menus
 

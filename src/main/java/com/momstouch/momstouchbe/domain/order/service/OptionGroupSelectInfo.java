@@ -1,13 +1,13 @@
 package com.momstouch.momstouchbe.domain.order.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Setter
 @Getter
 public class OptionGroupSelectInfo {
 
