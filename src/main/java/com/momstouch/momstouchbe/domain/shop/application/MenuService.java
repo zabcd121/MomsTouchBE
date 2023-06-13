@@ -46,7 +46,9 @@ public class MenuService {
             shop.addMenu(
                     menuRequest.toEntity(
                             imageURL,
-                            discountPolicyRepository.getReferenceById(menuRequest.getDiscountPolicyId())
+                            menuRequest.getDiscountPolicyId()==null ?
+                                    null
+                                    : discountPolicyRepository.getReferenceById(menuRequest.getDiscountPolicyId())
                     ));
         } catch (IOException e) { //TODO : 예외 발생 테스트
             e.printStackTrace();

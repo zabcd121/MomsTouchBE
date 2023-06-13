@@ -36,10 +36,20 @@ public class SocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws Exception {
         WebSocketMessage message = objectMapper.readValue(textMessage.getPayload(), WebSocketMessage.class);
         switch(message.getFrom()) {
+            case "join-owner":
+                ownerSessionIdList.add(session);
+                break;
+            case "join-customer":
+                customerSessionIdList.add(session);
+                break;
             case "owner":
                 sendMessage(customerSessionIdList.get(0), message);
+                break;
             case "customer":
                 sendMessage(ownerSessionIdList.get(0), message);
+                break;
+            default:
+                break;
         }
     }
 

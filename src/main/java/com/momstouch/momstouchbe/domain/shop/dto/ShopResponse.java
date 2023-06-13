@@ -8,6 +8,7 @@ import com.momstouch.momstouchbe.domain.discountpolicy.model.TimeDiscountPolicy;
 import com.momstouch.momstouchbe.domain.shop.model.Shop;
 import lombok.*;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,6 +58,8 @@ public class ShopResponse {
     public static class ShopMenuListResponse {
         private Long shopId;
         private String shopName;
+        private LocalTime openTime;
+        private LocalTime closedTime;
         private DiscountListResponse discountList;
 
         @Builder.Default
@@ -67,6 +70,8 @@ public class ShopResponse {
             return ShopMenuListResponse.builder()
                     .shopId(shop.getId())
                     .shopName(shop.getName())
+                    .openTime(shop.getOpenTime())
+                    .closedTime(shop.getClosedTime())
                     .discountList(
                             DiscountListResponse.of(
                                 discountPolicyList.stream()

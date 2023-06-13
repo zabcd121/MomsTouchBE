@@ -56,8 +56,10 @@ public class InitData {
             Long rateDiscountPolicy = discountPolicyService.createRateDiscountPolicy(shop, 10000, 10.0);
             Long timeDiscountPolicy = discountPolicyService.createTimeDiscountPolicy(shop, LocalTime.of(10, 0, 0), 1000);
 
-            Menu menu1 = getMenu1(amountDiscountPolicy); Menu menu2 = getMenu2(rateDiscountPolicy);
-            shop.addMenu(menu1); shop.addMenu(menu2);
+            Menu menu1 = getMenu1(amountDiscountPolicy);
+            Menu menu2 = getMenu2(rateDiscountPolicy);
+            Menu menu3 = getMenu3(timeDiscountPolicy);
+            shop.addMenu(menu1); shop.addMenu(menu2); shop.addMenu(menu3);
 
             em.flush();
             em.clear();
@@ -67,7 +69,7 @@ public class InitData {
 
             OrderInfo orderInfo = orderInfo(shop, member, List.of(menuInfo1, menuInfo2));
 
-            Long orderId = orderService.createOrder(orderInfo);
+            //Long orderId = orderService.createOrder(orderInfo);
         }
 
         private Menu getMenu1(Long discountPolicyId) {
@@ -82,11 +84,13 @@ public class InitData {
                             List.of(
                                     OptionGroupSpecification.builder().name("단품, 세트 선택")
                                             .optionList( //0
-                                                    List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build())
+                                                    List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build(),
+                                                            OptionSpecification.builder().name("세트변경").price(Money.of(2500)).build())
                                             ).build(),
-                                    OptionGroupSpecification.builder().name("음료 선택")
+                                    OptionGroupSpecification.builder().name("사이드 선택")
                                             .optionList( //1500
-                                                    List.of(OptionSpecification.builder().name("커피").price(Money.of(1500)).build())
+                                                    List.of(OptionSpecification.builder().name("감자").price(Money.of(1500)).build(),
+                                                            OptionSpecification.builder().name("콜라").price(Money.of(1500)).build())
                                             ).build()
                             )
                     ).build();
@@ -103,16 +107,38 @@ public class InitData {
                     .optionGroupList(
                             List.of(
                                     OptionGroupSpecification.builder().name("단품, 세트 선택")
-                                            .optionList( //1000
-                                                    List.of(OptionSpecification.builder().name("세트변경").price(Money.of(1000)).build())
+                                            .optionList( //0
+                                                    List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build(),
+                                                            OptionSpecification.builder().name("세트변경").price(Money.of(2500)).build())
                                             ).build(),
                                     OptionGroupSpecification.builder().name("사이드 선택")
                                             .optionList( //1500
-                                                    List.of(OptionSpecification.builder().name("감자튀김").price(Money.of(1500)).build())
+                                                    List.of(OptionSpecification.builder().name("감자").price(Money.of(1500)).build(),
+                                                            OptionSpecification.builder().name("콜라").price(Money.of(1500)).build())
+                                            ).build()
+                            )
+                    ).build();
+        }
+
+        private Menu getMenu3(Long discountPolicyId) {
+            return Menu.builder()
+                    .category(Category.MAIN)
+                    .name("싸이플렉스갈릭버거")
+                    .description("플렉스를 할 수 있는 버거입니다.")
+                    .imageURL("/api/images/menus/2023/6/13/1674626662-ITQZP.png")
+                    .price(Money.of(6500)) //(5500 + 3500) *2 = 18000
+                    .discountPolicy(discountPolicyService.findById(discountPolicyId).get())
+                    .optionGroupList(
+                            List.of(
+                                    OptionGroupSpecification.builder().name("단품, 세트 선택")
+                                            .optionList( //0
+                                                    List.of(OptionSpecification.builder().name("단품선택").price(Money.of(0)).build(),
+                                                            OptionSpecification.builder().name("세트변경").price(Money.of(2500)).build())
                                             ).build(),
-                                    OptionGroupSpecification.builder().name("음료 선택")
-                                            .optionList( //1000
-                                                    List.of(OptionSpecification.builder().name("콜라").price(Money.of(1000)).build())
+                                    OptionGroupSpecification.builder().name("사이드 선택")
+                                            .optionList( //1500
+                                                    List.of(OptionSpecification.builder().name("감자").price(Money.of(1500)).build(),
+                                                            OptionSpecification.builder().name("콜라").price(Money.of(1500)).build())
                                             ).build()
                             )
                     ).build();
